@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Guerrier" />
+    <link href="Lecture2_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Lecture2_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="Lecture2_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="Lecture2_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture2_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture2_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture2_files/panelset-0.2.4/panelset.js"></script>
+    <script src="Lecture2_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+class: title-slide  
+&lt;div class="my-logo-right"&gt;&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part II: Analysis of Variance (ANOVA)
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;img src="pics/liscence.png" width="25%" style="display: block; margin: auto;" /&gt;
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu &amp; Yuming Zhang]
+---
+
+
+# Quick review: Normal distribution
+
+.smaller[$$Y\sim \mathcal{N}(\mu,\sigma^{2}), \ \ \ \ \ \color{#b4b4b4}{f_{Y}(y) = \frac{1}{\sqrt{2\pi{\color{drawColor6} \sigma}^{2}}}\ e^{-\frac{(y-{\color{drawColor6} \mu})^{2}}{2{\color{drawColor6} \sigma}^{2}}}}$$]
+
+.smaller[$$\mathbb{E}[Y] = \mu, \ \ \ \ \ \text{Var}[Y] = \sigma^{2},$$]
+
+.smaller[$$Z = \frac{Y-\mu}{\sigma} \sim \mathcal{N}(0,1), \ \ \ \ \ \color{#b4b4b4}{f_{Z}(z) = \frac{1}{\sqrt{2\pi}}\ e^{-\frac{z^{2}}{2}}.}$$]
+
+.smaller[.purple[Probability density function of a normal distribution:]]
+
+&lt;img src="pics/standardnormalpdf2.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Quick review: Normal distribution
+
+.smaller[$$Y\sim \mathcal{N}(\mu,\sigma^{2}), \ \ \ \ \ \color{#b4b4b4}{f_{Y}(y) = \frac{1}{\sqrt{2\pi{\color{drawColor6} \sigma}^{2}}}\ e^{-\frac{(y-{\color{drawColor6} \mu})^{2}}{2{\color{drawColor6} \sigma}^{2}}}}$$]
+
+.smaller[$$\mathbb{E}[Y] = \mu, \ \ \ \ \ \text{Var}[Y] = \sigma^{2},$$]
+
+.smaller[$$Z = \frac{Y-\mu}{\sigma} \sim \mathcal{N}(0,1), \ \ \ \ \ \color{#b4b4b4}{f_{Z}(z) = \frac{1}{\sqrt{2\pi}}\ e^{-\frac{z^{2}}{2}}.}$$]
+
+.smaller[.purple[Suitable modeling for a lot of phenomena: IQ]] `\(\small \color{#373895}{\sim \mathcal{N}(100,15^{2})}\)`
+
+&lt;img src="pics/standardnormalpdf3.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# .smaller[Normal distribution as an approximation?]
+
+The .hi.purple[Central Limit Theorem(s) (CLT)] that states (very informally): .purple[*the sampling distribution of the average of independent (or "not too strongly correlated") random variables (whose distributions are "not too different" nor "too extreme") tends to a normal distribution as the sample size gets larger.*]
+
+As an example, one of the simplest version of the CLT (known as the *Lindeberg–Lévy CLT*) states:
+*Suppose that* `\(\{X_{1},\ldots ,X_{n}\}\)` *is a sequence of* *iid* *random variables such that* `\(\mathbb{E}[ X_i ] = \mu\)` *and `\(\text{Var} [X_{i}]=\sigma^{2}&lt;\infty\)`. Let `\({\bar{X}}_{n} = \frac{1}{n} \sum_{i = 1}^n X_i\)`, then as `\(n\)` approaches infinity, the random variables `\(\sqrt{n} (\bar{X}_{n}-\mu)\)` .pink[converge in distribution] to a normal `\(\mathcal{N}(0,\sigma^{2})\)`.*
+
+This result can be extended (under some conditions) to .pink[dependent] (i.e. `\(X_i\)` and `\(X_j\)` are not independent for `\(i \neq j\)`) and/or .pink[non identically distributed] (i.e. `\(X_i\)` and `\(X_j\)` don't have the same distribution for `\(i \neq j\)`).
+
+---
+
+# .smaller[Normal distribution as an approximation?]
+
+Loosely speaking, we can translate CLTs results as 
+
+`$$\bar{X}_n = \frac{1}{n} \sum_{i = 1}^n X_i \color{#eb078e}{\overset{\cdot}{\sim}} \color{#06bcf1}{\mathcal{N}(\mu, \sigma^2)},$$` 
+
+where `\(\color{#eb078e}{\overset{\cdot}{\sim}}\)` corresponds ".pink[approximately distributed as]". 
+
+---
+
+Let me start by denying the premise. Robert Geary probably didn't overstate the case when he said (in 1947) "...normality is a myth; there never was, and never will be, a normal distribution." --
+the normal distribution is a model*, an approximation that is sometimes more-or-less useful.
+
+*(about which, see George Box, though I prefer the version on my profile).
+
+That some phenomena are approximately normal may be no vast surprise, since 
+
+The central limit theorem (which is about the convergence to a normal distribution of a standardized sample mean as 𝑛
+
+goes to infinity under some mild conditions) at least suggests that we might see a tendency toward that normality with sufficiently large but finite sample sizes.
+
+Of course if standardized means are approximately normal, standardized sums will be; this is the reason for the "sum of many effects" reasoning. So if there are a lot of little contributions to the variation, and they're not highly correlated, you might tend to see it.
+
+Uncertainty can be measured in many different ways. A common approach (in statistics) is to use .hi-purple[confidence intervals], which rely on the .hi.pink[Central Limit Theorem (CLT)] that states:
+
+.center[.turquoise["The sampling distribution of the sample mean approaches to a normal distribution as the sample size gets larger."]]
+
+Loosely speaking, we can translate the CLT as 
+
+`$$\bar{X} = \frac{1}{n} \sum_{i = 1}^n X_i \color{#e64173}{\overset{\cdot}{\sim}} \color{#6A5ACD}{\mathcal{N}(\mu, \sigma^2)},$$` 
+
+where `\(\color{#6A5ACD}{\mathcal{N}(\mu, \sigma^2)}\)` denotes a normal distribution with mean `\(\mu\)` and variance `\(\sigma^2\)` (typically computed using the data)&lt;sup&gt;.smallest[👋]&lt;/sup&gt;. Here `\(\bar{X}\)` denotes the sample mean and `\(\color{#e64173}{\overset{\cdot}{\sim}}\)` represents ".pink[approximately distributed as]". 
+
+.footnote[.smallest[👋] Check out [expected value](https://en.wikipedia.org/wiki/Expected_value) and [variance](https://en.wikipedia.org/wiki/Variance).]
+
+---
+
+# How to measure uncertainty?
+
+In our example, we have 
+
+`$$\hat{p} \overset{\cdot}{\sim} \mathcal{N}\Bigg(p, \frac{p(1-p)}{n}\Bigg).$$`
+.pink[How to understand the practical implications of the CLT?] Informally, it means that when a measurement can be thought of as the sum (or the average) of .hi.purple[numerous] factors, its distribution tends to go to a normal distribution. For example, the height of adults can be thought of as the sum of their genetic information, diet, life style, ...
+
+---
+
+# Distribution of heights
+
+&lt;img src="pics/distribution-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Grand Picture of Statistics
+
+(TO ADD)
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

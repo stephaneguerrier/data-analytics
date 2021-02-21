@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Guerrier" />
+    <link href="Lecture1_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Lecture1_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="Lecture1_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="Lecture1_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture1_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture1_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture1_files/panelset-0.2.4/panelset.js"></script>
+    <script src="Lecture1_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="Lecture1_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture1_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+class: title-slide  
+&lt;div class="my-logo-right"&gt;&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part I: Introduction to Statistical Inference
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;img src="pics/liscence.png" width="25%" style="display: block; margin: auto;" /&gt;
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu &amp; Yuming Zhang]
+---
+
+# R and RStudio
+
+.pull-left[
+In this class, we will use the statistical software .hi-purple[R] together with the integrated development environment .hi-purple[RStudio], which can be downloaded with the following: 
+
+- Latest version of R: [https://cran.r-project.org/](https://cran.r-project.org/)
+- Latest version of RStudio: [https://www.rstudio.com/](https://www.rstudio.com/)
+
+.hi-purple[Note:] You cannot use RStudio without having installed R on your computer.
+]
+
+.pull-right[
+
+&lt;img src="pics/r_first_then.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.red[(YUMING: COULD YOU ADD THE LINK HERE FOR THE FIGURE?)]
+]
+
+---
+
+
+# What is statistics?
+
+.pull-left[
+.smaller[.hi-purple[Statistics] is a science that uses mathematics and computer science to deal with the collection, analysis, interpretation, and presentation of masses of numerical data. Informally, it is the .pink[science of learning from data].]
+&lt;img src="pics/stat.jpeg" width="90%" style="display: block; margin: auto;" /&gt;
+.tiny[Source: [luminousmen](luminousmen.com)]
+]
+
+.pull-right[
+.smaller[.hi-purple[Statistics] is a crucial part of our life. However, .pink[statistical methods are often consciously (or not) misused]. This can lead to contradictory studies and conclusions (as seen during the current COVID-19 pandemic).]
+
+&lt;img src="pics/data-torture.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+.tiny[Source: [Atoz Markets](https://atozmarkets.com/news/untold-reality-of-p-hacking-in-finance/)]
+]
+
+---
+
+# How can statistics be useful?
+
+.smaller[Statistics can be used (among others) to
+
+1. .pink[Visualize data] (e.g. propagation of COVID-19 in different countries).
+2. .pink[Understand and interpret data] (e.g. main causes of cancer). 
+3. .pink[Assess the validity of a hypothesis] (e.g. is a drug working?).
+4. .pink[Make predictions] (e.g. predicting unemployment or risk indices).]
+
+.smaller[Learning more about statistics allows to 
+
+1. Better understand arguments based on data.
+2. Be able to apply critical thinking about statistics used as evidence.
+3. Understand how statistical associations are used to evaluate claims (hypotheses) and assess causal connections.] 
+
+.smaller[.purple[Understanding and knowing how to interpret statistical analyses is therefore becoming an increasingly vital skill.]]
+
+---
+
+
+# How to test a (scientific) hypothesis?
+
+.center[
+.purple["In god we trust, all others must bring data." &lt;sup&gt;.smallest[👋]&lt;/sup&gt;]
+]
+
+- .smallest[To assess the .pink[validity of a (scientific) hypothesis], the scientific community (generally) agrees on a specific procedure.]
+- .smallest[These hypotheses can be .pink[nearly anything], such as:]
+  1. .smallest[Coffee consumption increases blood pressure. ]
+  2. .smallest[Republican politicians are bad/good for the American Economy.]
+  3. .smallest[A glass of red wine is as good as an hour at the gym.️]
+- .smallest[This procedure involves the design of an experiment and then the collection of data to compute a metric, called .hi.purple[p-value], which evaluates the adequacy between the data and your original hypothesis.]
+- .smallest[There is generally .pink[a specific threshold] (typically 5%), and if the p-value falls below this threshold we can claim that we have statistically significant result(s) validating our hypothesis.]
+
+.footnote[.smallest[👋 From W. Edwards Deming]]
+
+---
+
+# Statistics vs Truth 🤥
+
+- .smallest[.pink[Statistically significant results are not necessarily the truth], as there isn't a threshold (again typically 5%) that separates real results from the false ones.]
+- .smallest[This procedure simply provides us with one piece of a puzzle that should be considered in the context of other evidence.]
+
+&lt;img src="pics/medical_studies.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+.footnote[.smallest[👋] Read the original article: "*This is why you shouldn't believe that exciting new medical study*" [here](https://www.vox.com/2015/3/23/8264355/research-study-hype).]
+
+---
+
+# How does it work?
+
+.smallest[
+- Statistical methods are based on several fundamental concepts, the most central of which is to consider the information available (in the form of data) resulting from a .pink[random process].
+- As such, the data represent a .hi-purple[random sample] of a totally or conceptually accessible .hi-purple[population].
+- Then, .pink[statistical inference] allows to infer the properties of a population based on the observed sample. This includes deriving estimates and testing hypotheses.
+]
+
+&lt;img src="pics/sampling.png" width="45%" style="display: block; margin: auto;" /&gt;
+.tiny[Source: [luminousmen](luminousmen.com)]
+
+---
+
+# A hypothesis testing
+
+- In general (scientific) hypotheses can be translated into a set of statistical hypotheses:
+.center[
+`\(H_0: \theta \color{#eb078e}{\in} \Theta_0\)` and `\(H_a: \theta \color{#eb078e}{\not\in} \Theta_0\)`.
+]
+- In a hypothesis test, the statement being tested is called the .hi-purple[null hypothesis] `\(\color{#373895}{H_0}\)`. A hypothesis test is designed to assess the strength of the evidence against the null hypothesis.
+- The .hi-purple[alternative hypothesis] `\(\color{#373895}{H_a}\)` is the statement we hope or suspect to be true instead of `\(\color{#373895}{H_0}\)`.
+- Each hypothesis excludes the other, so that one can exclude one in favor of the other using the data.
+- Example
+---
+
+# A hypothesis testing
+
+|                     | `\(H_0\)` is true                               | `\(H_0\)` is false                          |
+| ------------------- |---------------------------------------------| ----------------------------------------|
+| Can't reject `\(H_0\)`  | `\(\text{Correct decision (prob=}1-\alpha)\)`   | `\(\text{Type II error (prob=}1-\beta)\)`   |
+| Reject `\(H_0\)`        | `\(\text{Type I error (prob=}\alpha)\)`         | `\(\text{Correct decision (prob=}\beta)\)`  |
+
+- If we reject `\(H_0\)` when in fact `\(H_0\)` is true, this is a .pink[type I error] (also called .pink[false positive]). If we accept `\(H_0\)` when in fact `\(H_a\)` is true, this is a .purple[type II error] (also called .purple[false negative]).
+- A test is of .pink[significance level] `\(\color{#e64173}{\alpha}\)` when the probability to make a type I error is `\(\alpha\)`. Usually we consider `\(\alpha = 5\%\)`, however, this can vary depending on the context.
+- A test is of .purple[power] `\(\color{#6A5ACD}{\beta}\)` when the probability to make a type II error is `\(1-\beta.\)` In other words, the power of a test is its probability to reject `\(H_0\)` when `\(H_0\)` is false.
+
+---
+
+# Test statistics and P-values
+
+- .smallest[A hypothesis testing is based on a .hi-pink[test statistic], which measures the difference between the sample estimate and the hypothesized value in terms of its standard deviation, i.e.] 
+`$$\small \text{test statistic} = \frac{\text{sample estimate - hypothesized value}}{\text{standard deviation of sample estimate}}.$$`
+
+- .smallest[For example, consider a test for a single proportion with] `\(\small H_0: p = p_0\)` .smallest[and] `\(\small H_a: p &gt; p_0\)`.smallest[, the corresponding test statistic can be computed as] `$$Z = \frac{\hat{p}-\color{#e64173}{p_0}}{\color{#6A5ACD}{\sqrt{\frac{p_0(1-p_0)}{n}}}} \overset{\cdot}{\sim} \mathcal{N}(0,1).$$`
+- .smallest[The .hi-purple[p-value] is defined as the probability, assuming that] `\(\small H_0\)` .smallest[is true, that the test statistic will take a value at least as extreme as that actually observed.] 🤯😱
+- .smallest[Informally, .pink[a p-value can be understood as a measure of plausibility of the null hypothesis given the data]. Small p-value indicates strong evidence against] `\(\small H_0\)`.
+
+---
+
+# How to understand p-values?
+
+- When the p-value is small enough (i.e. smaller than the significance level `\(\alpha\)`), one says that the test based on the null and alternative hypotheses is .pink[significant] or that the null hypothesis is rejected in favor of the alternative. .purple[This is generally what we want because it "verifies" our (research) hypothesis].
+- When the p-value is not small enough, with the available data, we cannot reject the null hypothesis so .pink[nothing] can be concluded. 🤔
+- With a sample of data, the obtained p-value summarizes somehow the .pink[incompatibility between the data and the model] (random process) constructed under the set of assumptions.
+
+.center[
+.purple["Absence of evidence is not evidence of absence." &lt;sup&gt;.smallest[👋]&lt;/sup&gt;]
+]
+
+.footnote[.smallest[👋] From the British Medical Journal.]
+
+---
+
+# How to understand p-values?
+
+&lt;img src="pics/p_value.png" width="45%" style="display: block; margin: auto;" /&gt;
+
+👋 .smallest[If you want to know more have a look [here](https://xkcd.com/1478/).]
+
+---
+
+# P-values may be controversial
+
+.purple[P-values have been misused] many times because understanding what they mean is not intuitive!
+
+&lt;div align="center"&gt;
+&lt;iframe src="https://fivethirtyeight.abcnews.go.com/video/embed/56150342" width="675" height="380" scrolling="no" style="border:none;" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt; 
+
+👋 .smallest[If you want to know more have a look [here](https://fivethirtyeight.com/features/statisticians-found-one-thing-they-can-agree-on-its-time-to-stop-misusing-p-values/).]
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
