@@ -191,6 +191,190 @@ include_graphics("pics/liscence.png")
 ---
 
 
+# R and RStudio
+
+.pull-left[
+In this class, we will use the statistical software .hi-purple[R] together with the integrated development environment .hi-purple[RStudio], which can be downloaded with the following: 
+
+- Latest version of R: [https://cran.r-project.org/](https://cran.r-project.org/)
+- Latest version of RStudio: [https://www.rstudio.com/](https://www.rstudio.com/)
+
+.hi-purple[Note:] You cannot use RStudio without having installed R on your computer.
+]
+
+.pull-right[
+
+```{R, out.width = "100%", echo = F}
+include_graphics("pics/r_first_then.png")
+```
+
+.red[(YUMING: COULD YOU ADD THE LINK HERE FOR THE FIGURE?)]
+]
+
+---
+
+
+# What is statistics?
+
+.pull-left[
+.smaller[.hi-purple[Statistics] is a science that uses mathematics and computer science to deal with the collection, analysis, interpretation, and presentation of masses of numerical data. Informally, it is the .pink[science of learning from data].]
+```{R, stat, out.width = "90%", echo = F}
+include_graphics("pics/stat.jpeg")
+```
+.tiny[Source: [luminousmen](luminousmen.com)]
+]
+
+.pull-right[
+.smaller[.hi-purple[Statistics] is a crucial part of our life. However, .pink[statistical methods are often consciously (or not) misused]. This can lead to contradictory studies and conclusions (as seen during the current COVID-19 pandemic).]
+
+```{R, torture, out.width = "85%", echo = F}
+include_graphics("pics/data-torture.png")
+```
+
+.tiny[Source: [Atoz Markets](https://atozmarkets.com/news/untold-reality-of-p-hacking-in-finance/)]
+]
+
+---
+
+# How can statistics be useful?
+
+.smaller[Statistics can be used (among others) to
+
+1. .pink[Visualize data] (e.g. propagation of COVID-19 in different countries).
+2. .pink[Understand and interpret data] (e.g. main causes of cancer). 
+3. .pink[Assess the validity of a hypothesis] (e.g. is a drug working?).
+4. .pink[Make predictions] (e.g. predicting unemployment or risk indices).]
+
+.smaller[Learning more about statistics allows to 
+
+1. Better understand arguments based on data.
+2. Be able to apply critical thinking about statistics used as evidence.
+3. Understand how statistical associations are used to evaluate claims (hypotheses) and assess causal connections.] 
+
+.smaller[.purple[Understanding and knowing how to interpret statistical analyses is therefore becoming an increasingly vital skill.]]
+
+---
+
+
+# How to test a (scientific) hypothesis?
+
+.center[
+.purple["In god we trust, all others must bring data." <sup>.smallest[👋]</sup>]
+]
+
+- .smallest[To assess the .pink[validity of a (scientific) hypothesis], the scientific community (generally) agrees on a specific procedure.]
+- .smallest[These hypotheses can be .pink[nearly anything], such as:]
+  1. .smallest[Coffee consumption increases blood pressure. ]
+  2. .smallest[Republican politicians are bad/good for the American Economy.]
+  3. .smallest[A glass of red wine is as good as an hour at the gym.️]
+- .smallest[This procedure involves the design of an experiment and then the collection of data to compute a metric, called .hi.purple[p-value], which evaluates the adequacy between the data and your original hypothesis.]
+- .smallest[There is generally .pink[a specific threshold] (typically 5%), and if the p-value falls below this threshold we can claim that we have statistically significant result(s) validating our hypothesis.]
+
+.footnote[.smallest[👋 From W. Edwards Deming]]
+
+---
+
+# Statistics vs Truth 🤥
+
+- .smallest[.pink[Statistically significant results are not necessarily the truth], as there isn't a threshold (again typically 5%) that separates real results from the false ones.]
+- .smallest[This procedure simply provides us with one piece of a puzzle that should be considered in the context of other evidence.]
+
+```{R, out.width = "50%", echo = F}
+include_graphics("pics/medical_studies.png")
+```
+
+.footnote[.smallest[👋] Read the original article: "*This is why you shouldn't believe that exciting new medical study*" [here](https://www.vox.com/2015/3/23/8264355/research-study-hype).]
+
+---
+
+# How does it work?
+
+.smallest[
+- Statistical methods are based on several fundamental concepts, the most central of which is to consider the information available (in the form of data) resulting from a .pink[random process].
+- As such, the data represent a .hi-purple[random sample] of a totally or conceptually accessible .hi-purple[population].
+- Then, .pink[statistical inference] allows to infer the properties of a population based on the observed sample. This includes deriving estimates and testing hypotheses.
+]
+
+```{R, out.width = "45%", echo = F}
+include_graphics("pics/sampling.png")
+```
+.tiny[Source: [luminousmen](luminousmen.com)]
+
+---
+
+# A hypothesis testing
+
+- In general (scientific) hypotheses can be translated into a set of statistical hypotheses:
+.center[
+$H_0: \theta \color{#eb078e}{\in} \Theta_0$ and $H_a: \theta \color{#eb078e}{\not\in} \Theta_0$.
+]
+- In a hypothesis test, the statement being tested is called the .hi-purple[null hypothesis] $\color{#373895}{H_0}$. A hypothesis test is designed to assess the strength of the evidence against the null hypothesis.
+- The .hi-purple[alternative hypothesis] $\color{#373895}{H_a}$ is the statement we hope or suspect to be true instead of $\color{#373895}{H_0}$.
+- Each hypothesis excludes the other, so that one can exclude one in favor of the other using the data.
+- Example ???????????????
+
+---
+
+# A hypothesis testing
+
+|                     | $H_0$ is true                               | $H_0$ is false                          |
+| ------------------- |---------------------------------------------| ----------------------------------------|
+| Can't reject $H_0$  | $\text{Correct decision (prob=}1-\alpha)$   | $\text{Type II error (prob=}1-\beta)$   |
+| Reject $H_0$        | $\text{Type I error (prob=}\alpha)$         | $\text{Correct decision (prob=}\beta)$  |
+
+- If we reject $H_0$ when in fact $H_0$ is true, this is a .pink[type I error] (also called .pink[false positive]). If we accept $H_0$ when in fact $H_a$ is true, this is a .purple[type II error] (also called .purple[false negative]).
+- A test is of .pink[significance level] $\color{#e64173}{\alpha}$ when the probability to make a type I error is $\alpha$. Usually we consider $\alpha = 5\%$, however, this can vary depending on the context.
+- A test is of .purple[power] $\color{#6A5ACD}{\beta}$ when the probability to make a type II error is $1-\beta.$ In other words, the power of a test is its probability to reject $H_0$ when $H_0$ is false.
+
+---
+
+# Test statistics and P-values
+
+- .smallest[A hypothesis testing is based on a .hi-pink[test statistic], which measures the difference between the sample estimate and the hypothesized value in terms of its standard deviation, i.e.] 
+$$\small \text{test statistic} = \frac{\text{sample estimate - hypothesized value}}{\text{standard deviation of sample estimate}}.$$
+
+- .smallest[For example, consider a test for a single proportion with] $\small H_0: p = p_0$ .smallest[and] $\small H_a: p > p_0$.smallest[, the corresponding test statistic can be computed as] $$Z = \frac{\hat{p}-\color{#e64173}{p_0}}{\color{#6A5ACD}{\sqrt{\frac{p_0(1-p_0)}{n}}}} \overset{\cdot}{\sim} \mathcal{N}(0,1).$$
+- .smallest[The .hi-purple[p-value] is defined as the probability, assuming that] $\small H_0$ .smallest[is true, that the test statistic will take a value at least as extreme as that actually observed.] 🤯😱
+- .smallest[Informally, .pink[a p-value can be understood as a measure of plausibility of the null hypothesis given the data]. Small p-value indicates strong evidence against] $\small H_0$.
+
+---
+
+# How to understand p-values?
+
+- When the p-value is small enough (i.e. smaller than the significance level $\alpha$), one says that the test based on the null and alternative hypotheses is .pink[significant] or that the null hypothesis is rejected in favor of the alternative. .purple[This is generally what we want because it "verifies" our (research) hypothesis].
+- When the p-value is not small enough, with the available data, we cannot reject the null hypothesis so .pink[nothing] can be concluded. 🤔
+- With a sample of data, the obtained p-value summarizes somehow the .pink[incompatibility between the data and the model] (random process) constructed under the set of assumptions.
+
+.center[
+.purple["Absence of evidence is not evidence of absence." <sup>.smallest[👋]</sup>]
+]
+
+.footnote[.smallest[👋] From the British Medical Journal.]
+
+---
+
+# How to understand p-values?
+
+```{R, out.width = "45%", echo = F}
+include_graphics("pics/p_value.png")
+```
+
+👋 .smallest[If you want to know more have a look [here](https://xkcd.com/1478/).]
+
+---
+
+# P-values may be controversial
+
+.purple[P-values have been misused] many times because understanding what they mean is not intuitive!
+
+<div align="center">
+<iframe src="https://fivethirtyeight.abcnews.go.com/video/embed/56150342" width="675" height="380" scrolling="no" style="border:none;" allowfullscreen></iframe>
+</div> 
+
+👋 .smallest[If you want to know more have a look [here](https://fivethirtyeight.com/features/statisticians-found-one-thing-they-can-agree-on-its-time-to-stop-misusing-p-values/).]
+
+---
+
 # Quick review: Normal distribution
 
 .smaller[$$Y\sim \mathcal{N}(\mu,\sigma^{2}), \ \ \ \ \ \color{#b4b4b4}{f_{Y}(y) = \frac{1}{\sqrt{2\pi{\color{drawColor6} \sigma}^{2}}}\ e^{-\frac{(y-{\color{drawColor6} \mu})^{2}}{2{\color{drawColor6} \sigma}^{2}}}}$$]
@@ -238,7 +422,7 @@ This result can be extended (under some conditions) to .pink[dependent] (i.e. $X
 
 Loosely speaking, we can translate CLTs results as 
 
-$$\bar{X}_n = \frac{1}{n} \sum_{i = 1}^n X_i \color{#eb078e}{\overset{\cdot}{\sim}} {\mathcal{N}(\mu, \sigma^2)},$$ 
+$$\bar{X}_n = \frac{1}{n} \sum_{i = 1}^n X_i \color{#eb078e}{\overset{\cdot}{\sim}} {\mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)},$$ 
 
 where $\color{#eb078e}{\overset{\cdot}{\sim}}$ corresponds ".pink[approximately distributed as]". This result is essential in statistics and the vast majority of inferential methods are based on some version of the CLT.
 
@@ -266,7 +450,7 @@ Informally, it means that when a measurement can be thought of as the average (o
 
 Suppose that we conduct an experiment on $n$ patients where a new diet is tested. We measure $X_i$ as the weight loss after 4 months. Our hope is to show that the diet allows to significantly reduce the weight of the participants.
 
-Suppose that the (possibly dependent) data are such that $X_i \sim F_i, \, i = 1,\ldots, n$ and $\mathbb{E}[X_i] = \mu$. This is a rather a plausible assumption (why? 🤔). To verify our hypothesis (i.e. diet reduces weight) we consider:
+Suppose that the (possibly dependent) data are such that $X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n$ and $\mathbb{E}[X_i] = \mu$. This is a rather a plausible assumption (why? 🤔). To verify our hypothesis (i.e. diet reduces weight) we consider:
 
 $$H_0: \mu \color{#eb078e}{=} 0 \ \ \ \ \text{and} \ \ \ \ H_a: \mu \color{#eb078e}{>} 0.$$
 
@@ -282,7 +466,7 @@ where $\color{#373895}{\varepsilon_i} = X_i - \mu$ can be understood ".purple[re
 Then, by the CLT we have
 
 $$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}} \mathcal{N}(0,1),$$
-where $\color{#373895}{S} = \sqrt{ \frac{1}{n} \sum_{i = 1}^n (X_i - \bar{X}_n)^2}$ and $\color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}}$ corresponds ".pink[approximately distributed under] $\color{#eb078e}{H_0}$ .pink[as]". In the above formula $T \sim G \approx \mathcal{N}(0,1)$ is a random variable but we can compute its .hi-purple[realization] based on our sample, i.e. $\color{#eb078e}{\sqrt{n}\bar{x}_n/s}$.
+where $\color{#373895}{S} = \sqrt{ \frac{1}{n-1} \sum_{i = 1}^n (X_i - \bar{X}_n)^2}$ and $\color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}}$ corresponds ".pink[approximately distributed under] $\color{#eb078e}{H_0}$ .pink[as]". In the above formula $T \sim G \approx \mathcal{N}(0,1)$ is a random variable but we can compute its .hi-purple[realization] based on our sample, i.e. $\color{#eb078e}{\sqrt{n}\bar{x}_n/s}$.
 
 Using the definition of the p-value<sup>.smallest[👋]</sup>, we have
 
@@ -359,7 +543,7 @@ t = sqrt(n)*Xbar/s
 
 # One-sample Student's t-test
 
-Before we assume that the (possibly dependent) data are such that $X_i \sim F_i, \, i = 1,\ldots, n$ and $\mathbb{E}[X_i] = \mu$. However, in the very special case where
+Before we assume that the (possibly dependent) data were such that $X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n$ and $\mathbb{E}[X_i] = \mu$. However, in the .pink[very special] case where
 
 $$X_i \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(\mu, \sigma^2),$$
 which corresponds to the following model
@@ -374,15 +558,16 @@ Unlike our previous result, $T$ .pink[follows exactely] (for all $n$) a $\text{S
 
 # Remarks
 
-- .smaller[.pink[Why is it called Student?] The Student's t distributions were discovered in 1908 by William S. Gosset, who is a statistician employed by the Guinness brewing company. Gosset devised the t-test as an economical way to monitor the quality of stout 🍻. The company forbade its scientists from publishing their findings, so Gosset published his statistical work under the pen name ".pink[Student]".
+- .smaller[.pink[Why is it called Student?] The Student's t distributions were discovered in 1908 by William S. Gosset, who is a statistician employed by the Guinness brewing company. Gosset devised the t-test as an economical way to monitor the quality of stout 🍻. The company forbade its scientists from publishing their findings, so Gosset published his statistical work under the pen name ".pink[Student]".]
 
 - .smaller[The t-test (similarly to the z-test previously discussed) can be used to test if the population mean is .pink[greater, smaller, or different than] a hypothesized value, i.e.] 
 
-$$H_0: \mu \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \mu \big[\ \color{#eb078e}{>} \text{ or } \color{#eb078e}{<} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$
+$$H_0: \mu \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \mu \ \big[ \color{#eb078e}{>} \text{ or } \color{#eb078e}{<} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$
 
 - .smaller[The t-test accounts for the uncertainty of sample variance and, we have:] 
 
 $$\text{p-values based on } \mathcal{N} (0, 1)\color{#eb078e}{<}\text{p-values based on } \text{Student}(n).$$
+
 ---
 
 # R syntax for the t-test
@@ -414,15 +599,14 @@ t.test(data)
 .panel[.panel-name[Results]
 1. .purple[Define hypotheses:] $H_0: \mu = 0$ and $H_a: \mu \color{#e64173}{>} 0$.
 2. .purple[Define] $\color{#373895}{\alpha}$: We consider $\alpha = 5\%$.
-3. .purple[Compute p-value]: p-value = ] $3.697 \times 10^{-5} \ \%$ (see R code tab for details).
+3. .purple[Compute p-value]: p-value =  $3.697 \times 10^{-5} \ \%$ (see R code tab for details).
 4. .purple[Conclusion:] We have p-value < $\alpha$ and so we can reject the null hypothesis at the significance level of 5% and conclude that the diet significantly reduces the weight of the participants.
 ]
 .panel[.panel-name[`R` output]
 ```{r}
 t.test(X, alternative = "greater")
 ```
-]
-]
+]]
 
 ---
 
@@ -468,7 +652,7 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 .panel[.panel-name[Results]
 1. .purple[Define hypotheses:] $H_0: \mu = 0$ and $H_a: \mu \color{#e64173}{>} 0$.
 2. .purple[Define] $\color{#373895}{\alpha}$: We consider $\alpha = 5\%$.
-3. .purple[Compute p-value]: p-value = ] $2.71 \times 10^{-3} \ \%$ (see R code tab for details).
+3. .purple[Compute p-value]: p-value = $2.71 \times 10^{-3} \ \%$ (see R code tab for details).
 4. .purple[Conclusion:] We have p-value < $\alpha$ and so we can reject the null hypothesis at the significance level of 5% and conclude that the diet significantly reduces the weight of the participants.
 ]
 .panel[.panel-name[`R` output]
@@ -476,21 +660,3 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 wilcox.test(X, alternative = "greater")
 ```
 ]]
-
----
-
-# Diet Example (with Wilcoxon test)
-
-.panelset[
-.panel[.panel-name[Results]
-1. .purple[Define hypotheses:] $H_0: \mu = 0$ and $H_a: \mu \color{#e64173}{>} 0$.
-2. .purple[Define] $\color{#373895}{\alpha}$: We consider $\alpha = 5\%$.
-3. .purple[Compute p-value]: p-value = ] $2.71 \times 10^{-3} \ \%$ (see R code tab for details).
-4. .purple[Conclusion:] We have p-value < $\alpha$ and so we can reject the null hypothesis at the significance level of 5% and conclude that the diet significantly reduces the weight of the participants.
-]
-.panel[.panel-name[`R` output]
-```{r}
-wilcox.test(X, alternative = "greater")
-```
-]]
-
