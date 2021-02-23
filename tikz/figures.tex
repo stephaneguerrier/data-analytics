@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{amsfonts}
+\usepackage[active,tightpage,psfixbb]{preview}
+\PreviewEnvironment{pgfpicture}
+\setlength\PreviewBorder{0pt}
+\usepackage{amssymb}
+%\definecolor{mygreen}{HTML}{16AF11}
+%\definecolor{myred}{HTML}{F16A57}
+%\definecolor{myblue}{HTML}{0A71BD}
+\usepackage{Sweave}
+\begin{document}
+\input{figures-concordance}
+
+\begin{Schunk}
+\begin{Sinput}
+> library(tikzDevice)
+> tikz("pvalue.tex", width = 5.2, height = 4.7)
+> t_col <- function(color, percent = 50) {
++   rgb.val <- col2rgb(color)
++     t.col <- rgb(rgb.val[1], rgb.val[2], rgb.val[3],
++                max = 255,
++                alpha = (100 - percent) * 255 / 100)
++ }
+> col_blue = "#373895"
+> col_blue_transp = t_col(col_blue, percent = 70)
+> col_pink = "#eb078e"
+> col_pink_transp = t_col(col_pink, percent = 85)
+> xx = seq(from = -4, to = 10, length.out = 10^3)
+> yy = dnorm(xx)
+> yy2 = dt(xx, df = 1.5, ncp = 0.2)
+> plot(NA, xlim = range(xx), ylim = range(yy), ann = FALSE, axes = FALSE)
+> grid()
+> lines(xx, yy, col = col_blue)
+> lines(xx, yy2, col = col_pink)
+> axis(1)
+> axis(2)
+> stat = 2
+> xx_stat = xx[xx > stat]
+> yy_stat = yy[xx > stat]
+> yy2_stat = yy2[xx > stat]
+> polygon(c(xx_stat, rev(xx_stat)), c(yy_stat, rep(0, length(yy_stat))),
++         border = NA, col = col_blue_transp)
+> polygon(c(xx_stat, rev(xx_stat)), c(yy2_stat, rep(0, length(yy_stat))),
++         border = NA, col = col_pink_transp)
+> lines(c(stat, stat), c(0, 0.3), lwd = 1.5, col = "#06bcf1")
+> text(stat, 0.3, "Test stastic: $\\sqrt{n}\\bar{X}_n / s = 2$", pos = 4,
++      col = "#06bcf1")
+> arrows(x0 = 2.2, y0 = 0.01, x1 = 3.5, y1 = 0.18, length = 0.07, code = 1, col = col_blue)
+> text(3.6, .18, "Approx. p-value:", pos = 4, col = col_blue)
+> text(3.6, .18 - 0.025, "$P(Z > 2) = 1 - \\Phi(2) = 2.28\\%$", pos = 4, col = col_blue)
+> arrows(x0 = 3.2, y0 = 0.02, x1 = 4, y1 = .8*0.1307692 + 0.02, length = 0.07, code = 1, col = col_pink)
+> text(4, .8*0.1307692 + 0.02, "Exact p-value:", pos = 4, col = col_pink)
+> text(4, .8*0.1307692 + 0.02  - 0.025, "$P(T > 2) = 14.49\\%$", pos = 4, col = col_pink)
+> text(-2.75, 0.3, "$Z \\sim N(0,1)$", col = col_blue, pos = 3)
+> text(-2.75, 0.2, "$T \\sim G$", col = col_pink, pos = 3)
+> dev.off()
+\end{Sinput}
+\end{Schunk}
+
+
+\begin{figure}
+\input{pvalue.tex}
+\end{figure}
+
+\end{document}

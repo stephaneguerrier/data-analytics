@@ -75,6 +75,11 @@ content: "";
 .purple {
   color: #373895 !important;
 }
+
+.purple2 {
+  color: #884dff !important;
+}
+
 /* Orange ("orange") text */
 .orange {
   color: #FFA500 !important;
