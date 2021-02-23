@@ -39,7 +39,7 @@ class: title-slide
  
 # Data Analytics for Pharmaceutical Sciences
 
-## Part II: Analysis of Variance (ANOVA)
+## Part I: Introduction to Statistical Inference
 
 ### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
 ### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
@@ -118,6 +118,7 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 .purple["In god we trust, all others must bring data." &lt;sup&gt;.smallest[👋]&lt;/sup&gt;]
 ]
 
+
 - .smallest[To assess the .pink[validity of a (scientific) hypothesis], the scientific community (generally) agrees on a specific procedure.]
 - .smallest[These hypotheses can be .pink[nearly anything], such as:]
   1. .smallest[Coffee consumption increases blood pressure. ]
@@ -158,21 +159,26 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 
 - In general (scientific) hypotheses can be translated into a set of statistical hypotheses:
 .center[
-`\(H_0: \theta \color{#eb078e}{\in} \Theta_0\)` and `\(H_a: \theta \color{#eb078e}{\not\in} \Theta_0\)`.
+$H_0: \theta \color{#eb078e}{\in} \Theta_0 \ $ and $ \ H_a: \theta \color{#eb078e}{\not\in} \Theta_0$.
 ]
 - In a hypothesis test, the statement being tested is called the .hi-purple[null hypothesis] `\(\color{#373895}{H_0}\)`. A hypothesis test is designed to assess the strength of the evidence against the null hypothesis.
 - The .hi-purple[alternative hypothesis] `\(\color{#373895}{H_a}\)` is the statement we hope or suspect to be true instead of `\(\color{#373895}{H_0}\)`.
 - Each hypothesis excludes the other, so that one can exclude one in favor of the other using the data.
-- Example ???????????????
+- .pink[Example:] a drug represses the progression of cancer
+.center[
+$H_0: \mu_{\text{drug}} \color{#eb078e}{=} \mu_{\text{control}} \ $ and `\(\ H_a: \mu_{\text{drug}}  \color{#eb078e}{&lt;} \mu_{\text{control}}\)`.
+]
 
 ---
 
 # A hypothesis testing
 
+.smallest[
 |                     | `\(H_0\)` is true                               | `\(H_0\)` is false                          |
 | ------------------- |---------------------------------------------| ----------------------------------------|
 | Can't reject `\(H_0\)`  | `\(\text{Correct decision (prob=}1-\alpha)\)`   | `\(\text{Type II error (prob=}1-\beta)\)`   |
-| Reject `\(H_0\)`        | `\(\text{Type I error (prob=}\alpha)\)`         | `\(\text{Correct decision (prob=}\beta)\)`  |
+| Reject `\(H_0\)`        | `\(\text{Type II error (prob}=\alpha)\)`         | `\(\text{Correct decision (prob=}\beta)\)`  |
+]
 
 - If we reject `\(H_0\)` when in fact `\(H_0\)` is true, this is a .pink[type I error] (also called .pink[false positive]). If we accept `\(H_0\)` when in fact `\(H_a\)` is true, this is a .purple[type II error] (also called .purple[false negative]).
 - A test is of .pink[significance level] `\(\color{#e64173}{\alpha}\)` when the probability to make a type I error is `\(\alpha\)`. Usually we consider `\(\alpha = 5\%\)`, however, this can vary depending on the context.
@@ -180,26 +186,17 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 
 ---
 
-# Test statistics and P-values
+# What are p-values?
 
-- .smallest[A hypothesis testing is based on a .hi-pink[test statistic], which measures the difference between the sample estimate and the hypothesized value in terms of its standard deviation, i.e.] 
-`$$\small \text{test statistic} = \frac{\text{sample estimate - hypothesized value}}{\text{standard deviation of sample estimate}}.$$`
-
-- .smallest[For example, consider a test for a single proportion with] `\(\small H_0: p = p_0\)` .smallest[and] `\(\small H_a: p &gt; p_0\)`.smallest[, the corresponding test statistic can be computed as] `$$Z = \frac{\hat{p}-\color{#e64173}{p_0}}{\color{#6A5ACD}{\sqrt{\frac{p_0(1-p_0)}{n}}}} \overset{\cdot}{\sim} \mathcal{N}(0,1).$$`
-- .smallest[The .hi-purple[p-value] is defined as the probability, assuming that] `\(\small H_0\)` .smallest[is true, that the test statistic will take a value at least as extreme as that actually observed.] 🤯😱
+- .smallest[The .hi-purple[p-value] is defined as the probability, assuming that] `\(\small H_0\)` .smallest[is true, that the test statistic will take a value at least as extreme as that actually observed.]
 - .smallest[Informally, .pink[a p-value can be understood as a measure of plausibility of the null hypothesis given the data]. Small p-value indicates strong evidence against] `\(\small H_0\)`.
-
----
-
-# How to understand p-values?
-
-- When the p-value is small enough (i.e. smaller than the significance level `\(\alpha\)`), one says that the test based on the null and alternative hypotheses is .pink[significant] or that the null hypothesis is rejected in favor of the alternative. .purple[This is generally what we want because it "verifies" our (research) hypothesis].
-- When the p-value is not small enough, with the available data, we cannot reject the null hypothesis so .pink[nothing] can be concluded. 🤔
-- With a sample of data, the obtained p-value summarizes somehow the .pink[incompatibility between the data and the model] (random process) constructed under the set of assumptions.
+- .smallest[When the p-value is small enough (i.e. smaller than the significance level] `\(\small \alpha\)`.smallest[), one says that the test based on the null and alternative hypotheses is .pink[significant] or that the null hypothesis is rejected in favor of the alternative. This is generally what we want because it "verifies" our (research) hypothesis.]
+- .smallest[When the p-value is not small enough, with the available data, we cannot reject the null hypothesis so nothing can be concluded.] 🤔
+- .smallest[The obtained p-value summarizes somehow the .pink[incompatibility between the data and the model] constructed under the set of assumptions.]
 
 .center[
-.purple["Absence of evidence is not evidence of absence." &lt;sup&gt;.smallest[👋]&lt;/sup&gt;]
-]
+.smaller.purple["Absence of evidence is not evidence of absence."] &lt;sup&gt;.smallest[👋]&lt;/sup&gt;]
+
 
 .footnote[.smallest[👋] From the British Medical Journal.]
 
@@ -215,7 +212,7 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 
 # P-values may be controversial
 
-.purple[P-values have been misused] many times because understanding what they mean is not intuitive!
+.pink[P-values have been misused] many times because understanding what they mean is not intuitive!
 
 &lt;div align="center"&gt;
 &lt;iframe src="https://fivethirtyeight.abcnews.go.com/video/embed/56150342" width="675" height="380" scrolling="no" style="border:none;" allowfullscreen&gt;&lt;/iframe&gt;
@@ -419,6 +416,11 @@ Unlike our previous result, `\(T\)` .pink[follows exactely] (for all `\(n\)`) a 
 - .smaller[The t-test accounts for the uncertainty of sample variance and, we have:] 
 
 `$$\text{p-values based on } \mathcal{N} (0, 1)\color{#eb078e}{&lt;}\text{p-values based on } \text{Student}(n).$$`
+---
+
+# Remarks
+
+&lt;img src="pics/pvalue2.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
 

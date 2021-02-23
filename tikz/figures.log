@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.21)  23 FEB 2021 01:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.21)  23 FEB 2021 23:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -492,7 +492,7 @@ LaTeX Font Info:    Trying to load font information for T1+aett on input line 1
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
-) (./pvalue.tex
+) (./tex/pvalue.tex
 LaTeX Font Info:    Trying to load font information for U+msa on input line 439
 7.
 
@@ -515,12 +515,22 @@ Non-PDF special ignored!
 <special> psfile=/dev/null
 Non-PDF special ignored!
 <special> psfile=/dev/null
+]) (./tex/pvalue2.tex
+Overfull \hbox (30.8pt too wide) in paragraph at lines 6588--6588
+[][] 
+ []
+
+[2
+Non-PDF special ignored!
+<special> psfile=/dev/null
+Non-PDF special ignored!
+<special> psfile=/dev/null
 ]) (./figures.aux) ) 
 Here is how much of TeX's memory you used:
- 13302 strings out of 480608
- 262803 string characters out of 5903630
- 635080 words of memory out of 5000000
- 28921 multiletter control sequences out of 15000+600000
+ 13307 strings out of 480608
+ 262990 string characters out of 5903630
+ 689573 words of memory out of 5000000
+ 28922 multiletter control sequences out of 15000+600000
  537592 words of font info for 38 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,9n,60p,409b,764s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -528,11 +538,12 @@ Here is how much of TeX's memory you used:
 onts/cm/cmmi10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmmi7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmr10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmsy10.pfb>
-Output written on figures.pdf (1 page, 65871 bytes).
+cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmsy7.pfb>
+Output written on figures.pdf (2 pages, 108518 bytes).
 PDF statistics:
- 28 PDF objects out of 1000 (max. 8388607)
- 19 compressed objects within 1 object stream
+ 35 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  17 words of extra memory for PDF output out of 10000 (max. 10000000)
 
