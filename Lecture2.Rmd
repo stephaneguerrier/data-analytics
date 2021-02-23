@@ -466,13 +466,13 @@ where $\color{#373895}{\varepsilon_i} = X_i - \mu$ can be understood ".purple[re
 Then, by the CLT we have
 
 $$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}} \mathcal{N}(0,1),$$
-where $\color{#373895}{S} = \sqrt{ \frac{1}{n-1} \sum_{i = 1}^n (X_i - \bar{X}_n)^2}$ and $\color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}}$ corresponds ".pink[approximately distributed under] $\color{#eb078e}{H_0}$ .pink[as]". In the above formula $T \sim G \approx \mathcal{N}(0,1)$ is a random variable but we can compute its .hi-purple[realization] based on our sample, i.e. $\color{#eb078e}{\sqrt{n}\bar{x}_n/s}$.
+where $\color{#373895}{S} = \sqrt{ \frac{1}{n-1} \sum_{i = 1}^n (X_i - \bar{X}_n)^2}$ and $\color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}}$ corresponds ".pink[approximately distributed under] $\color{#eb078e}{H_0}$ .pink[as]". In the above formula $T \color{#eb078e}{\underset{H_0}{\overset{ }{\sim}}} G$ ( $\color{#eb078e}{\to} \mathcal{N}(0,1)$, as $n \color{#eb078e}{\to} \infty$) is a random variable but we can compute its .hi-purple[realization] based on our sample, i.e. $\color{#eb078e}{\sqrt{n}\bar{x}_n/s}$.
 
-Using the definition of the p-value<sup>.smallest[👋]</sup>, we have
+Let $Z \sim \mathcal{N}(0,1)$, then using the definition of the p-value<sup>.smallest[👋]</sup>, we have
 
 $$\text{p-value} = \Pr \left(T > \frac{\bar{x}_n}{s} \right) \color{#eb078e}{\overset{\tiny CLT}{\approx}} \Pr \left(Z > \frac{\bar{x}_n}{s} \right) = 1 - \Phi\left(\frac{\bar{x}_n}{s}\right).$$
 
-.footnote[.smallest[👋] The .hi-purple[p-value] is defined as the probability, assuming that the null is true, that the test statistic will take a value at least as extreme as that actually observed.]
+.footnote[.smallest[👋] Reminder: the .hi-purple[p-value] is defined as the probability, assuming that the null is true, that the test statistic will take a value at least as extreme as that actually observed.]
 
 ---
 
@@ -551,8 +551,8 @@ which corresponds to the following model
 $$X_i = \mu + \color{#373895}{\varepsilon_i},$$
 where $\color{#373895}{\varepsilon_i} = X_i - \mu \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(0,\sigma^2)$, we have
 
-$$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{}{\sim}}} \text{Student}(n-1) \color{#eb078e}{\overset{\tiny CLT}{\approx}} \mathcal{N}(0,1).$$
-Unlike our previous result, $T$ .pink[follows exactely] (for all $n$) a $\text{Student}(n-1)$ distribution. Note that $\text{Student}(n) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1)$ as $n \to \infty$.
+$$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{}{\sim}}} \text{Student}(n-1) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1).$$
+Unlike our previous result, $T$ .pink[follows exactely] (for all $n$) a $\text{Student}(n-1)$ distribution. Note that $\text{Student}(n) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1)$ as $n \color{#eb078e}{\overset{}{\to}} \infty$.
 
 ---
 
@@ -640,7 +640,7 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 
 - The Wilcoxon signed rank test considers the same alternative hypothesis as the t.test and its use in `R` is based on the function `wilcox.test(...)`, which has a similar syntax as the function `t.test(...).` 
 
-- In general, assessing whether the data is normally distributed is very difficult (In fact, there is no satisfactory statistical method for it).
+- In general, assessing whether the data is normally distributed is .purple[very difficult] (in fact, there is no satisfactory statistical method for it).
 
 - .pink[Our recommendation is to always use the one-sample Wilcoxon signed rank test]. Compared to the t-test, we may lose a bit of power using the Wilcoxon signed rank test if all the conditions are indeed satisfied (the difference is generally very small), but this is not case the results will be far more reliable. 
 
