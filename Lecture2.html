@@ -52,7 +52,6 @@ class: title-slide
 ### .tiny[This document was prepared with the help of Wenfei Chu &amp; Yuming Zhang]
 ---
 
-
 # R and RStudio
 
 .pull-left[
@@ -68,7 +67,7 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 
 &lt;img src="pics/r_first_then.png" width="100%" style="display: block; margin: auto;" /&gt;
 
-.red[(YUMING: COULD YOU ADD THE LINK HERE FOR THE FIGURE?)]
+.tiny[Source: [allisonhorst](https://github.com/allisonhorst/stats-illustrations)]
 ]
 
 ---
@@ -252,7 +251,7 @@ $H_0: \mu_{\text{drug}} \color{#eb078e}{=} \mu_{\text{control}} \ $ and `\(\ H_a
 
 # .smaller[Normal distribution as an approximation?]
 
-The .hi.purple[Central Limit Theorem(s) (CLT)] that states (very informally): .purple[*the sampling distribution of the average of independent (or "not too strongly correlated") random variables (whose distributions are "not too different" nor "too extreme") tends to a normal distribution as the sample size gets larger.*]
+The .hi.purple[Central Limit Theorem(s) (CLT)] states (very informally): .purple[*the sampling distribution of the average of independent (or "not too strongly correlated") random variables (whose distributions are "not too different" nor "too extreme") tends to a normal distribution as the sample size gets larger.*]
 
 As an example, one of the simplest version of the CLT (known as the *Lindeberg–Lévy CLT*) states:
 *Suppose that* `\(\{X_{1},\ldots ,X_{n}\}\)` *is a sequence of* *iid* *random variables such that* `\(\mathbb{E}[ X_i ] = \mu\)` *and `\(\text{Var} [X_{i}]=\sigma^{2}&lt;\infty\)`. Let `\({\bar{X}}_{n} = \frac{1}{n} \sum_{i = 1}^n X_i\)`, then as `\(n\)` approaches infinity, the random variables `\(\sqrt{n} (\bar{X}_{n}-\mu)\)` .pink[converge in distribution] to a normal `\(\mathcal{N}(0,\sigma^{2})\)`.*
@@ -263,11 +262,11 @@ This result can be extended (under some conditions) to .pink[dependent] (i.e. `\
 
 # .smaller[Normal distribution as an approximation?]
 
-Loosely speaking, we can translate CLTs results as 
+Loosely speaking, we can translate the results of CLTs as 
 
 `$$\bar{X}_n = \frac{1}{n} \sum_{i = 1}^n X_i \color{#eb078e}{\overset{\cdot}{\sim}} {\mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)},$$` 
 
-where `\(\color{#eb078e}{\overset{\cdot}{\sim}}\)` corresponds ".pink[approximately distributed as]". This result is essential in statistics and the vast majority of inferential methods are based on some version of the CLT.
+where `\(\color{#eb078e}{\overset{\cdot}{\sim}}\)` corresponds ".pink[approximately distributed as]". This result is essential in Statistics and a vast majority of inferential methods are based on some versions of the CLT.
 
 Informally, it means that when a measurement can be thought of as the average (or the sum) of .hi.purple[numerous factors], its distribution tends to go to a normal distribution. For example, the height of adults can be thought of as the sum of their genetic information, diet, life style, ...
 
@@ -293,14 +292,14 @@ Informally, it means that when a measurement can be thought of as the average (o
 
 Suppose that we conduct an experiment on `\(n\)` patients where a new diet is tested. We measure `\(X_i\)` as the weight loss after 4 months. Our hope is to show that the diet allows to significantly reduce the weight of the participants.
 
-Suppose that the (possibly dependent) data are such that `\(X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n\)` and `\(\mathbb{E}[X_i] = \mu\)`. This is a rather a plausible assumption (why? 🤔). To verify our hypothesis (i.e. diet reduces weight) we consider:
+Suppose that the (possibly dependent) data are such that `\(X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n\)` and `\(\mathbb{E}[X_i] = \mu\)`. This is a rather plausible assumption (why? 🤔). To verify our hypothesis (i.e. diet reduces weight) we consider:
 
 `$$H_0: \mu \color{#eb078e}{=} 0 \ \ \ \ \text{and} \ \ \ \ H_a: \mu \color{#eb078e}{&gt;} 0.$$`
 
-This implies that we are considering the following model
+This implies that we are considering the following model:
 
 `$$X_i = \mu + \color{#373895}{\varepsilon_i},$$`
-where `\(\color{#373895}{\varepsilon_i} = X_i - \mu\)` can be understood ".purple[residuals]".
+where `\(\color{#373895}{\varepsilon_i} = X_i - \mu\)` can be understood as ".purple[residuals]".
 
 ---
 
@@ -308,12 +307,12 @@ where `\(\color{#373895}{\varepsilon_i} = X_i - \mu\)` can be understood ".purpl
 
 Then, by the CLT we have
 
-`$$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}} \mathcal{N}(0,1),$$`
-where `\(\color{#373895}{S} = \sqrt{ \frac{1}{n-1} \sum_{i = 1}^n (X_i - \bar{X}_n)^2}\)` and `\(\color{#eb078e}{\underset{H_0}{\overset{\cdot}{\sim}}}\)` corresponds ".pink[approximately distributed under] `\(\color{#eb078e}{H_0}\)` .pink[as]". In the above formula `\(T \color{#eb078e}{\underset{H_0}{\overset{ }{\sim}}} G\)` ( `\(\color{#eb078e}{\to} \mathcal{N}(0,1)\)`, as `\(n \color{#eb078e}{\to} \infty\)`) is a random variable but we can compute its .hi-purple[realization] based on our sample, i.e. `\(\color{#eb078e}{\sqrt{n}\bar{x}_n/s}\)`.
+`$$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\sim}} G \color{#eb078e}{\approx} \mathcal{N}(0,1),$$`
+where `\(\color{#373895}{S} = \sqrt{ \frac{1}{n-1} \sum_{i = 1}^n (X_i - \bar{X}_n)^2}\)` and `\(\color{#eb078e}{\underset{H_0}{\sim}}\)` corresponds ".pink[distributed under] `\(\color{#eb078e}{H_0}\)` .pink[as]". In the above formula `\(T\)` is a random variable but we can compute its .hi-purple[realization] based on our sample, i.e. `\(\color{#eb078e}{\sqrt{n}\bar{x}_n/s}\)`.
 
 Let `\(Z \sim \mathcal{N}(0,1)\)`, then using the definition of the p-value&lt;sup&gt;.smallest[👋]&lt;/sup&gt;, we have
 
-`$$\text{p-value} = \Pr \left(T &gt; \frac{\bar{x}_n}{s} \right) \color{#eb078e}{\overset{\tiny CLT}{\approx}} \Pr \left(Z &gt; \frac{\bar{x}_n}{s} \right) = 1 - \Phi\left(\frac{\bar{x}_n}{s}\right).$$`
+`$$\text{p-value} = \Pr \left(T &gt; \frac{\sqrt{n}\bar{x}_n}{s} \right) \color{#eb078e}{\overset{\tiny CLT}{\approx}} \Pr \left(Z &gt; \frac{\sqrt{n}\bar{x}_n}{s} \right) = 1 - \Phi\left(\frac{\sqrt{n}\bar{x}_n}{s}\right).$$`
 
 .footnote[.smallest[👋] Reminder: the .hi-purple[p-value] is defined as the probability, assuming that the null is true, that the test statistic will take a value at least as extreme as that actually observed.]
 
@@ -322,13 +321,6 @@ Let `\(Z \sim \mathcal{N}(0,1)\)`, then using the definition of the p-value&lt;s
 # So how does it work?
 
 &lt;img src="pics/pvalue.png" width="80%" style="display: block; margin: auto;" /&gt;
-
----
-
-# Diet Example
-
-YUMING COULD YOU DO THIS? 
-(https://www.sheffield.ac.uk/polopoly_fs/1.570199!/file/stcp-Rdataset-Diet.csv)
 
 ---
 
@@ -385,23 +377,30 @@ t = sqrt(n)*Xbar/s
 #&gt; [1] 1.677825e-11
 ```
 
-.smallest[This result suggests that the diet allows to reduce the weight of the participants.]
-]]
+.smallest[This result suggests that Diet B allows to reduce the weight of the participants.]
+]
+.panel[.panel-name[Description]
+We consider an experiment on 76 people using one of the three diets, labeled as Diet A, B, and C. We are interested in knowing .pink[whether Diet B allows to reduce the weight of the participants]. To test our hypothesis, we collected a dataset that contains information on the participants, including their gender, age, height, assigned types of diets, initial weight and final weight after the experiment.
+
+Source: [University of Sheffield](https://www.sheffield.ac.uk/mash/statistics/datasets)
+]
+
+]
 
 ---
 
 # One-sample Student's t-test
 
-Before we assume that the (possibly dependent) data were such that `\(X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n\)` and `\(\mathbb{E}[X_i] = \mu\)`. However, in the .pink[very special] case where
+Before we assume that the (possibly dependent) data is such that `\(X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n\)` and `\(\mathbb{E}[X_i] = \mu\)`. However, in the .pink[very special] case where
 
 `$$X_i \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(\mu, \sigma^2),$$`
-which corresponds to the following model
+which corresponds to the following model:
 
 `$$X_i = \mu + \color{#373895}{\varepsilon_i},$$`
 where `\(\color{#373895}{\varepsilon_i} = X_i - \mu \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(0,\sigma^2)\)`, we have
 
 `$$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{}{\sim}}} \text{Student}(n-1) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1).$$`
-Unlike our previous result, `\(T\)` .pink[follows exactely] (for all `\(n\)`) a `\(\text{Student}(n-1)\)` distribution. Note that `\(\text{Student}(n) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1)\)` as `\(n \color{#eb078e}{\overset{}{\to}} \infty\)`.
+Unlike our previous result, `\(T\)` .pink[follows exactly] a `\(\text{Student}(n-1)\)` distribution for all `\(n\)`. Note that `\(\text{Student}(n) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1)\)` as `\(n \color{#eb078e}{\overset{}{\to}} \infty\)`.
 
 ---
 
@@ -409,11 +408,11 @@ Unlike our previous result, `\(T\)` .pink[follows exactely] (for all `\(n\)`) a 
 
 - .smaller[.pink[Why is it called Student?] The Student's t distributions were discovered in 1908 by William S. Gosset, who is a statistician employed by the Guinness brewing company. Gosset devised the t-test as an economical way to monitor the quality of stout 🍻. The company forbade its scientists from publishing their findings, so Gosset published his statistical work under the pen name ".pink[Student]".]
 
-- .smaller[The t-test (similarly to the z-test previously discussed) can be used to test if the population mean is .pink[greater, smaller, or different than] a hypothesized value, i.e.] 
+- .smaller[The t-test (similarly to the test previously discussed) can be used to test if the population mean is .pink[greater, smaller, or different than] a hypothesized value, i.e.] 
 
 `$$H_0: \mu \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \mu \ \big[ \color{#eb078e}{&gt;} \text{ or } \color{#eb078e}{&lt;} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$`
 
-- .smaller[The t-test accounts for the uncertainty of sample variance and, we have:] 
+- .smaller[The t-test accounts for the uncertainty of sample variance and we have:] 
 
 `$$\text{p-values based on } \mathcal{N} (0, 1)\color{#eb078e}{&lt;}\text{p-values based on } \text{Student}(n).$$`
 ---
@@ -444,7 +443,7 @@ t.test(data, alternative = "less")
 `$$H_0: \mu \color{#eb078e}{=} 0 \ \ \ \ \text{and} \ \ \ \ H_a: \mu \color{#eb078e}{\neq} 0$$`
 
 ```r
-t.test(data, alternative = "two.sided", mu = 5)
+t.test(data, alternative = "two.sided", mu = 0)
 t.test(data)
 ```
 
@@ -456,7 +455,7 @@ t.test(data)
 .panel[.panel-name[Results]
 1. .purple[Define hypotheses:] `\(H_0: \mu = 0\)` and `\(H_a: \mu \color{#e64173}{&gt;} 0\)`.
 2. .purple[Define] `\(\color{#373895}{\alpha}\)`: We consider `\(\alpha = 5\%\)`.
-3. .purple[Compute p-value]: p-value =  `\(3.697 \times 10^{-5} \ \%\)` (see R code tab for details).
+3. .purple[Compute p-value]: p-value =  `\(3.697 \times 10^{-5} \ \%\)` (see R output tab for details).
 4. .purple[Conclusion:] We have p-value &lt; `\(\alpha\)` and so we can reject the null hypothesis at the significance level of 5% and conclude that the diet significantly reduces the weight of the participants.
 ]
 .panel[.panel-name[`R` output]
@@ -491,7 +490,7 @@ The reliability of the t-test strongly relies on:
 
 ⚠️ Therefore, before proceeding to any inference, we should check the data preliminarily using .purple[boxplot] or .purple[histogram] or .purple[QQ plot] &lt;sup&gt;.smallest[👋]&lt;/sup&gt; to see if a t-test can be used.
 
-In the diet example, these assumptions appear plausible. When this is not the case, the .pink[Wilcoxon signed rank test] can be used as an alternative that is less sensitive to outliers and doesn't assume that the data are normally distributed. This test is, however, less powerful than the t-test (when it assumptions are satisfied).
+In the diet example, these assumptions appear plausible. When this is not the case, the .pink[Wilcoxon signed rank test] can be used as an alternative that is less sensitive to outliers and doesn't assume that the data are normally distributed. This test is, however, less powerful than the t-test (when its assumptions are satisfied).
 
 .footnote[.smallest[👋 Check out [QQ plot](https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot)]]
 
@@ -501,7 +500,7 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 
 - The .pink[rank] is the position index of each observation when we order them from smallest to largest, starting with rank 1 for the smallest observation. 
 - The Wilcoxon signed rank test only uses the ranks (i.e. the ordering) of the observations, and makes no use of their actual numerical values. Therefore, it is a .pink[nonparametric test].
-- The Wilcoxon signed rank test depends on the .pink[Wilcoxon signed rank statistic], which is the sum of the ranks of only the positive values (or only the negative values). It's distribution under the null can be obtained by different methods (e.g. exact, asymptotic normal, ...) but the details beyond the scope of this class.
+- The Wilcoxon signed rank test depends on the .pink[Wilcoxon signed rank statistic], which is the sum of the ranks of only the positive values (or only the negative values). Its distribution under the null can be obtained by different methods (e.g. exact, asymptotic normal, ...) but the details are beyond the scope of this class.
 - Unlike the t-test whose hypotheses are on the population mean, the Wilcoxon signed rank test states the hypotheses in terms of .pink[population median]. When the distribution is symmetric, the mean and the median of the population have the same value.
 
 ---
@@ -510,11 +509,11 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 
 - Under the assumption of a symmetric distribution, the assumed model for this method is given by `\(X_i = \mu + \color{#373895}{\varepsilon_i}\)`, where `\(\color{#373895}{\varepsilon_i} = X_i - \mu \color{#eb078e}{\overset{iid}{\sim}} (0,\sigma^2)\)`.
 
-- The Wilcoxon signed rank test considers the same alternative hypothesis as the t.test and its use in `R` is based on the function `wilcox.test(...)`, which has a similar syntax as the function `t.test(...).` 
+- The Wilcoxon signed rank test considers the same alternative hypothesis as the t-test and its use in `R` is based on the function `wilcox.test(...)`, which has a similar syntax as the function `t.test(...).` 
 
-- In general, assessing whether the data is normally distributed is .purple[very difficult] (in fact, there is no satisfactory statistical method for it).
+- In general, assessing whether the data is normally distributed is .purple[very difficult]. (In fact, there is no satisfactory statistical method for it.)
 
-- .pink[Our recommendation is to always use the one-sample Wilcoxon signed rank test]. Compared to the t-test, we may lose a bit of power using the Wilcoxon signed rank test if all the conditions are indeed satisfied (the difference is generally very small), but this is not case the results will be far more reliable. 
+- .pink[Our recommendation is to always use the one-sample Wilcoxon signed rank test]. Compared to the t-test, we may lose a bit of power using the Wilcoxon signed rank test if all the conditions are indeed satisfied (the difference is generally very small), but if this is not case the results will be far more reliable. 
 
 ---
 
@@ -524,7 +523,7 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 .panel[.panel-name[Results]
 1. .purple[Define hypotheses:] `\(H_0: \mu = 0\)` and `\(H_a: \mu \color{#e64173}{&gt;} 0\)`.
 2. .purple[Define] `\(\color{#373895}{\alpha}\)`: We consider `\(\alpha = 5\%\)`.
-3. .purple[Compute p-value]: p-value = `\(2.71 \times 10^{-3} \ \%\)` (see R code tab for details).
+3. .purple[Compute p-value]: p-value = `\(2.71 \times 10^{-3} \ \%\)` (see R output tab for details).
 4. .purple[Conclusion:] We have p-value &lt; `\(\alpha\)` and so we can reject the null hypothesis at the significance level of 5% and conclude that the diet significantly reduces the weight of the participants.
 ]
 .panel[.panel-name[`R` output]
