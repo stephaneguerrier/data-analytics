@@ -1,0 +1,341 @@
+---
+title: "Modelling and Data Analytics for Pharmaceutical Sciences"
+subtitle: "Part I: Introduction to Statistical Inference"
+author: "Stéphane Guerrier"
+date: " "
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    seal: false
+---
+
+
+```{R, setup, include = F}
+# devtools::install_github("dill/emoGG")
+library(pacman)
+p_load(
+  broom, tidyverse,
+  latex2exp, ggplot2, ggthemes, ggforce, viridis, extrafont, gridExtra,
+  kableExtra, snakecase, janitor,
+  data.table, dplyr, estimatr,
+  lubridate, knitr, parallel,
+  lfe,
+  here, magrittr
+)
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+orange <- "#FFA500"
+red <- "#fb6107"
+blue <- "#2b59c3"
+green <- "#8bb174"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+purple <- "#6A5ACD"
+slate <- "#314f4f"
+# Dark slate grey: #314f4f
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+options(crayon.enabled = F)
+options(knitr.table.format = "html")
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -0.5, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 18, family = "STIXGeneral"),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_math <- theme_void() + theme(
+  text = element_text(family = "MathJax_Math"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_serif <- theme_void() + theme(
+  text = element_text(family = "MathJax_Main"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes <- theme_void() + theme(
+  text = element_text(family = "Fira Sans Book"),
+  axis.title = element_text(size = 18),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = grey_light,
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_set(theme_gray(base_size = 20))
+# Column names for regression results
+reg_columns <- c("Term", "Est.", "S.E.", "t stat.", "p-Value")
+# Function for formatting p values
+format_pvi <- function(pv) {
+  return(ifelse(
+    pv < 0.0001,
+    "<0.0001",
+    round(pv, 4) %>% format(scientific = F)
+  ))
+}
+format_pv <- function(pvs) lapply(X = pvs, FUN = format_pvi) %>% unlist()
+# Tidy regression results table
+tidy_table <- function(x, terms, highlight_row = 1, highlight_color = "black", highlight_bold = T, digits = c(NA, 3, 3, 2, 5), title = NULL) {
+  x %>%
+    tidy() %>%
+    select(1:5) %>%
+    mutate(
+      term = terms,
+      p.value = p.value %>% format_pv()
+    ) %>%
+    kable(
+      col.names = reg_columns,
+      escape = F,
+      digits = digits,
+      caption = title
+    ) %>%
+    kable_styling(font_size = 20) %>%
+    row_spec(1:nrow(tidy(x)), background = "white") %>%
+    row_spec(highlight_row, bold = highlight_bold, color = highlight_color)
+}
+```
+
+```{css, echo = F, eval = F}
+@media print {
+  .has-continuation {
+    display: block !important;
+  }
+}
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_extra_styles()
+```
+
+
+class: title-slide  
+<div class="my-logo-right"></div>
+<br>
+<br>
+<br>
+<br>
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part II: Analysis of Variance (ANOVA)
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+
+<br>
+<br>
+```{R, out.width = "25%", echo = F}
+include_graphics("pics/liscence.png")
+```
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu & Yuming Zhang]
+
+---
+
+
+# .smaller[Two-sample Location Tests]
+
+In practice, we often encounter problems where our goal is .pink[to compare the means (or locations) of two samples]. For example,
+1. A scientist is interested in comparing the vaccine efficacy of the Pfizer-BioNTech and the Moderna vaccine.
+2. A bank wants to know which of two proposed plans will most increase the use of its credit cards.
+3. A psychologist wants to compare male and female college students' impression on a selected webpage.
+
+We will discuss three ".pink[two-sample location tests]":
+1. .purple[Two independent sample Student's t-test]
+2. .purple[Two independent sample Welch's t-test]
+3. .purple[Two independent sample Mann-Whitney-Wilcoxon test]
+
+---
+
+# .smaller[Two independent sample Student's t-test]
+
+This test considers the following assumed model for group .hi-purple2[A] and .hi-blue[B]
+
+$$X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$
+where $g=A,B$, $i=1,...,n_{g}$, $\varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}})$ and $\sum n_{g}\delta_{g} = \color{#6A5ACD}{\delta_A} + \color{#06bcf1}{\delta_B}=0$. 
+
+📝 $\color{#6A5ACD}{n_A}$ $=$ sample size of group .hi-purple2[A], $\color{#6A5ACD}{\mu_{A} = \mu + \delta_A}$ $=$ population mean of group .purple2[A], $\color{#06bcf1}{n_B}$ and $\color{#06bcf1}{\mu_{B} = \mu + \delta_B}$ are similarly defined for group .hi-blue[B].
+
+.pink[Hypotheses:]
+
+$$H_0: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \ \big[ \color{#eb078e}{>} \text{ or } \color{#eb078e}{<} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$
+Test statistic's distribution under .H0} 
+
+$$T = \frac{(\overline{X}_{A}-\overline{X}_{B})-\mu_0}{s_{p}\sqrt{n_{A}^{-1}+n_{B}^{-1}}} \sim \text{Student}(n_{A}+n_{B}-2).$$ 
+
+
+
+
+---
+
+
+dietAB
+
+
+# The two-sample t-test: Example
+
+.panelset[
+.panel[.panel-name[Problem]
+.smallest[There is emerging evidence of a relationship between timing of feeding and weight regulation. More precisely, it is claimed that .pink[people who have their main meal early tend to lose more weight compared to people who eat late]. We collect weight loss (in kg) data from 12 individuals, where 7 of them are early eaters and 5 of them are late eaters. We want to test if such claim is valid based on the observed sample: 
+$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
+]
+1. .smallest[.purple[Define hypotheses:]] $\small H_0: \mu_{\text{early}} = \mu_{\text{late}}$ .smallest[and] $\small H_a: \mu_{\text{early}} \color{#e64173}{>} \mu_{\text{late}}$.smallest[.]
+2. .smallest[.purple[Define]] $\small \color{#6A5ACD}{\alpha}$.smallest[: We consider] $\small \alpha = 5\%$.smallest[.]
+3. .smallest[.purple[Compute p-value:] p-value =] $\small 2.122\%$ .smallest[(see R code tab for details).]
+4. .smallest[.purple[Conclusion:] We have p-value <] $\small \alpha$ .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
+]
+.panel[.panel-name[Boxplot Code]
+```{r, eval = F}
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+
+boxplot(early_eaters, late_eaters, 
+        names = c("Early", "Late"), 
+        ylab = "Weight loss (kg)",
+        col = c("#F8766D", "#00BFC4"))
+points(1:2, c(mean(early_eaters), mean(late_eaters)), 
+       pch = 16, col = 1)
+```
+]
+.panel[.panel-name[Boxplot]
+```{r, out.width = "80%", echo = F}
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+
+par(mai = c(1,1.5,1,1))
+boxplot(early_eaters, late_eaters, col = c("#F8766D", "#00BFC4"), 
+        names = c("Early", "Late"), ylab = "Weight loss (kg)", cex.axis = 2, cex.lab = 2)
+points(1:2, c(mean(early_eaters), mean(late_eaters)), pch = 16, col = 1, cex = 2)
+```
+]
+.panel[.panel-name[`R` Code ]
+```{r}
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+t.test(x = early_eaters, y = late_eaters, alternative = "greater")
+```
+]
+]
+
+---
+
+# Wilcoxon rank sum test
+
+- .smallest[Similar to the Wilcoxon signed rank test as a robust <sup>.smallest[👋]</sup> alternative to the one-sample t-test, we can use the .hi-pink[Wilcoxon rank sum test] (also called the Mann-Whitney test) when the normality condition is not satisfied to use two-sample t-test.]
+- .smallest[The Wilcoxon rank sum test depends on the .purple[Wilcoxon rank sum statistic], which is the .purple[sum of the ranks of one sample]. As it only uses the ranks of the observations, it is a .turquoise[nonparametric test].]
+- .smallest[In the simplest form, the Wilcoxon rank sum test states the hypotheses in terms of .pink[population median]. However, more precisely, it actually tests whether the two distributions are the same, i.e. 😵]
+\begin{align}
+& \small H_0: \text{The two distributions are the same.} \\
+& \small H_a: \text{One distribution has values that are systematically larger (or smaller). }
+\end{align}
+
+.footnote[.smallest[👋 Informally, a robust method is such that it is not overly affected by outliers. The usual one-sample and two-sample t-tests are somehow robust in the sense that their results of inference are not very sensitive to moderate lack of normality when the samples are sufficiently large. However, they may still fail when the population distribution shows strong skewness, especially when we have only a few observations.]]
+
+---
+
+# Revisit the weight loss example
+
+.panelset[
+.panel[.panel-name[Problem]
+.smallest[Let's recall the previous weight loss example. We want to test if .pink[early eaters tend to lose more weight than late eaters]. The sample is as follows: 
+$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
+]
+1. .smallest[.purple[Define hypotheses:]] $\small H_0: \text{median}_{\text{early}} = \text{median}_{\text{late}}$ .smallest[and] $\small H_a: \text{median}_{\text{early}} \color{#e64173}{>} \text{median}_{\text{late}}$.smallest[.]
+2. .smallest[.purple[Define]] $\small \color{#6A5ACD}{\alpha}$.smallest[: We consider] $\small \alpha = 5\%$.smallest[.]
+3. .smallest[.purple[Compute p-value:] p-value =] $\small 2.399\%$ .smallest[(see R code tab for details).]
+4. .smallest[.purple[Conclusion:] We have p-value <] $\small \alpha$ .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
+]
+.panel[.panel-name[Boxplot Code]
+```{r, eval = F}
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+
+boxplot(early_eaters, late_eaters, 
+        names = c("Early", "Late"), 
+        ylab = "Weight loss (kg)",
+        col = c("#F8766D", "#00BFC4"))
+points(1:2, c(mean(early_eaters), mean(late_eaters)), 
+       pch = 16, col = 1)
+```
+]
+.panel[.panel-name[Boxplot]
+```{r, out.width = "80%", echo = F}
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+
+par(mai = c(1,1.5,1,1))
+boxplot(early_eaters, late_eaters, col = c("#F8766D", "#00BFC4"), 
+        names = c("Early", "Late"), ylab = "Weight loss (kg)", cex.axis = 2, cex.lab = 2)
+points(1:2, c(mean(early_eaters), mean(late_eaters)), pch = 16, col = 1, cex = 2)
+```
+]
+.panel[.panel-name[`R` Code ]
+```{r}
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+wilcox.test(x = early_eaters, y = late_eaters, alternative = "greater")
+```
+]
+]
+
+---
+

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Guerrier" />
+    <link href="Lecture2_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Lecture2_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="Lecture2_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="Lecture2_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture2_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture2_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture2_files/panelset-0.2.4/panelset.js"></script>
+    <script src="Lecture2_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="Lecture2_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+class: title-slide  
+&lt;div class="my-logo-right"&gt;&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part II: Analysis of Variance (ANOVA)
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;img src="pics/liscence.png" width="25%" style="display: block; margin: auto;" /&gt;
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu &amp; Yuming Zhang]
+
+---
+
+
+# .smaller[Two-sample Location Tests]
+
+In practice, we often encounter problems where our goal is .pink[to compare the means (or locations) of two samples]. For example,
+1. A scientist is interested in comparing the vaccine efficacy of the Pfizer-BioNTech and the Moderna vaccine.
+2. A bank wants to know which of two proposed plans will most increase the use of its credit cards.
+3. A psychologist wants to compare male and female college students' impression on a selected webpage.
+
+We will discuss three ".pink[two-sample location tests]":
+1. .purple[Two independent sample Student's t-test]
+2. .purple[Two independent sample Welch's t-test]
+3. .purple[Two independent sample Mann-Whitney-Wilcoxon test]
+
+---
+
+# .smaller[Two independent sample Student's t-test]
+
+This test considers the following assumed model for group .purple2[A] and .blue[B]
+
+`$$X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$`
+where `\(g=A,B\)`, `\(i=1,...,n_{g}\)`, `\(\varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}})\)` and `\(\sum n_{g}\delta_{g} = \color{#6A5ACD}{\delta_A} + \color{#06bcf1}{\delta_B}=0\)`. 
+
+📝 `\(\color{#6A5ACD}{n_A}\)` `\(=\)` sample size of group .hi-purple2[A], `\(\color{#6A5ACD}{\mu_{A} = \mu + \delta_A}\)` `\(=\)` population mean of group .purple2[A], `\(\color{#06bcf1}{n_B}\)` and `\(\color{#06bcf1}{\mu_{B} = \mu + \delta_B}\)` are similarly defined for group .hi-blue[B].
+
+.pink[Hypotheses:]
+
+`$$H_0: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \ \big[ \color{#eb078e}{&gt;} \text{ or } \color{#eb078e}{&lt;} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$`
+Test statistic's distribution under .H0} 
+
+`$$T = \frac{(\overline{X}_{A}-\overline{X}_{B})-\mu_0}{s_{p}\sqrt{n_{A}^{-1}+n_{B}^{-1}}} \sim \text{Student}(n_{A}+n_{B}-2).$$` 
+
+
+
+
+---
+
+
+dietAB
+
+
+# The two-sample t-test: Example
+
+.panelset[
+.panel[.panel-name[Problem]
+.smallest[There is emerging evidence of a relationship between timing of feeding and weight regulation. More precisely, it is claimed that .pink[people who have their main meal early tend to lose more weight compared to people who eat late]. We collect weight loss (in kg) data from 12 individuals, where 7 of them are early eaters and 5 of them are late eaters. We want to test if such claim is valid based on the observed sample: 
+$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
+]
+1. .smallest[.purple[Define hypotheses:]] `\(\small H_0: \mu_{\text{early}} = \mu_{\text{late}}\)` .smallest[and] `\(\small H_a: \mu_{\text{early}} \color{#e64173}{&gt;} \mu_{\text{late}}\)`.smallest[.]
+2. .smallest[.purple[Define]] `\(\small \color{#6A5ACD}{\alpha}\)`.smallest[: We consider] `\(\small \alpha = 5\%\)`.smallest[.]
+3. .smallest[.purple[Compute p-value:] p-value =] `\(\small 2.122\%\)` .smallest[(see R code tab for details).]
+4. .smallest[.purple[Conclusion:] We have p-value &lt;] `\(\small \alpha\)` .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
+]
+.panel[.panel-name[Boxplot Code]
+
+```r
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+
+boxplot(early_eaters, late_eaters, 
+        names = c("Early", "Late"), 
+        ylab = "Weight loss (kg)",
+        col = c("#F8766D", "#00BFC4"))
+points(1:2, c(mean(early_eaters), mean(late_eaters)), 
+       pch = 16, col = 1)
+```
+]
+.panel[.panel-name[Boxplot]
+&lt;img src="Lecture2_files/figure-html/unnamed-chunk-4-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[`R` Code ]
+
+```r
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+t.test(x = early_eaters, y = late_eaters, alternative = "greater")
+```
+
+```
+#&gt; 
+#&gt; 	Welch Two Sample t-test
+#&gt; 
+#&gt; data:  early_eaters and late_eaters
+#&gt; t = 2.4351, df = 7.5918, p-value = 0.02122
+#&gt; alternative hypothesis: true difference in means is greater than 0
+#&gt; 95 percent confidence interval:
+#&gt;  1.414346      Inf
+#&gt; sample estimates:
+#&gt; mean of x mean of y 
+#&gt;  11.24286   5.12000
+```
+]
+]
+
+---
+
+# Wilcoxon rank sum test
+
+- .smallest[Similar to the Wilcoxon signed rank test as a robust &lt;sup&gt;.smallest[👋]&lt;/sup&gt; alternative to the one-sample t-test, we can use the .hi-pink[Wilcoxon rank sum test] (also called the Mann-Whitney test) when the normality condition is not satisfied to use two-sample t-test.]
+- .smallest[The Wilcoxon rank sum test depends on the .purple[Wilcoxon rank sum statistic], which is the .purple[sum of the ranks of one sample]. As it only uses the ranks of the observations, it is a .turquoise[nonparametric test].]
+- .smallest[In the simplest form, the Wilcoxon rank sum test states the hypotheses in terms of .pink[population median]. However, more precisely, it actually tests whether the two distributions are the same, i.e. 😵]
+`\begin{align}
+&amp; \small H_0: \text{The two distributions are the same.} \\
+&amp; \small H_a: \text{One distribution has values that are systematically larger (or smaller). }
+\end{align}`
+
+.footnote[.smallest[👋 Informally, a robust method is such that it is not overly affected by outliers. The usual one-sample and two-sample t-tests are somehow robust in the sense that their results of inference are not very sensitive to moderate lack of normality when the samples are sufficiently large. However, they may still fail when the population distribution shows strong skewness, especially when we have only a few observations.]]
+
+---
+
+# Revisit the weight loss example
+
+.panelset[
+.panel[.panel-name[Problem]
+.smallest[Let's recall the previous weight loss example. We want to test if .pink[early eaters tend to lose more weight than late eaters]. The sample is as follows: 
+$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
+]
+1. .smallest[.purple[Define hypotheses:]] `\(\small H_0: \text{median}_{\text{early}} = \text{median}_{\text{late}}\)` .smallest[and] `\(\small H_a: \text{median}_{\text{early}} \color{#e64173}{&gt;} \text{median}_{\text{late}}\)`.smallest[.]
+2. .smallest[.purple[Define]] `\(\small \color{#6A5ACD}{\alpha}\)`.smallest[: We consider] `\(\small \alpha = 5\%\)`.smallest[.]
+3. .smallest[.purple[Compute p-value:] p-value =] `\(\small 2.399\%\)` .smallest[(see R code tab for details).]
+4. .smallest[.purple[Conclusion:] We have p-value &lt;] `\(\small \alpha\)` .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
+]
+.panel[.panel-name[Boxplot Code]
+
+```r
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+
+boxplot(early_eaters, late_eaters, 
+        names = c("Early", "Late"), 
+        ylab = "Weight loss (kg)",
+        col = c("#F8766D", "#00BFC4"))
+points(1:2, c(mean(early_eaters), mean(late_eaters)), 
+       pch = 16, col = 1)
+```
+]
+.panel[.panel-name[Boxplot]
+&lt;img src="Lecture2_files/figure-html/unnamed-chunk-7-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[`R` Code ]
+
+```r
+early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
+late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+wilcox.test(x = early_eaters, y = late_eaters, alternative = "greater")
+```
+
+```
+#&gt; 
+#&gt; 	Wilcoxon rank sum test
+#&gt; 
+#&gt; data:  early_eaters and late_eaters
+#&gt; W = 30, p-value = 0.02399
+#&gt; alternative hypothesis: true location shift is greater than 0
+```
+]
+]
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
