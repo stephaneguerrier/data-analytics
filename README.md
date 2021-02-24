@@ -22,7 +22,9 @@ up.
 Inference](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html)**
 (note formats:
 [.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html)
-| .pdf (coming soon 🚧) |
+|
+[.pdf](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.pdf)
+|
 [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.Rmd))
 
 **Part II: ANOVA** (coming soon 🚧)
