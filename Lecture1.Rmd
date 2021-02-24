@@ -276,7 +276,7 @@ include_graphics("pics/data-torture.png")
 
 # Statistics vs Truth 🤥
 
-- .smallest[.pink[Statistically significant results are not necessarily the truth], as there isn't a threshold (again typically 5%) that separates real results from the false ones.]
+- .smallest[.pink[Statistically significant results are not necessarily the truth], as there isn't a threshold (e.g. 5%) that separates real results from the false ones.]
 - .smallest[This procedure simply provides us with one piece of a puzzle that should be considered in the context of other evidence.]
 
 ```{R, out.width = "50%", echo = F}
@@ -322,7 +322,7 @@ $$H_0: \mu_{\text{drug}} \color{#eb078e}{=} \mu_{\text{control}} \  \text{ and }
 |                     | $H_0$ is true                               | $H_0$ is false                          |
 | ------------------- |---------------------------------------------| ----------------------------------------|
 | Can't reject $H_0$  | $\text{Correct decision (prob=}1-\alpha)$   | $\text{Type II error (prob=}1-\beta)$   |
-| Reject $H_0$        | $\text{Type II error (prob}=\alpha)$         | $\text{Correct decision (prob=}\beta)$  |
+| Reject $H_0$        | $\text{Type I error (prob}=\alpha)$         | $\text{Correct decision (prob=}\beta)$  |
 ]
 
 - The .pink[type I error] corresponds to the probability of rejecting $H_0$ when $H_0$ is true (also called .pink[false positive]). The .purple[type II error] corresponds to the probability of not rejecting $H_0$ when $H_a$ is true (also called .purple[false negative]).
@@ -408,7 +408,7 @@ The .hi.purple[Central Limit Theorem(s) (CLT)] states (very informally): .purple
 As an example, one of the simplest version of the CLT (known as the *Lindeberg–Lévy CLT*) states:
 *Suppose that* $\{X_{1},\ldots ,X_{n}\}$ *is a sequence of* *iid* *random variables such that* $\mathbb{E}[ X_i ] = \mu$ *and $\text{Var} [X_{i}]=\sigma^{2}<\infty$. Let ${\bar{X}}_{n} = \frac{1}{n} \sum_{i = 1}^n X_i$, then as $n$ approaches infinity, the random variables $\sqrt{n} (\bar{X}_{n}-\mu)$ .pink[converge in distribution] to a normal $\mathcal{N}(0,\sigma^{2})$.*
 
-This result can be extended (under some conditions) to .pink[dependent] (i.e. $X_i$ and $X_j$ are not independent for $i \neq j$) and/or .pink[non identically distributed] (i.e. $X_i$ and $X_j$ don't have the same distribution for $i \neq j$).
+This result can be extended (under some conditions) to .pink[dependent] (i.e. $X_i$ and $X_j$ are not independent for $i \neq j$) and/or .pink[non identically distributed] (i.e. $X_i$ and $X_j$ don't have the same distribution for $i \neq j$) data.
 
 ---
 
@@ -418,7 +418,7 @@ Loosely speaking, we can translate the results of CLTs as
 
 $$\bar{X}_n = \frac{1}{n} \sum_{i = 1}^n X_i \color{#eb078e}{\overset{\cdot}{\sim}} {\mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)},$$ 
 
-where $\color{#eb078e}{\overset{\cdot}{\sim}}$ corresponds ".pink[approximately distributed as]". This result is essential in Statistics and a vast majority of inferential methods are based on some versions of the CLT.
+where $\color{#eb078e}{\overset{\cdot}{\sim}}$ corresponds ".pink[approximately distributed as]". This result is essential in statistics and a vast majority of inferential methods are based on some versions of the CLT.
 
 Informally, it means that when a measurement can be thought of as the average (or the sum) of .hi.purple[numerous factors], its distribution tends to go to a normal distribution. For example, the height of adults can be thought of as the sum of their genetic information, diet, life style, ...
 
