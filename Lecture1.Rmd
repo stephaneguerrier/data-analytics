@@ -424,6 +424,16 @@ Informally, it means that when a measurement can be thought of as the average (o
 
 ---
 
+# .smaller[Central Limit Theorem - Example]
+
+.smaller[eople have used .pink[the Galton Board] as a practical device to demonstrate the CLT, in particular that with sufficient sample size the binomial distribution approximates a normal distribution.]
+
+<div align="center">
+<iframe width="684" height="381" src="https://www.youtube.com/embed/Vo9Esp1yaC8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+---
+
 # .smaller[Normal distribution in nature?]
 
 > .smaller[Amends might be made in the interest of the new generation of students by printing in leaded type in future editions of existing text-books and in all new text-books:]
