@@ -304,7 +304,7 @@ include_graphics("pics/sampling.png")
 
 # A hypothesis testing
 
-- In general (scientific) hypotheses can be translated into a set of statistical hypotheses:
+- In general (scientific) hypotheses can be translated into a set of (non-overlapping idealized) statistical hypotheses:
 
 $$H_0: \theta \color{#eb078e}{\in} \Theta_0 \  \text{ and } \ H_a: \theta \color{#eb078e}{\not\in} \Theta_0.$$
 
