@@ -4,19 +4,18 @@
     <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Guerrier" />
-    <script src="Lecture1_files/header-attrs-2.7.1/header-attrs.js"></script>
     <link href="Lecture1_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture1_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture1_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture1_files/tile-view-0.2.5.9000/tile-view.css" rel="stylesheet" />
-    <script src="Lecture1_files/tile-view-0.2.5.9000/tile-view.js"></script>
-    <link href="Lecture1_files/panelset-0.2.5.9000/panelset.css" rel="stylesheet" />
-    <script src="Lecture1_files/panelset-0.2.5.9000/panelset.js"></script>
+    <link href="Lecture1_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture1_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture1_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture1_files/panelset-0.2.4/panelset.js"></script>
     <script src="Lecture1_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture1_files/xaringanExtra-clipboard-0.2.5.9000/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture1_files/xaringanExtra-clipboard-0.2.5.9000/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture1_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture1_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture1_files/xaringanExtra-extra-styles-0.2.5.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture1_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -179,14 +178,14 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 ]
 
 - The .pink[type I error] corresponds to the probability of rejecting `\(H_0\)` when `\(H_0\)` is true (also called .pink[false positive]). The .purple[type II error] corresponds to the probability of not rejecting `\(H_0\)` when `\(H_a\)` is true (also called .purple[false negative]).
-- A test is of .pink[significance level] `\(\color{#e64173}{\alpha}\)` when the probability to make a type I error equals `\(\alpha\)`. Usually we consider `\(\alpha = 5\%\)`, however, this can vary depending on the context.
-- A test is of .purple[power] `\(\color{#6A5ACD}{\beta}\)` when the probability to make a type II error is `\(1-\beta.\)` In other words, the power of a test is its probability of rejecting `\(H_0\)` when `\(H_0\)` is false (or the probability of accepting `\(H_1\)` when `\(H_1\)` is true).
+- A test is of .pink[significance level] `\(\color{#e64173}{\alpha}\)` when the probability of making a type I error equals `\(\alpha\)`. Usually we consider `\(\alpha = 5\%\)`, however, this can vary depending on the context.
+- A test is of .purple[power] `\(\color{#6A5ACD}{\beta}\)` when the probability to make a type II error is `\(1-\beta.\)` In other words, the power of a test is its probability of rejecting `\(H_0\)` when `\(H_0\)` is false (or the probability of accepting `\(H_a\)` when `\(H_a\)` is true).
 
 ---
 
 # What are p-values?
 
-- .smallest[The .hi-purple[p-value] is defined as the probability of observing a test statistic that is at least as extreme as that actually observed, assuming that `\(\small H_0\)` is true]
+- .smallest[The .hi-purple[p-value] is defined as the probability of observing a test statistic that is at least as extreme as actually observed, assuming that] `\(\small H_0\)` .smallest[is true.]
 - .smallest[Informally, .pink[a p-value can be understood as a measure of plausibility of the null hypothesis given the data]. Small p-value indicates strong evidence against] `\(\small H_0\)`.
 - .smallest[When the p-value is small enough (i.e. smaller than the significance level] `\(\small \alpha\)`.smallest[), one says that the test based on the null and alternative hypotheses is .pink[significant] or that the null hypothesis is rejected in favor of the alternative. This is generally what we want because it "verifies" our (research) hypothesis.]
 - .smallest[When the p-value is not small enough, with the available data, we cannot reject the null hypothesis so nothing can be concluded.] 🤔
@@ -250,7 +249,7 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 
 # .smaller[Normal distribution as an approximation?]
 
-The .hi.purple[Central Limit Theorem(s) (CLT)] states (very informally): .purple[*the sampling distribution of the average of independent (or "not too strongly correlated") random variables (whose distributions are "not too different" nor "too extreme") tends to a normal distribution as the sample size gets larger.*]
+The .hi.purple[Central Limit Theorem(s) (CLT)] states (very informally): .purple[*the sampling distribution of the average of independent (or "not too strongly dependent") random variables (whose distributions are "not too different" nor "too extreme") tends to a normal distribution as the sample size gets larger.*]
 
 As an example, one of the simplest version of the CLT (known as the *Lindeberg–Lévy CLT*) states:
 *Suppose that* `\(\{X_{1},\ldots ,X_{n}\}\)` *is a sequence of* *iid* *random variables such that* `\(\mathbb{E}[ X_i ] = \mu\)` *and `\(\text{Var} [X_{i}]=\sigma^{2}&lt;\infty\)`. Let `\({\bar{X}}_{n} = \frac{1}{n} \sum_{i = 1}^n X_i\)`, then as `\(n\)` approaches infinity, the random variables `\(\sqrt{n} (\bar{X}_{n}-\mu)\)` .pink[converge in distribution] to a normal `\(\mathcal{N}(0,\sigma^{2})\)`.*
@@ -285,13 +284,13 @@ Informally, it means that when a measurement can be thought of as the average (o
 
 &gt; .smaller[Amends might be made in the interest of the new generation of students by printing in leaded type in future editions of existing text-books and in all new text-books:]
 &gt;
-&gt; *.smaller[.pink[Normality is a myth; there never was, and never will be, a normal distribution.]]*
+&gt; *.smaller[.pink[Normality is a myth; there never was, and never will be, a normal distribution.]]* 😟 
 
 .smallest[👋].smallest[*[ Testing for normality](https://www.jstor.org/stable/2332434?seq=1#metadata_info_tab_contents)*, R.C. Geary, Biometrika, 1947]
 
 &lt;br&gt;
 
-&gt; .smaller[.pink[All models are wrong, but some are useful.]]
+&gt; .smaller[.pink[All models are wrong, but some are useful.]] 🧐
 
 .smallest[👋].smallest[*[ Science and Statistics](http://www-sop.inria.fr/members/Ian.Jermyn/philosophy/writings/Boxonmaths.pdf)*, G. Box, Journal of the American Statistical Association, 1976]
 
@@ -323,7 +322,7 @@ Let `\(Z \sim \mathcal{N}(0,1)\)`, then using the definition of the p-value&lt;s
 
 `$$\text{p-value} = \Pr \left(T &gt; \frac{\sqrt{n}\bar{x}_n}{s} \right) \color{#eb078e}{\overset{\tiny CLT}{\approx}} \Pr \left(Z &gt; \frac{\sqrt{n}\bar{x}_n}{s} \right) = 1 - \Phi\left(\frac{\sqrt{n}\bar{x}_n}{s}\right).$$`
 
-.footnote[.smallest[👋] Reminder: the .hi-purple[p-value] is defined as the probability, assuming that the null is true, that the test statistic will take a value at least as extreme as that actually observed.]
+.footnote[.smallest[👋] Reminder: the .hi-purple[p-value] is defined as the probability of observing a test statistic that is at least as extreme as actually observed, assuming that null is true]
 
 ---
 
@@ -400,7 +399,7 @@ Source: [University of Sheffield](https://www.sheffield.ac.uk/mash/statistics/da
 
 # One-sample Student's t-test
 
-Before we assume that the (possibly dependent) data is such that `\(X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n\)` and `\(\mathbb{E}[X_i] = \mu\)`. However, in the .pink[very special] case where
+Before we assume that the (possibly correlated) data is such that `\(X_i \sim F_{\color{#eb078e}{i}}, \, i = 1,\ldots, n\)` and `\(\mathbb{E}[X_i] = \mu\)`. However, in the .pink[very special] case where
 
 `$$X_i \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(\mu, \sigma^2),$$`
 which corresponds to the following model:
@@ -409,7 +408,7 @@ which corresponds to the following model:
 where `\(\color{#373895}{\varepsilon_i} = X_i - \mu \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(0,\sigma^2)\)`, we have
 
 `$$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{}{\sim}}} \text{Student}(n-1) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1).$$`
-Unlike our previous result, `\(T\)` .pink[follows exactly] a `\(\text{Student}(n-1)\)` distribution for all `\(n\)`. Note that `\(\text{Student}(n) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1)\)` as `\(n \color{#eb078e}{\overset{}{\to}} \infty\)`.
+Unlike our previous result, `\(T\)` .pink[follows exactly] a `\(\text{Student}(n-1)\)` distribution for all `\(n\)`. 📝 `\(\text{Student}(n) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1)\)` as `\(n \color{#eb078e}{\overset{}{\to}} \infty\)`.
 
 ---
 
@@ -486,31 +485,33 @@ t.test(X, alternative = "greater")
 #&gt; mean of x 
 #&gt;     3.268
 ```
+
+.smallest[As expected the p-value of this test is larger than the one of the previous test (based on the CLT).]
 ]]
 
 ---
 
 # Limitations of the one-sample t-test
 
-The reliability of the t-test strongly relies on: 
+The .pink[reliability] of the t-test strongly relies on: 
 
-1. There are .pink[no outliers];
-2. The sample distribution is at least .pink[approximately normal] with no strong skewness (i.e. heavy tails). 
+1. The absence of .pink[outliers];
+2. For moderate and small sample, the sample distribution is at least .pink[approximately normal] with no strong skewness (i.e. heavy tails). &lt;sup&gt;.smallest[✋]&lt;/sup&gt;
 
 ⚠️ Therefore, before proceeding to any inference, we should check the data preliminarily using .purple[boxplot] or .purple[histogram] or .purple[QQ plot] &lt;sup&gt;.smallest[👋]&lt;/sup&gt; to see if a t-test can be used.
 
 In the diet example, these assumptions appear plausible. When this is not the case, the .pink[Wilcoxon signed rank test] can be used as an alternative that is less sensitive to outliers and doesn't assume that the data are normally distributed. This test is, however, less powerful than the t-test (when its assumptions are satisfied).
 
-.footnote[.smallest[👋 Check out [QQ plot](https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot)]]
+.footnote[✋ If you want to know more [here](https://www.annualreviews.org/doi/full/10.1146/annurev.publhealth.23.100901.140546) is an interesting reference. .smallest[👋 Check out [QQ plot](https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot)]]
 
 ---
 
 # One-sample Wilcoxon signed rank test
 
-- The .pink[rank] is the position index of each observation when we order them from smallest to largest, starting with rank 1 for the smallest observation. 
-- The Wilcoxon signed rank test only uses the ranks (i.e. the ordering) of the observations, and makes no use of their actual numerical values. Therefore, it is a .pink[nonparametric test].
-- The Wilcoxon signed rank test depends on the .pink[Wilcoxon signed rank statistic], which is the sum of the ranks of only the positive values (or only the negative values). Its distribution under the null can be obtained by different methods (e.g. exact, asymptotic normal, ...) but the details are beyond the scope of this class.
-- Unlike the t-test whose hypotheses are on the population mean, the Wilcoxon signed rank test states the hypotheses in terms of .pink[population median]. When the distribution is symmetric, the mean and the median of the population have the same value.
+- .smaller[The .pink[rank] is the position index of each observation when we order them from smallest to largest, starting with rank 1 for the smallest observation.]
+- .smaller[The Wilcoxon signed rank test only uses the ranks (i.e. the ordering) of the observations, and makes no use of their actual numerical values. Therefore, it is a .pink[nonparametric test].]
+- .smaller[The Wilcoxon signed rank test depends on the .pink[Wilcoxon signed rank statistic], which is the sum of the ranks of only the positive values (or only the negative values). Its distribution under the null can be obtained by different methods (e.g. exact, asymptotic normal, ...) but the details are beyond the scope of this class.]
+- .smaller[Unlike the t-test whose hypotheses are on the population mean, the Wilcoxon signed rank test states the hypotheses in terms of .pink[population median]. When the distribution is symmetric, the mean and the median of the population have the same value.]
 
 ---
 
@@ -522,7 +523,7 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 
 - In general, assessing whether the data is normally distributed is .purple[very difficult]. (In fact, there is no satisfactory statistical method for it.)
 
-- .pink[Our recommendation is to always use the one-sample Wilcoxon signed rank test]. Compared to the t-test, we may lose a bit of power using the Wilcoxon signed rank test if all the conditions are indeed satisfied (the difference is generally very small), but if this is not case the results will be far more reliable. 
+- .pink[A reasonable strategy is to always use the one-sample Wilcoxon signed rank test]. Compared to the t-test, we may lose a bit of power using the Wilcoxon signed rank test if all the conditions are indeed satisfied (the difference is generally very small), but if this is not case the results will be far more reliable. 
 
 ---
 

@@ -70,25 +70,22 @@ We will discuss three ".pink[two-sample location tests]":
 
 # .smaller[Two independent sample Student's t-test]
 
-This test considers the following assumed model for group .purple2[A] and .blue[B]
+This test considers the following assumed model for group .hi-purple2[A] and .hi-blue[B]
 
 `$$X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$`
 where `\(g=A,B\)`, `\(i=1,...,n_{g}\)`, `\(\varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}})\)` and `\(\sum n_{g}\delta_{g} = \color{#6A5ACD}{\delta_A} + \color{#06bcf1}{\delta_B}=0\)`. 
 
 📝 `\(\color{#6A5ACD}{n_A}\)` `\(=\)` sample size of group .hi-purple2[A], `\(\color{#6A5ACD}{\mu_{A} = \mu + \delta_A}\)` `\(=\)` population mean of group .purple2[A], `\(\color{#06bcf1}{n_B}\)` and `\(\color{#06bcf1}{\mu_{B} = \mu + \delta_B}\)` are similarly defined for group .hi-blue[B].
 
-.pink[Hypotheses:]
+Hypotheses:
 
 `$$H_0: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \ \big[ \color{#eb078e}{&gt;} \text{ or } \color{#eb078e}{&lt;} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$`
-Test statistic's distribution under .H0} 
+Test statistic's distribution under `\(H_0\)`
 
-`$$T = \frac{(\overline{X}_{A}-\overline{X}_{B})-\mu_0}{s_{p}\sqrt{n_{A}^{-1}+n_{B}^{-1}}} \sim \text{Student}(n_{A}+n_{B}-2).$$` 
-
-
-
-
+`$$\color{#b4b4b4}{T = \frac{(\overline{X}_{A}-\overline{X}_{B})-\mu_0}{s_{p}\sqrt{n_{A}^{-1}+n_{B}^{-1}}} \ {\underset{H_0}{\sim}} \ \text{Student}(n_{A}+n_{B}-2).}$$` 
 ---
 
+# Comparing Diet A and B 
 
 dietAB
 
