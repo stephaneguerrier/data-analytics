@@ -32,3 +32,9 @@ Inference](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lectur
 **Part IV: Logistic Regression** (coming soon 🚧)
 
 **Part V: Generalized Additive Model** (coming soon 🚧)
+
+# License
+
+<img src="pics/liscence.png" alt="drawing" width="200"/>
+
+[CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

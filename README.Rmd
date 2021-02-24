@@ -19,3 +19,10 @@ The linked slides (below) are `.html` files that will only work properly if you 
 **Part IV: Logistic Regression** (coming soon 🚧)
 
 **Part V: Generalized Additive Model** (coming soon 🚧)
+
+# License
+
+
+<img src="pics/liscence.png" alt="drawing" width="200"/>
+
+[CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
