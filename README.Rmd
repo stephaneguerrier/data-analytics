@@ -10,7 +10,7 @@ The linked slides (below) are `.html` files that will only work properly if you 
 
 *Note:* The slides were created with [`xaringan`](https://github.com/yihui/xaringan/wiki) in [R](cran.r-project.org) and the [template](https://github.com/edrubin/EC607S20) is based on the work of [Ed Rubin](https://edrub.in)
 
-**[Part I: Introduction to Statistical Inference](https://raw.githack.com/stephaneguerrier/intro_stat/master/lecture1.html)**  (note formats: [.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html) | .pdf (coming soon 🚧) | [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.Rmd))
+**[Part I: Introduction to Statistical Inference](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html)**  (note formats: [.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html) | .pdf (coming soon 🚧) | [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.Rmd))
 
 **Part II: ANOVA** (coming soon 🚧)
 

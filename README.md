@@ -19,7 +19,7 @@ up.
 [Ed Rubin](https://edrub.in)
 
 **[Part I: Introduction to Statistical
-Inference](https://raw.githack.com/stephaneguerrier/intro_stat/master/lecture1.html)**
+Inference](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html)**
 (note formats:
 [.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html)
 | .pdf (coming soon 🚧) |
