@@ -1,8 +1,8 @@
 
 Welcome to the course **Data Analytics for Pharmaceutical Sciences**.
-These documents were prepared by [Dominique-Laurent
-Couturier](https://github.com/dlc48), [Stéphane
-Guerrier](https://stephaneguerrier.com/), Wenfei Chu and [Yuming
+These documents were prepared by [Stéphane
+Guerrier](https://stephaneguerrier.com/), [Dominique-Laurent
+Couturier](https://github.com/dlc48), Wenfei Chu and [Yuming
 Zhang](https://github.com/Yuming-Zhang).
 
 # Course materials
