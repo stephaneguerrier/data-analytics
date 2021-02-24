@@ -304,7 +304,7 @@ include_graphics("pics/sampling.png")
 
 # A hypothesis testing
 
-- In general (scientific) hypotheses can be translated into a set of statistical hypotheses:
+- In general (scientific) hypotheses can be translated into a set of (non-overlapping idealized) statistical hypotheses:
 
 $$H_0: \theta \color{#eb078e}{\in} \Theta_0 \  \text{ and } \ H_a: \theta \color{#eb078e}{\not\in} \Theta_0.$$
 
@@ -325,7 +325,7 @@ $$H_0: \mu_{\text{drug}} \color{#eb078e}{=} \mu_{\text{control}} \  \text{ and }
 | Reject $H_0$        | $\text{Type II error (prob}=\alpha)$         | $\text{Correct decision (prob=}\beta)$  |
 ]
 
-- If we reject $H_0$ when in fact $H_0$ is true, this is a .pink[type I error] (also called .pink[false positive]). If we accept $H_0$ when in fact $H_a$ is true, this is a .purple[type II error] (also called .purple[false negative]).
+- The .pink[type I error] corresponds to the probability of rejecting $H_0$ when $H_0$ is true (also called .pink[false positive]). The .purple[type II error] corresponds to the probability of not rejecting $H_0$ when $H_a$ is true (also called .purple[false negative]).
 - A test is of .pink[significance level] $\color{#e64173}{\alpha}$ when the probability to make a type I error is $\alpha$. Usually we consider $\alpha = 5\%$, however, this can vary depending on the context.
 - A test is of .purple[power] $\color{#6A5ACD}{\beta}$ when the probability to make a type II error is $1-\beta.$ In other words, the power of a test is its probability to reject $H_0$ when $H_0$ is false.
 
