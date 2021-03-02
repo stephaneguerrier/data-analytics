@@ -36,6 +36,7 @@ green <- "#8bb174"
 grey_light <- "grey70"
 grey_mid <- "grey50"
 grey_dark <- "grey20"
+grey = "#b4b4b4"
 purple <- "#6A5ACD"
 slate <- "#314f4f"
 # Dark slate grey: #314f4f
@@ -444,115 +445,212 @@ include_graphics("pics/medical_studies2.png")
 
 ---
 
+# The multiple-sample location tests
+
+- .smallest[To compare several means of different populations, a standard approach is to start our analysis by using the .pink[multiple-sample location tests]. More precisely, we proceed our analysis with the following steps:]
+  - .smallest[.purple[Step 1:] We first perform the multiple-sample location tests, where the null hypothesis states that all the locations are the same. If we cannot reject the null hypothesis, we stop our analysis here. Otherwise, we move on to Step 2.]
+  - .smallest[.purple[Step 2:] We compare the groups mutually with two-sample location tests in order to verify our hypothesis.]
+- .smallest[For example, suppose we have 3 groups and our hypothesis is that the location of Group A is larger than the location of Group B, which is larger than the location of Group C. We start with a multile-sample location test and see if all the locations are equal. If we reject the null hypothesis, then we perform the two-sample location tests of Group A vs Group B, Group A vs Group C, and Group B vs Group C, which in total are 3 tests.]
+- .smallest[.pink[Naturally, we should adjust the significance level for multiple testing in Step 2.]]
 
 ---
 
+# The multiple sample location tests
 
-# The two-sample t-test: Example
+We will discuss three ".pink[multiple-sample location tests]":
+1. .purple[Fisher's one-way ANalysis Of VAriance (ANOVA)]
+2. .purple[Welch's one-way ANOVA]
+3. .purple[Kruskal-Wallis test]
+
+We are interested in comparing means, but why is it an analysis of .purple[variance]?
+.pull-left[
+```{r, out.width="100%", echo = F}
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+par(mai = c(1,1.5,0,1))
+cols = gg_color_hue(3)
+set.seed(2)
+x1 = rnorm(10, 10, 5)
+x2 = rnorm(10, 5, 5)
+x3 = rnorm(10, 0, 5)
+boxplot(x1, x2, x3, col = cols, names = c("Group 1", "Group 2", "Group 3"), cex.axis = 2, cex.lab = 2)
+points(1:3, c(mean(x1), mean(x2), mean(x3)), pch = 16, col = 1, cex = 2)
+```
+]
+
+.pull-right[
+```{R, out.width = "100%", echo = F}
+par(mai = c(1,1.5,0,1))
+cols = gg_color_hue(3)
+set.seed(2)
+x1 = rnorm(10, 10, 2)
+x2 = rnorm(10, 5, 2)
+x3 = rnorm(10, 0, 2)
+boxplot(x1, x2, x3, col = cols, names = c("Group 1", "Group 2", "Group 3"), cex.axis = 2, cex.lab = 2)
+points(1:3, c(mean(x1), mean(x2), mean(x3)), pch = 16, col = 1, cex = 2)
+```
+]
+
+---
+
+# Fisher's one-way ANOVA
+
+.smallest[This test considers the following assumed model for G groups]
+$$\small X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$
+.smallest[where] $\small g=1,\ldots, G$, $i=1,...,n_{g}$, $\small \varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}})$ .smallest[and] $\small \sum n_{g}\delta_{g}=0$. 
+
+📝 $\small n_i =$ .smallest[sample size of group] $\small i$, $\small \mu_i = \mu + \delta_i =$ .smallest[population mean of group] $\small i$, $\small i=1,\ldots, G$.
+
+.smallest[Hypotheses:]
+$$\small H_0: \color{#6A5ACD}{\mu_1} \color{#eb078e}{=} \color{#06bcf1}{\mu_2} \color{#eb078e}{=} \ldots \color{#eb078e}{=} \color{#8bb174}{\mu_G} \ \ \ \ \text{and} \ \ \ \ H_a: \mu_i \color{#eb078e}{\neq} \mu_j \ \ \text{for at least one pair of} \ \ (i,j).$$
+
+.smallest[Test statistic's distribution under] $\small H_0$:
+$$\small \color{#b4b4b4}{F = \frac{N s^2_{\overline{Y}}}{s_p^2} \ {\underset{H_0}{\sim}} \ \text{Fisher}(G-1, N-G),}$$
+.smallest[.grey[where]] $\small \color{#b4b4b4}{s^2_{\overline{Y}} = \frac{1}{G-1} \sum_{g=1}^G \frac{n_g}{N} (\overline{Y}_g - \overline{Y})^2}$.smallest[.grey[,]] $\small \color{#b4b4b4}{s_p^2 = \frac{1}{N-G} \sum_{g=1}^G (n_g-1)s_g^2}$.smallest[.grey[,]] $\small \color{#b4b4b4}{N = \sum_{g=1}^G n_g}$.smallest[.grey[, and]] $\small \color{#b4b4b4}{\overline{Y} = \frac{1}{N} \sum_{g=1}^G n_g \overline{Y}_g}$.smallest[.grey[.]]
+
+---
+
+# Discussion - Fisher's one-way ANOVA
+
+- R function: 
+
+.center[
+`aov(response ~ groups)`.]
+
+- This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Kruskal-Wallis Test (see later) is (probably) a better option.
+- For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
+- In practice, the assumption of equal variance is hard to verify and .hi.pink[we recommend avoiding this test in practice].
+
+---
+
+# Welch's one-way ANOVA
+
+.smallest[This test considers the following assumed model for G groups]
+$$\small X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$
+.smallest[where] $\small g=1,\ldots, G$, $i=1,...,n_{g}$, $\small \varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma_g^{2}})$ .smallest[and] $\small \sum n_{g}\delta_{g}=0$. 
+
+.smallest[Hypotheses:]
+$$\small H_0: \color{#6A5ACD}{\mu_1} \color{#eb078e}{=} \color{#06bcf1}{\mu_2} \color{#eb078e}{=} \ldots \color{#eb078e}{=} \color{#8bb174}{\mu_G} \ \ \ \ \text{and} \ \ \ \ H_a: \mu_i \color{#eb078e}{\neq} \mu_j \ \ \text{for at least one pair of} \ \ (i,j).$$
+
+.smallest[Test statistic's distribution under] $\small H_0$:
+$$\small \color{#b4b4b4}{F = \frac{s^{*^2}_{\overline{Y}}}{1+\frac{2(G-2)}{3\Delta}} \ {\underset{H_0}{\sim}} \ \text{Fisher}(G-1, \Delta),}$$
+.smallest[.grey[where]] $\small \color{#b4b4b4}{s^{*^2}_{\overline{Y}} = \frac{1}{G-1} \sum_{g=1}^G w_g (\overline{Y}_g - \overline{Y}^*)^2}$.smallest[.grey[,]] $\small \color{#b4b4b4}{\Delta = [\frac{3}{G^2-1} \sum_{g=1}^G \frac{1}{n_g} (1-\frac{w_g}{\sum_{g=1}^G w_g})]^{-1}}$.smallest[.grey[,]] $\small \color{#b4b4b4}{w_g = \frac{n_g}{s_g^2}}$.smallest[.grey[, and]] $\small \color{#b4b4b4}{\overline{Y}^* = \sum_{g=1}^G \frac{w_g\overline{Y}_g}{\sum_{g=1}^G w_g}}$.smallest[.grey[.]]
+
+---
+
+# Discussion - Welch's one-way ANOVA
+
+- R function: 
+
+.center[
+`aov(response ~ groups)`.]
+
+- This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Kruskal-Wallis Test (see later) is (probably) a better option.
+- For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
+- This test does not require the variances of the groups to be equal. If the variances of all the groups are the same (which is rather unlikely in practice), the Welch's one-way ANOVA losses a little bit of power compared to the Fisher's one-way ANOVA.
+
+---
+
+# Kruskal-Wallis test
+
+.smallest[This test considers the following assumed model for G groups]
+$$\small X_{i(g)} = \color{#eb078e}{\theta_{g}} + \varepsilon_{i(g)} = \theta + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$
+.smallest[where] $\small g=1,\ldots, G$, $i=1,...,n_{g}$, $\small \varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}})$ .smallest[and] $\small \sum n_{g}\delta_{g}=0$. 
+
+📝 $\small n_i =$ .smallest[sample size of group] $\small i$, $\small \theta_i = \theta + \delta_i =$ .smallest[population .pink[location] of group] $\small i$, $\small i=1,\ldots, G$.
+
+.smallest[Hypotheses:]
+$$\small H_0: \color{#6A5ACD}{\theta_1} \color{#eb078e}{=} \color{#06bcf1}{\theta_2} \color{#eb078e}{=} \ldots \color{#eb078e}{=} \color{#8bb174}{\theta_G} \ \ \ \ \text{and} \ \ \ \ H_a: \theta_i \color{#eb078e}{\neq} \theta_j \ \ \text{for at least one pair of} \ \ (i,j).$$
+
+---
+
+# Kruskal-Wallis test
+
+.smallest[Test statistic's distribution under] $\small H_0$:
+$$\small \color{#b4b4b4}{H = \frac{\frac{12}{N(N+1)} \sum_{g=1}^G \frac{\overline{R}_g}{n_g}-3(N-1)}{1-\frac{\sum_{v=1}^V{t_v^3-t_v}}{N^3-N}} \ {\underset{H_0}{\sim}} \ \mathcal{X}(G-1)}$$
+
+.smallest[.grey[where]] $\small \color{#b4b4b4}{\overline{R}_g = \frac{1}{n_g} \sum_{i=1}^{n_g} R_{i(g)}}$ .smallest[.grey[with]] $\small \color{#b4b4b4}{R_{i(g)}}$ .smallest[.grey[denoting the global rank of the]] $\small \color{#b4b4b4}{i^{th}}$ .smallest[.grey[observation of group]] $\small \color{#b4b4b4}{g}$.smallest[.grey[,]] $\small \color{#b4b4b4}{V}$ .smallest[.grey[is the number of different values/levels in]] $\small \color{#b4b4b4}{y}$ .smallest[.grey[and]] $\small \color{#b4b4b4}{t_v}$ .smallest[.grey[denotes the number of times a given value/level occurred in]] $\small \color{#b4b4b4}{y}$.smallest[.grey[.]]
+
+---
+
+# Discussion - Kruskal-Wallis test
+
+- R function: 
+
+.center[
+`kruskal.test(response ~ groups)`.]
+
+- This test is ".pink[robust]" in the sense that (unlike the one-way ANOVA) it is not overly affected by outliers.
+- The Kruskal-Wallis test does not require the distributions to be Gaussian nor the variances to be the same, however, in this case this method actually tests whether all distributions are the same. To render the Kruskal-Wallis test comparable to the one-way ANOVA we need to assume: (1) The distribution is symmetric, (2) the variances are the same. Then, we have $\theta_i = \mu_i, i=1,\ldots,G$.
+- Compared to the one-way ANOVA, the Kruskal-Wallis test is less power if their requirements (Gaussian and possibly same variances) are met.
+
+---
+
+# Comparing Diet A, B and C
 
 .panelset[
-.panel[.panel-name[Problem]
-.smallest[There is emerging evidence of a relationship between timing of feeding and weight regulation. More precisely, it is claimed that .pink[people who have their main meal early tend to lose more weight compared to people who eat late]. We collect weight loss (in kg) data from 12 individuals, where 7 of them are early eaters and 5 of them are late eaters. We want to test if such claim is valid based on the observed sample: 
-$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
+.panel[.panel-name[Graph]
+STEF :)
 ]
-1. .smallest[.purple[Define hypotheses:]] $\small H_0: \mu_{\text{early}} = \mu_{\text{late}}$ .smallest[and] $\small H_a: \mu_{\text{early}} \color{#e64173}{>} \mu_{\text{late}}$.smallest[.]
-2. .smallest[.purple[Define]] $\small \color{#6A5ACD}{\alpha}$.smallest[: We consider] $\small \alpha = 5\%$.smallest[.]
-3. .smallest[.purple[Compute p-value:] p-value =] $\small 2.122\%$ .smallest[(see R code tab for details).]
-4. .smallest[.purple[Conclusion:] We have p-value <] $\small \alpha$ .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
-]
-.panel[.panel-name[Boxplot Code]
-```{r, eval = F}
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-
-boxplot(early_eaters, late_eaters, 
-        names = c("Early", "Late"), 
-        ylab = "Weight loss (kg)",
-        col = c("#F8766D", "#00BFC4"))
-points(1:2, c(mean(early_eaters), mean(late_eaters)), 
-       pch = 16, col = 1)
-```
-]
-.panel[.panel-name[Boxplot]
-```{r, out.width = "80%", echo = F}
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-
-par(mai = c(1,1.5,1,1))
-boxplot(early_eaters, late_eaters, col = c("#F8766D", "#00BFC4"), 
-        names = c("Early", "Late"), ylab = "Weight loss (kg)", cex.axis = 2, cex.lab = 2)
-points(1:2, c(mean(early_eaters), mean(late_eaters)), pch = 16, col = 1, cex = 2)
-```
-]
-.panel[.panel-name[`R` Code ]
+.panel[.panel-name[Import]
 ```{r}
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-t.test(x = early_eaters, y = late_eaters, alternative = "greater")
+# Import data
+diet = read.csv("data/diet.csv",row.names=1)
+
+# Compute weight loss
+diet$weight.loss = diet$initial.weight - diet$final.weight
+
+# Select diet
+posA = diet$diet.type=="A"
+posB = diet$diet.type=="B"
+posC = diet$diet.type=="C"
+
+# Variable of interest
+dietA = diet$weight.loss[posA]
+dietB = diet$weight.loss[posB]
+dietC = diet$weight.loss[posC]
 ```
 ]
-]
-
----
-
-# Wilcoxon rank sum test
-
-- .smallest[Similar to the Wilcoxon signed rank test as a robust <sup>.smallest[👋]</sup> alternative to the one-sample t-test, we can use the .hi-pink[Wilcoxon rank sum test] (also called the Mann-Whitney test) when the normality condition is not satisfied to use two-sample t-test.]
-- .smallest[The Wilcoxon rank sum test depends on the .purple[Wilcoxon rank sum statistic], which is the .purple[sum of the ranks of one sample]. As it only uses the ranks of the observations, it is a .turquoise[nonparametric test].]
-- .smallest[In the simplest form, the Wilcoxon rank sum test states the hypotheses in terms of .pink[population median]. However, more precisely, it actually tests whether the two distributions are the same, i.e. 😵]
-\begin{align}
-& \small H_0: \text{The two distributions are the same.} \\
-& \small H_a: \text{One distribution has values that are systematically larger (or smaller). }
-\end{align}
-
-.footnote[.smallest[👋 Informally, a robust method is such that it is not overly affected by outliers. The usual one-sample and two-sample t-tests are somehow robust in the sense that their results of inference are not very sensitive to moderate lack of normality when the samples are sufficiently large. However, they may still fail when the population distribution shows strong skewness, especially when we have only a few observations.]]
-
----
-
-# Revisit the weight loss example
-
-.panelset[
-.panel[.panel-name[Problem]
-.smallest[Let's recall the previous weight loss example. We want to test if .pink[early eaters tend to lose more weight than late eaters]. The sample is as follows: 
-$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
-]
-1. .smallest[.purple[Define hypotheses:]] $\small H_0: \text{median}_{\text{early}} = \text{median}_{\text{late}}$ .smallest[and] $\small H_a: \text{median}_{\text{early}} \color{#e64173}{>} \text{median}_{\text{late}}$.smallest[.]
-2. .smallest[.purple[Define]] $\small \color{#6A5ACD}{\alpha}$.smallest[: We consider] $\small \alpha = 5\%$.smallest[.]
-3. .smallest[.purple[Compute p-value:] p-value =] $\small 2.399\%$ .smallest[(see R code tab for details).]
-4. .smallest[.purple[Conclusion:] We have p-value <] $\small \alpha$ .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
-]
-.panel[.panel-name[Boxplot Code]
-```{r, eval = F}
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-
-boxplot(early_eaters, late_eaters, 
-        names = c("Early", "Late"), 
-        ylab = "Weight loss (kg)",
-        col = c("#F8766D", "#00BFC4"))
-points(1:2, c(mean(early_eaters), mean(late_eaters)), 
-       pch = 16, col = 1)
-```
-]
-.panel[.panel-name[Boxplot]
-```{r, out.width = "80%", echo = F}
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-
-par(mai = c(1,1.5,1,1))
-boxplot(early_eaters, late_eaters, col = c("#F8766D", "#00BFC4"), 
-        names = c("Early", "Late"), ylab = "Weight loss (kg)", cex.axis = 2, cex.lab = 2)
-points(1:2, c(mean(early_eaters), mean(late_eaters)), pch = 16, col = 1, cex = 2)
-```
-]
-.panel[.panel-name[`R` Code ]
+.panel[.panel-name[Fisher]
 ```{r}
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-wilcox.test(x = early_eaters, y = late_eaters, alternative = "greater")
+# Number of observations
+numA = length(dietA)
+numB = length(dietB)
+numC = length(dietC)
+
+# Combine 
+response = c(dietA, dietB, dietC)
+groups = c(rep("A", numA), rep("B", numB), rep("C", numC))
+
+res_aov = aov(response ~ groups)
+summary(res_aov)
+```
+]
+.panel[.panel-name[Welch]
+```{r}
+res_aov = aov(response ~ groups)
+summary(res_aov)
+```
+]
+.panel[.panel-name[Kruskal]
+```{r}
+kruskal.test(response ~ groups)
+```
+]
+.panel[.panel-name[Results]
+1. .purple[Define hypotheses:] $H_0: \mu_A = \mu_B = \mu_C$ and $H_a: H_0 \ \text{is false}$.
+2. .purple[Define] $\color{#373895}{\alpha}$: We consider $\alpha = 5\%$.
+3. .purple[Compute p-value]: All tests show p-values smaller than $\alpha$ (see R output tab for details).
+4. .purple[Conclusion:] We have p-value < $\alpha$ so we reject the null hypothesis at the significance level of 5%.
+]
+.panel[.panel-name[Comp]
+```{r, eval = FALSE}
+wilcox.test(dietA, dietB, alternative = "less")
+wilcox.test(dietA, dietC, alternative = "less")
+wilcox.test(dietB, dietC, alternative = "less")
 ```
 ]
 ]
-
----
-

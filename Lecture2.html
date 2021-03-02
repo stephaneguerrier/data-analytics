@@ -7,15 +7,15 @@
     <link href="Lecture2_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture2_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture2_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture2_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="Lecture2_files/tile-view-0.2.4/tile-view.js"></script>
-    <link href="Lecture2_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="Lecture2_files/panelset-0.2.4/panelset.js"></script>
+    <link href="Lecture2_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="Lecture2_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="Lecture2_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="Lecture2_files/panelset-0.2.6/panelset.js"></script>
     <script src="Lecture2_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture2_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture2_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -251,128 +251,303 @@ wilcox.test(dietA, dietB)
 ]
 ]
 
-
 ---
 
 
-# The two-sample t-test: Example
+# Problems with multiple samples
+
+In practice, we often even encounter situations where we need to .pink[compare the means of more than 2 groups]. For example,
+
+1. A scientist wants to compare the vaccine efficacy of the Pfizer-BioNTech, the Moderna, and the Sputnik V vaccines.
+2. A nutritionist wants to compare the weight loss efficacy of several diets. 
+
+`\(\mu_A \approx \mu_B &lt; \mu_C\)`
+
+
+---
+
+# Jelly beans example
+
+.purple[Are jelly beans causing acne? Maybe... but why only green ones?] 🤨 
+
+&lt;img src="pics/green.png" width="45%" style="display: block; margin: auto;" /&gt;
+.tiny[Source: [xkcd](https://xkcd.com/882/)]
+---
+
+# Are jelly beans causing acne?
+
+&lt;br&gt;
+&lt;img src="pics/green1.png" width="85%" style="display: block; margin: auto;" /&gt;
+.tiny[Source: [xkcd](https://xkcd.com/882/)]
+
+---
+
+# Maybe a specific color?
+
+&lt;br&gt;
+&lt;img src="pics/green2.png" width="76%" style="display: block; margin: auto;" /&gt;
+.tiny[Source: [xkcd](https://xkcd.com/882/)]
+
+---
+
+# Maybe a specific color?
+
+&lt;br&gt;
+&lt;img src="pics/green3.png" width="75%" style="display: block; margin: auto;" /&gt;
+.tiny[Source: [xkcd](https://xkcd.com/882/)]
+
+---
+
+# And finally...
+
+&lt;img src="pics/green.png" width="45%" style="display: block; margin: auto;" /&gt;
+.tiny[Source: [xkcd](https://xkcd.com/882/)]
+
+👋 .smallest[If you want to know more about this comics have a look [here](https://www.explainxkcd.com/wiki/index.php/882:_Significant).]
+
+---
+
+# ☠️ Multiple testing can be dangerous!
+
+- .smaller[Remember that a p-value is .hi-pink[random] as its value depends on the data.]
+- .smaller[Hence, by chance, it might happen that while the null hypothesis cannot be rejected (supposing it is true), that the p-value is smaller than the set threshold. With the latter chosen as 5%, then, on average, the (sample) p-value is below 5% .purple[once in twenty times!]]
+- .smaller[If multiple hypotheses are tested, the chance of observing a rare event increases, and therefore, the chance to incorrectly reject a null hypothesis (i.e., making a Type I error) increases.]
+- .smaller[Hence .hi-pink[performing multiple tests, with the same or different data, is dangerous ⚠️] (but very common! 😟) as it automatically leads to .pink[significant results, when actually there are none!]]
+
+---
+
+# ☠️ Multiple testing can be dangerous!
+
+&lt;img src="pics/medical_studies2.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+.footnote[.smallest[👋] Read the original article: "*This is why you shouldn't believe that exciting new medical study*" [here](https://www.vox.com/2015/3/23/8264355/research-study-hype).]
+
+---
+
+# Methods to remedy such problem
+
+- .smallest[The .hi-pink[Bonferroni correction] is one of the oldest methods proposed to counteract the problem of multiple testing (i.e. potential increased chance to make Type I errors). ]
+- .smallest[.purple[It tests each individual hypothesis at a reduced significance level.] For example, if a trial is testing 20 hypotheses with a desired] `\(\small \alpha = 5\%\)`.smallest[, then the Bonferroni correction would test each individual hypothesis at] `\(\small \alpha^* = \alpha/20 = 5\% / 20 = 0.25\%\)`.smallest[. Therefore, .purple[it controls the familywise error rate at]] `\(\small \color{#6A5ACD}{\leq \alpha}\)`.
+- .smallest[The Bonferroni correction can be .turquoise[conservative] if there are a large number of tests, as it comes at the cost of reducing the power of the tests.]
+- .smallest[Another more recent and less conservative method is the .hi-pink[False Discovery Rate (FDR)]. It provides less stringent control of Type I errors compared to the Bonferroni correction. Thus, the FDR has greater power, yet at the cost of increased numbers of Type I errors.]
+
+---
+
+# The multiple-sample location tests
+
+- .smallest[To compare several means of different populations, a standard approach is to start our analysis by using the .pink[multiple-sample location tests]. More precisely, we proceed our analysis with the following steps:]
+  - .smallest[.purple[Step 1:] We first perform the multiple-sample location tests, where the null hypothesis states that all the locations are the same. If we cannot reject the null hypothesis, we stop our analysis here. Otherwise, we move on to Step 2.]
+  - .smallest[.purple[Step 2:] We compare the groups mutually with two-sample location tests in order to verify our hypothesis.]
+- .smallest[For example, suppose we have 3 groups and our hypothesis is that the location of Group A is larger than the location of Group B, which is larger than the location of Group C. We start with a multile-sample location test and see if all the locations are equal. If we reject the null hypothesis, then we perform the two-sample location tests of Group A vs Group B, Group A vs Group C, and Group B vs Group C, which in total are 3 tests.]
+- .smallest[.pink[Naturally, we should adjust the significance level for multiple testing in Step 2.]]
+
+---
+
+# The multiple sample location tests
+
+We will discuss three ".pink[multiple-sample location tests]":
+1. .purple[Fisher's one-way ANalysis Of VAriance (ANOVA)]
+2. .purple[Welch's one-way ANOVA]
+3. .purple[Kruskal-Wallis test]
+
+We are interested in comparing means, but why is it an analysis of .purple[variance]?
+.pull-left[
+&lt;img src="Lecture2_files/figure-html/unnamed-chunk-7-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="Lecture2_files/figure-html/unnamed-chunk-8-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Fisher's one-way ANOVA
+
+.smallest[This test considers the following assumed model for G groups]
+`$$\small X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$`
+.smallest[where] `\(\small g=1,\ldots, G\)`, `\(i=1,...,n_{g}\)`, `\(\small \varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}})\)` .smallest[and] `\(\small \sum n_{g}\delta_{g}=0\)`. 
+
+📝 `\(\small n_i =\)` .smallest[sample size of group] `\(\small i\)`, `\(\small \mu_i = \mu + \delta_i =\)` .smallest[population mean of group] `\(\small i\)`, `\(\small i=1,\ldots, G\)`.
+
+.smallest[Hypotheses:]
+`$$\small H_0: \color{#6A5ACD}{\mu_1} \color{#eb078e}{=} \color{#06bcf1}{\mu_2} \color{#eb078e}{=} \ldots \color{#eb078e}{=} \color{#8bb174}{\mu_G} \ \ \ \ \text{and} \ \ \ \ H_a: \mu_i \color{#eb078e}{\neq} \mu_j \ \ \text{for at least one pair of} \ \ (i,j).$$`
+
+.smallest[Test statistic's distribution under] `\(\small H_0\)`:
+`$$\small \color{#b4b4b4}{F = \frac{N s^2_{\overline{Y}}}{s_p^2} \ {\underset{H_0}{\sim}} \ \text{Fisher}(G-1, N-G),}$$`
+.smallest[.grey[where]] `\(\small \color{#b4b4b4}{s^2_{\overline{Y}} = \frac{1}{G-1} \sum_{g=1}^G \frac{n_g}{N} (\overline{Y}_g - \overline{Y})^2}\)`.smallest[.grey[,]] `\(\small \color{#b4b4b4}{s_p^2 = \frac{1}{N-G} \sum_{g=1}^G (n_g-1)s_g^2}\)`.smallest[.grey[,]] `\(\small \color{#b4b4b4}{N = \sum_{g=1}^G n_g}\)`.smallest[.grey[, and]] `\(\small \color{#b4b4b4}{\overline{Y} = \frac{1}{N} \sum_{g=1}^G n_g \overline{Y}_g}\)`.smallest[.grey[.]]
+
+---
+
+# Discussion - Fisher's one-way ANOVA
+
+- R function: 
+
+.center[
+`aov(response ~ groups)`.]
+
+- This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Kruskal-Wallis Test (see later) is (probably) a better option.
+- For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
+- In practice, the assumption of equal variance is hard to verify and .hi.pink[we recommend avoiding this test in practice].
+
+---
+
+# Welch's one-way ANOVA
+
+.smallest[This test considers the following assumed model for G groups]
+`$$\small X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$`
+.smallest[where] `\(\small g=1,\ldots, G\)`, `\(i=1,...,n_{g}\)`, `\(\small \varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma_g^{2}})\)` .smallest[and] `\(\small \sum n_{g}\delta_{g}=0\)`. 
+
+.smallest[Hypotheses:]
+`$$\small H_0: \color{#6A5ACD}{\mu_1} \color{#eb078e}{=} \color{#06bcf1}{\mu_2} \color{#eb078e}{=} \ldots \color{#eb078e}{=} \color{#8bb174}{\mu_G} \ \ \ \ \text{and} \ \ \ \ H_a: \mu_i \color{#eb078e}{\neq} \mu_j \ \ \text{for at least one pair of} \ \ (i,j).$$`
+
+.smallest[Test statistic's distribution under] `\(\small H_0\)`:
+`$$\small \color{#b4b4b4}{F = \frac{s^{*^2}_{\overline{Y}}}{1+\frac{2(G-2)}{3\Delta}} \ {\underset{H_0}{\sim}} \ \text{Fisher}(G-1, \Delta),}$$`
+.smallest[.grey[where]] `\(\small \color{#b4b4b4}{s^{*^2}_{\overline{Y}} = \frac{1}{G-1} \sum_{g=1}^G w_g (\overline{Y}_g - \overline{Y}^*)^2}\)`.smallest[.grey[,]] `\(\small \color{#b4b4b4}{\Delta = [\frac{3}{G^2-1} \sum_{g=1}^G \frac{1}{n_g} (1-\frac{w_g}{\sum_{g=1}^G w_g})]^{-1}}\)`.smallest[.grey[,]] `\(\small \color{#b4b4b4}{w_g = \frac{n_g}{s_g^2}}\)`.smallest[.grey[, and]] `\(\small \color{#b4b4b4}{\overline{Y}^* = \sum_{g=1}^G \frac{w_g\overline{Y}_g}{\sum_{g=1}^G w_g}}\)`.smallest[.grey[.]]
+
+---
+
+# Discussion - Welch's one-way ANOVA
+
+- R function: 
+
+.center[
+`aov(response ~ groups)`.]
+
+- This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Kruskal-Wallis Test (see later) is (probably) a better option.
+- For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
+- This test does not require the variances of the groups to be equal. If the variances of all the groups are the same (which is rather unlikely in practice), the Welch's one-way ANOVA losses a little bit of power compared to the Fisher's one-way ANOVA.
+
+---
+
+# Kruskal-Wallis test
+
+.smallest[This test considers the following assumed model for G groups]
+`$$\small X_{i(g)} = \color{#eb078e}{\theta_{g}} + \varepsilon_{i(g)} = \theta + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$`
+.smallest[where] `\(\small g=1,\ldots, G\)`, `\(i=1,...,n_{g}\)`, `\(\small \varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}})\)` .smallest[and] `\(\small \sum n_{g}\delta_{g}=0\)`. 
+
+📝 `\(\small n_i =\)` .smallest[sample size of group] `\(\small i\)`, `\(\small \theta_i = \theta + \delta_i =\)` .smallest[population .pink[location] of group] `\(\small i\)`, `\(\small i=1,\ldots, G\)`.
+
+.smallest[Hypotheses:]
+`$$\small H_0: \color{#6A5ACD}{\theta_1} \color{#eb078e}{=} \color{#06bcf1}{\theta_2} \color{#eb078e}{=} \ldots \color{#eb078e}{=} \color{#8bb174}{\theta_G} \ \ \ \ \text{and} \ \ \ \ H_a: \theta_i \color{#eb078e}{\neq} \theta_j \ \ \text{for at least one pair of} \ \ (i,j).$$`
+
+---
+
+# Kruskal-Wallis test
+
+.smallest[Test statistic's distribution under] `\(\small H_0\)`:
+`$$\small \color{#b4b4b4}{H = \frac{\frac{12}{N(N+1)} \sum_{g=1}^G \frac{\overline{R}_g}{n_g}-3(N-1)}{1-\frac{\sum_{v=1}^V{t_v^3-t_v}}{N^3-N}} \ {\underset{H_0}{\sim}} \ \mathcal{X}(G-1)}$$`
+
+.smallest[.grey[where]] `\(\small \color{#b4b4b4}{\overline{R}_g = \frac{1}{n_g} \sum_{i=1}^{n_g} R_{i(g)}}\)` .smallest[.grey[with]] `\(\small \color{#b4b4b4}{R_{i(g)}}\)` .smallest[.grey[denoting the global rank of the]] `\(\small \color{#b4b4b4}{i^{th}}\)` .smallest[.grey[observation of group]] `\(\small \color{#b4b4b4}{g}\)`.smallest[.grey[,]] `\(\small \color{#b4b4b4}{V}\)` .smallest[.grey[is the number of different values/levels in]] `\(\small \color{#b4b4b4}{y}\)` .smallest[.grey[and]] `\(\small \color{#b4b4b4}{t_v}\)` .smallest[.grey[denotes the number of times a given value/level occurred in]] `\(\small \color{#b4b4b4}{y}\)`.smallest[.grey[.]]
+
+---
+
+# Discussion - Kruskal-Wallis test
+
+- R function: 
+
+.center[
+`kruskal.test(response ~ groups)`.]
+
+- This test is ".pink[robust]" in the sense that (unlike the one-way ANOVA) it is not overly affected by outliers.
+- The Kruskal-Wallis test does not require the distributions to be Gaussian nor the variances to be the same, however, in this case this method actually tests whether all distributions are the same. To render the Kruskal-Wallis test comparable to the one-way ANOVA we need to assume: (1) The distribution is symmetric, (2) the variances are the same. Then, we have `\(\theta_i = \mu_i, i=1,\ldots,G\)`.
+- Compared to the one-way ANOVA, the Kruskal-Wallis test is less power if their requirements (Gaussian and possibly same variances) are met.
+
+---
+
+# Comparing Diet A, B and C
 
 .panelset[
-.panel[.panel-name[Problem]
-.smallest[There is emerging evidence of a relationship between timing of feeding and weight regulation. More precisely, it is claimed that .pink[people who have their main meal early tend to lose more weight compared to people who eat late]. We collect weight loss (in kg) data from 12 individuals, where 7 of them are early eaters and 5 of them are late eaters. We want to test if such claim is valid based on the observed sample: 
-$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
+.panel[.panel-name[Graph]
+STEF :)
 ]
-1. .smallest[.purple[Define hypotheses:]] `\(\small H_0: \mu_{\text{early}} = \mu_{\text{late}}\)` .smallest[and] `\(\small H_a: \mu_{\text{early}} \color{#e64173}{&gt;} \mu_{\text{late}}\)`.smallest[.]
-2. .smallest[.purple[Define]] `\(\small \color{#6A5ACD}{\alpha}\)`.smallest[: We consider] `\(\small \alpha = 5\%\)`.smallest[.]
-3. .smallest[.purple[Compute p-value:] p-value =] `\(\small 2.122\%\)` .smallest[(see R code tab for details).]
-4. .smallest[.purple[Conclusion:] We have p-value &lt;] `\(\small \alpha\)` .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
-]
-.panel[.panel-name[Boxplot Code]
+.panel[.panel-name[Import]
 
 ```r
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
+# Import data
+diet = read.csv("data/diet.csv",row.names=1)
 
-boxplot(early_eaters, late_eaters, 
-        names = c("Early", "Late"), 
-        ylab = "Weight loss (kg)",
-        col = c("#F8766D", "#00BFC4"))
-points(1:2, c(mean(early_eaters), mean(late_eaters)), 
-       pch = 16, col = 1)
+# Compute weight loss
+diet$weight.loss = diet$initial.weight - diet$final.weight
+
+# Select diet
+posA = diet$diet.type=="A"
+posB = diet$diet.type=="B"
+posC = diet$diet.type=="C"
+
+# Variable of interest
+dietA = diet$weight.loss[posA]
+dietB = diet$weight.loss[posB]
+dietC = diet$weight.loss[posC]
 ```
 ]
-.panel[.panel-name[Boxplot]
-&lt;img src="Lecture2_files/figure-html/unnamed-chunk-7-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
-]
-.panel[.panel-name[`R` Code ]
+.panel[.panel-name[Fisher]
 
 ```r
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-t.test(x = early_eaters, y = late_eaters, alternative = "greater")
+# Number of observations
+numA = length(dietA)
+numB = length(dietB)
+numC = length(dietC)
+
+# Combine 
+response = c(dietA, dietB, dietC)
+groups = c(rep("A", numA), rep("B", numB), rep("C", numC))
+
+res_aov = aov(response ~ groups)
+summary(res_aov)
+```
+
+```
+#&gt;             Df Sum Sq Mean Sq F value Pr(&gt;F)   
+#&gt; groups       2   60.5  30.264   5.383 0.0066 **
+#&gt; Residuals   73  410.4   5.622                  
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+]
+.panel[.panel-name[Welch]
+
+```r
+res_aov = aov(response ~ groups)
+summary(res_aov)
+```
+
+```
+#&gt;             Df Sum Sq Mean Sq F value Pr(&gt;F)   
+#&gt; groups       2   60.5  30.264   5.383 0.0066 **
+#&gt; Residuals   73  410.4   5.622                  
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+]
+.panel[.panel-name[Kruskal]
+
+```r
+kruskal.test(response ~ groups)
 ```
 
 ```
 #&gt; 
-#&gt; 	Welch Two Sample t-test
+#&gt; 	Kruskal-Wallis rank sum test
 #&gt; 
-#&gt; data:  early_eaters and late_eaters
-#&gt; t = 2.4351, df = 7.5918, p-value = 0.02122
-#&gt; alternative hypothesis: true difference in means is greater than 0
-#&gt; 95 percent confidence interval:
-#&gt;  1.414346      Inf
-#&gt; sample estimates:
-#&gt; mean of x mean of y 
-#&gt;  11.24286   5.12000
+#&gt; data:  response by groups
+#&gt; Kruskal-Wallis chi-squared = 9.4159, df = 2, p-value = 0.009023
 ```
 ]
+.panel[.panel-name[Results]
+1. .purple[Define hypotheses:] `\(H_0: \mu_A = \mu_B = \mu_C\)` and `\(H_a: H_0 \ \text{is false}\)`.
+2. .purple[Define] `\(\color{#373895}{\alpha}\)`: We consider `\(\alpha = 5\%\)`.
+3. .purple[Compute p-value]: All tests show p-values smaller than `\(\alpha\)` (see R output tab for details).
+4. .purple[Conclusion:] We have p-value &lt; `\(\alpha\)` so we reject the null hypothesis at the significance level of 5%.
 ]
-
----
-
-# Wilcoxon rank sum test
-
-- .smallest[Similar to the Wilcoxon signed rank test as a robust &lt;sup&gt;.smallest[👋]&lt;/sup&gt; alternative to the one-sample t-test, we can use the .hi-pink[Wilcoxon rank sum test] (also called the Mann-Whitney test) when the normality condition is not satisfied to use two-sample t-test.]
-- .smallest[The Wilcoxon rank sum test depends on the .purple[Wilcoxon rank sum statistic], which is the .purple[sum of the ranks of one sample]. As it only uses the ranks of the observations, it is a .turquoise[nonparametric test].]
-- .smallest[In the simplest form, the Wilcoxon rank sum test states the hypotheses in terms of .pink[population median]. However, more precisely, it actually tests whether the two distributions are the same, i.e. 😵]
-`\begin{align}
-&amp; \small H_0: \text{The two distributions are the same.} \\
-&amp; \small H_a: \text{One distribution has values that are systematically larger (or smaller). }
-\end{align}`
-
-.footnote[.smallest[👋 Informally, a robust method is such that it is not overly affected by outliers. The usual one-sample and two-sample t-tests are somehow robust in the sense that their results of inference are not very sensitive to moderate lack of normality when the samples are sufficiently large. However, they may still fail when the population distribution shows strong skewness, especially when we have only a few observations.]]
-
----
-
-# Revisit the weight loss example
-
-.panelset[
-.panel[.panel-name[Problem]
-.smallest[Let's recall the previous weight loss example. We want to test if .pink[early eaters tend to lose more weight than late eaters]. The sample is as follows: 
-$$\small \text{Early eaters:} \;\; 6.3 \;\; 15.1 \;\; 9.4 \;\; 16.8 \;\; 10.2 \;\; 8.2 \;\; 12.7 \quad \text{Late eaters:} \;\; 7.8 \;\; 0.2 \;\; 1.5 \;\; 11.5 \;\; 4.6 $$
-]
-1. .smallest[.purple[Define hypotheses:]] `\(\small H_0: \text{median}_{\text{early}} = \text{median}_{\text{late}}\)` .smallest[and] `\(\small H_a: \text{median}_{\text{early}} \color{#e64173}{&gt;} \text{median}_{\text{late}}\)`.smallest[.]
-2. .smallest[.purple[Define]] `\(\small \color{#6A5ACD}{\alpha}\)`.smallest[: We consider] `\(\small \alpha = 5\%\)`.smallest[.]
-3. .smallest[.purple[Compute p-value:] p-value =] `\(\small 2.399\%\)` .smallest[(see R code tab for details).]
-4. .smallest[.purple[Conclusion:] We have p-value &lt;] `\(\small \alpha\)` .smallest[so we can reject the null hypothesis at the significance level of 5% and conclude that the early eaters tend to lose more weight compared to late eaters.]
-]
-.panel[.panel-name[Boxplot Code]
+.panel[.panel-name[Comp]
 
 ```r
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-
-boxplot(early_eaters, late_eaters, 
-        names = c("Early", "Late"), 
-        ylab = "Weight loss (kg)",
-        col = c("#F8766D", "#00BFC4"))
-points(1:2, c(mean(early_eaters), mean(late_eaters)), 
-       pch = 16, col = 1)
-```
-]
-.panel[.panel-name[Boxplot]
-&lt;img src="Lecture2_files/figure-html/unnamed-chunk-10-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
-]
-.panel[.panel-name[`R` Code ]
-
-```r
-early_eaters = c(6.3, 15.1, 9.4, 16.8, 10.2, 8.2, 12.7)
-late_eaters = c(7.8, 0.2, 1.5, 11.5, 4.6)
-wilcox.test(x = early_eaters, y = late_eaters, alternative = "greater")
-```
-
-```
-#&gt; 
-#&gt; 	Wilcoxon rank sum test
-#&gt; 
-#&gt; data:  early_eaters and late_eaters
-#&gt; W = 30, p-value = 0.02399
-#&gt; alternative hypothesis: true location shift is greater than 0
+wilcox.test(dietA, dietB, alternative = "less")
+wilcox.test(dietA, dietC, alternative = "less")
+wilcox.test(dietB, dietC, alternative = "less")
 ```
 ]
 ]
-
----
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
