@@ -68,7 +68,7 @@ We will discuss three ".pink[two-sample location tests]":
 
 ---
 
-# .smaller[Two independent sample Student's t-test]
+# .smaller[Two Independent Sample Student's t-test]
 
 This test considers the following assumed model for group .hi-purple2[A] and .hi-blue[B]
 
@@ -80,14 +80,179 @@ where `\(g=A,B\)`, `\(i=1,...,n_{g}\)`, `\(\varepsilon_{i(g)} \overset{iid}{\sim
 Hypotheses:
 
 `$$H_0: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \ \big[ \color{#eb078e}{&gt;} \text{ or } \color{#eb078e}{&lt;} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$`
+
 Test statistic's distribution under `\(H_0\)`
 
 `$$\color{#b4b4b4}{T = \frac{(\overline{X}_{A}-\overline{X}_{B})-\mu_0}{s_{p}\sqrt{n_{A}^{-1}+n_{B}^{-1}}} \ {\underset{H_0}{\sim}} \ \text{Student}(n_{A}+n_{B}-2).}$$` 
 ---
 
+# .smaller[Discussion - Student's t-test]
+
+- R function: 
+
+.center[
+`t.test(x = ..., y = ..., alternative = ..., var.equal = TRUE)`.]
+
+- This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Mann-Whitney-Wilcoxon Test (see later) is (probably) a better option.
+- For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
+- In practice, the assumption of equal variance is hard to verify and .hi.pink[we recommend avoiding this test in practice].
+
+---
+
+# .smaller[Two Independent Sample Welch's t-test]
+
+This test considers the following assumed model for group .hi-purple2[A] and .hi-blue[B]
+
+`$$X_{i(g)} = \color{#eb078e}{\mu_{g}} + \varepsilon_{i(g)} = \mu + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$`
+where `\(g=A,B\)`, `\(i=1,...,n_{g}\)`, `\(\varepsilon_{i(g)} \overset{iid}{\sim} \mathcal{N}(0,\color{#eb078e}{\sigma^{2}_g})\)` and `\(\sum n_{g}\delta_{g} = \color{#6A5ACD}{\delta_A} + \color{#06bcf1}{\delta_B}=0\)`. 
+
+📝 `\(\color{#6A5ACD}{n_A}\)` `\(=\)` sample size of group .hi-purple2[A], `\(\color{#6A5ACD}{\mu_{A} = \mu + \delta_A}\)` `\(=\)` population mean of group .purple2[A], `\(\color{#06bcf1}{n_B}\)` and `\(\color{#06bcf1}{\mu_{B} = \mu + \delta_B}\)` are similarly defined for group .hi-blue[B].
+
+Hypotheses: 
+
+`$$H_0: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \color{#eb078e}{=} \mu_0 \ \ \ \ \text{and} \ \ \ \ H_a: \color{#6A5ACD}{\mu_A} - \color{#06bcf1}{\mu_B} \ \big[ \color{#eb078e}{&gt;} \text{ or } \color{#eb078e}{&lt;} \text{ or } \color{#eb078e}{\neq} \big] \ \mu_0.$$`
+
+Test statistic's distribution under `\(H_0\)`
+
+`$$\color{#b4b4b4}{T = \frac{(\overline{X}_{A}-\overline{X}_{B})-\mu_0}{\sqrt{s^2_A/n_{A} + s^2_B/n_{B}}} \ {\underset{H_0}{\sim}} \ \text{Student}(df).}$$` 
+
+---
+
+# .smaller[Discussion - Welch's t-test]
+
+- R function: 
+
+.center[
+`t.test(x = ..., y = ..., alternative = ...)`.]
+
+- This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Mann-Whitney-Wilcoxon Test (see later) is (probably) a better option.
+- For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
+- This test does not require the variances of the two groups to be equal. If the variances of the two groups are the same (which is rather unlikely in practice), the Welch's t-test losses a little bit of power compared to the Student's t-test.
+- The computation of `\(df\)` (i.e. the degrees of freedom of the distribution under the null) is beyond the scope of this class.
+
+---
+
+# .smaller[Mann-Whitney-Wilcoxon Test]
+
+This test considers the following assumed model for group .hi-purple2[A] and .hi-blue[B]
+
+`$$X_{i(g)} = \color{#eb078e}{\theta_{g}} + \varepsilon_{i(g)} = \theta + \color{#eb078e}{\delta_{g}} + \varepsilon_{i(g)},$$`
+where `\(g=A,B\)`, `\(i=1,...,n_{g}\)`, `\(\varepsilon_{i(g)} \overset{iid}{\sim} (0,\color{#eb078e}{\sigma^{2}})\)` and `\(\sum n_{g}\delta_{g} = \color{#6A5ACD}{\delta_A} + \color{#06bcf1}{\delta_B}=0\)`. 
+
+📝 `\(\color{#6A5ACD}{n_A}\)` `\(=\)` sample size of group .hi-purple2[A], `\(\color{#6A5ACD}{\theta_{A} = \theta + \delta_A}\)` `\(=\)` population .pink[location] of group .purple2[A], `\(\color{#06bcf1}{n_B}\)` and `\(\color{#06bcf1}{\theta_{B} = \theta + \delta_B}\)` are similarly defined for group .hi-blue[B].
+
+Hypotheses: `\(H_0: \color{#6A5ACD}{\theta_A} - \color{#06bcf1}{\theta_B} \color{#eb078e}{=} \theta_0 \ \ \ \ \text{and} \ \ \ \ H_a: \color{#6A5ACD}{\theta_A} - \color{#06bcf1}{\theta_B} \ \big[ \color{#eb078e}{&gt;} \text{ or } \color{#eb078e}{&lt;} \text{ or } \color{#eb078e}{\neq} \big] \ \theta_0.\)`
+
+Test statistic's distribution under `\(H_0\)`
+
+`$$\color{#b4b4b4}{Z = \frac{\sum_{i=1}^{n_{B}}R_{i(g)}-[n_{B}(n_{A}+n_{B}+1)/2]}{\sqrt{n_{A}n_{B}(n_{A}+n_{B}+1)/12}},}$$`
+.grey[where] `\(\color{#b4b4b4}{R_{i(g)}}\)` .grey[denotes the global rank of the] `\(\color{#b4b4b4}{i}\)`.grey[-th observation of group] `\(\color{#b4b4b4}{g}\)`.grey[.]
+
+---
+
+# .smaller[Discussion - Mann-Whitney-Wilcoxon test]
+
+- R function: 
+
+.center[
+`wilcox.test(x = ..., y = ..., alternative = ...)`.]
+
+- This test is ".pink[robust]" in the sense that (unlike the t-test) it is not overly affected by outliers.
+- The Mann-Whitney-Wilcoxon test does not require the distributions to be Gaussian nor the variances to be the same, however, in this case this method actually tests whether the two distributions are the same. To render the Mann-Whitney-Wilcoxon test comparable to the t-tests we need to assume: (1) The distribution is symmetric, (2) the variances are the same. Then, we have `\(\color{#6A5ACD}{\theta_A = \mu_A}\)` and `\(\color{#06bcf1}{\theta_B = \mu_B}\)`.
+- Compared to the t-tests, the Mann-Whitney-Wilcoxon test is less power if their requirements (Gaussian and possibly same variances) are met.
+- The distribution of this method under the null is complicated and can be obtained by different methods (e.g. exact, asymptotic normal, ...). The details are beyond the scope of this class.
+ 
+---
+
 # Comparing Diet A and B 
 
-dietAB
+.panelset[
+.panel[.panel-name[Graph]
+&lt;img src="pics/dietAB.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Import]
+
+```r
+# Import data
+diet = read.csv("data/diet.csv",row.names=1)
+
+# Compute weight loss
+diet$weight.loss = diet$initial.weight - diet$final.weight
+
+# Select diet
+posA = diet$diet.type=="A"
+posB = diet$diet.type=="B"
+
+# Variable of interest
+dietA = diet$weight.loss[posA]
+dietB = diet$weight.loss[posB]
+```
+]
+.panel[.panel-name[Student]
+
+```r
+t.test(dietA, dietB, var.equal = TRUE)
+```
+
+```
+#&gt; 
+#&gt; 	Two Sample t-test
+#&gt; 
+#&gt; data:  dietA and dietB
+#&gt; t = 0.0475, df = 47, p-value = 0.9623
+#&gt; alternative hypothesis: true difference in means is not equal to 0
+#&gt; 95 percent confidence interval:
+#&gt;  -1.323275  1.387275
+#&gt; sample estimates:
+#&gt; mean of x mean of y 
+#&gt;     3.300     3.268
+```
+]
+.panel[.panel-name[Welsh]
+
+```r
+t.test(dietA, dietB)
+```
+
+```
+#&gt; 
+#&gt; 	Welch Two Sample t-test
+#&gt; 
+#&gt; data:  dietA and dietB
+#&gt; t = 0.047594, df = 46.865, p-value = 0.9622
+#&gt; alternative hypothesis: true difference in means is not equal to 0
+#&gt; 95 percent confidence interval:
+#&gt;  -1.320692  1.384692
+#&gt; sample estimates:
+#&gt; mean of x mean of y 
+#&gt;     3.300     3.268
+```
+]
+.panel[.panel-name[Wilcox]
+
+```r
+wilcox.test(dietA, dietB)
+```
+
+```
+#&gt; 
+#&gt; 	Wilcoxon rank sum test with continuity correction
+#&gt; 
+#&gt; data:  dietA and dietB
+#&gt; W = 277, p-value = 0.6526
+#&gt; alternative hypothesis: true location shift is not equal to 0
+```
+]
+.panel[.panel-name[Results]
+1. .purple[Define hypotheses:] `\(H_0: \mu_A = \mu_B\)` and `\(H_a: \mu_A \color{#e64173}{\neq} \mu_B\)`.
+2. .purple[Define] `\(\color{#373895}{\alpha}\)`: We consider `\(\alpha = 5\%\)`.
+3. .purple[Compute p-value]: Welch's t-test appears suitable in this case, therefore, we obtain: p-value =  `\(96.22 \%\)` (see R output tab for details).
+4. .purple[Conclusion:] We have p-value &gt; `\(\alpha\)` and we fail to reject the null hypothesis at the significance level of 5%.
+]
+]
+
+
+---
 
 
 # The two-sample t-test: Example
@@ -117,7 +282,7 @@ points(1:2, c(mean(early_eaters), mean(late_eaters)),
 ```
 ]
 .panel[.panel-name[Boxplot]
-&lt;img src="Lecture2_files/figure-html/unnamed-chunk-4-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="Lecture2_files/figure-html/unnamed-chunk-7-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 .panel[.panel-name[`R` Code ]
 
@@ -186,7 +351,7 @@ points(1:2, c(mean(early_eaters), mean(late_eaters)),
 ```
 ]
 .panel[.panel-name[Boxplot]
-&lt;img src="Lecture2_files/figure-html/unnamed-chunk-7-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="Lecture2_files/figure-html/unnamed-chunk-10-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 .panel[.panel-name[`R` Code ]
 
