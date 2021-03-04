@@ -12,7 +12,7 @@ The linked slides (below) are `.html` files that will only work properly if you 
 
 **[Part I: Introduction to Statistical Inference](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html)**  (note formats: [.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.html) | [.pdf](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.pdf) | [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.Rmd))
 
-**Part II: ANOVA** (coming soon 🚧)
+**[Part II: Analysis of Variance](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.html#1)**  (note formats: [.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.html#1) | [.pdf](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.pdf) | [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.Rmd))
 
 **Part III: Linear Regression** (coming soon 🚧)
 

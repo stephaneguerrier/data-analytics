@@ -27,7 +27,14 @@ Inference](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lectur
 |
 [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture1.Rmd))
 
-**Part II: ANOVA** (coming soon 🚧)
+**[Part II: Analysis of
+Variance](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.html#1)**
+(note formats:
+[.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.html#1)
+|
+[.pdf](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.pdf)
+|
+[.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.Rmd))
 
 **Part III: Linear Regression** (coming soon 🚧)
 
