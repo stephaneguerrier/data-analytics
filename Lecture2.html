@@ -7,15 +7,15 @@
     <link href="Lecture2_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture2_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture2_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture2_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="Lecture2_files/tile-view-0.2.4/tile-view.js"></script>
-    <link href="Lecture2_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="Lecture2_files/panelset-0.2.4/panelset.js"></script>
+    <link href="Lecture2_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="Lecture2_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="Lecture2_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="Lecture2_files/panelset-0.2.6/panelset.js"></script>
     <script src="Lecture2_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture2_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture2_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -153,7 +153,7 @@ Test statistic's distribution under `\(H_0\)`:
 
 - R function: `wilcox.test(x = ..., y = ..., alternative = ...)`.
 - This test is ".pink[robust]" in the sense that (unlike the t-tests) it is not overly affected by outliers.
-- For the Mann-Whitney-Wilcoxon test to be comparable to the t-tests (i.e. testing for the mean) we need to assume: (1) The distribution is symmetric, (2) the variances are the same. Then, we have `\(\color{#6A5ACD}{\theta_A = \mu_A}\)` and `\(\color{#06bcf1}{\theta_B = \mu_B}\)`.
+- For the Mann-Whitney-Wilcoxon test to be comparable to the t-tests (i.e. testing for the mean) we need to assume: (1) The distributions are symmetric, (2) the variances are the same. Then, we have `\(\color{#6A5ACD}{\theta_A = \mu_A}\)` and `\(\color{#06bcf1}{\theta_B = \mu_B}\)`.
 - Compared to the t-tests, the Mann-Whitney-Wilcoxon test is less powerful if their requirements (Gaussian and possibly same variances) are met.
 - The distribution of this method under the null is complicated and can be obtained by different methods (e.g. exact, asymptotic normal, ...). The details are beyond the scope of this class.
  
@@ -438,7 +438,7 @@ We will discuss three .pink[multiple-sample location tests]:
 `kruskal.test(response ~ groups, data = mydata)`.]
 
 - This test is ".pink[robust]" in the sense that (unlike the one-way ANOVA) it is not overly affected by outliers.
-- For the Kruskal-Wallis test to be comparable to the one-way ANOVAs (i.e. testing for the mean) we need to assume: (1) The distribution is symmetric, (2) the variances are the same. Then, we have `\(\color{#eb078e}{\theta_i = \mu_i, i=1,\ldots,G}\)`.
+- For the Kruskal-Wallis test to be comparable to the one-way ANOVAs (i.e. testing for the mean) we need to assume: (1) The distributions are symmetric, (2) the variances are the same. Then, we have `\(\color{#eb078e}{\theta_i = \mu_i, i=1,\ldots,G}\)`.
 - Compared to the one-way ANOVA, the Kruskal-Wallis test is less powerful if their requirements (Gaussian and possibly same variances) are met.
 
 ---
