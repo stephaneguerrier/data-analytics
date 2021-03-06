@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage[active,tightpage,psfixbb]{preview}
+\PreviewEnvironment{pgfpicture}
+\setlength\PreviewBorder{0pt}
+\usepackage{amssymb}
+%\definecolor{mygreen}{HTML}{16AF11}
+%\definecolor{myred}{HTML}{F16A57}
+%\definecolor{myblue}{HTML}{0A71BD}
+\usepackage{Sweave}
+\begin{document}
+\input{RAE-concordance}
+
+\begin{Schunk}
+\begin{Sinput}
+> set.seed(18)
+> n1 = 40
+> n2 = 20
+> age1 = runif(n1, 6, 12)
+> age2 = runif(n2, 6, 9)
+> beta0 = -2
+> beta1 = 6
+> beta2 = -22
+> beta12 = 4
+> sigma = 4
+> mu1 = beta0 + beta1*age1 + rnorm(n1, 0, sigma)
+> mu2 = beta0 + beta2 + (beta1 + beta12)*age2 + rnorm(n2, 0, sigma)
+> dat = data.frame(score = c(mu1, mu2),
++                  age = c(age1, age2),
++                  group = c(rep("Control", n1),
++                            rep("Treatement", n2)))
+> # Graph 1
+> # jitter for boxplot
+> set.seed(1)
+> noise = runif(n1 + n2,-.075,.075)
+> t_col = function(col, percent){
++   rgb.val <- col2rgb(col)
++   rgb(rgb.val[1], rgb.val[2], rgb.val[3],
++                max = 255,
++                alpha = (100 - percent) * 255 / 100)
++ }
+> # colours
+> cruk_blue = rgb(55,56,149,maxColorValue=255)
+> cruk_lightblue = rgb(6, 188, 241,maxColorValue=255)
+> cruk_pink = rgb(235,7,142,maxColorValue=255)
+> cruk_yellow = rgb(240,178,0,maxColorValue=255)
+> cruk_yellow = rgb(240,178,0,maxColorValue=255)
+> beamer_gray = gray(.35)
+> library(tikzDevice)
+> tikz("tex/boxplot_RAE.tex",width=4,height=3,standAlone = FALSE)
+> par(mar=c(4,0,2,6))
+> plot(1,1,pch="",axes=FALSE,ylim=c(.5,3.2),xlim=range(dat$score),
++      main="Reading ability assessment",xlab="",ylab="",col.axis=beamer_gray,col.main=beamer_gray,col.lab=beamer_gray,cex.lab=1.5)
+> # Control
+> posw = dat$group=="Control"
+> boxplot(dat$score[posw],at=2,add=TRUE,outline=FALSE,
++         col="light gray",axes=FALSE,horizontal=TRUE)
+> points(dat$score[posw],noise[posw]+2,pch=19,col=t_col(cruk_pink, 50))
+>          #.p(cruk_pink,50))
+> # Treatement
+> posw = dat$group=="Treatement"
+> boxplot(dat$score[posw],at=1,add=TRUE,outline=FALSE,
++         col="light gray",axes=FALSE,horizontal=TRUE)
+> points(dat$score[posw],noise[posw]+1,pch=19,col=t_col(cruk_pink, 50))
+> #.p(cruk_pink,50))
+> 
+> #abline(v=0,col=cruk_lightblue)
+> 
+> axis(1,las=1,col=beamer_gray,col.axis=beamer_gray)
+> axis(4,at=2,"Control",col=beamer_gray,col.axis=beamer_gray,tick=FALSE,las=2)
+> axis(4,at=1,"Treatement",col=beamer_gray,col.axis=beamer_gray,tick=FALSE,las=2)
+> dev.off()
+\end{Sinput}
+\begin{Soutput}
+null device 
+          1 
+\end{Soutput}
+\end{Schunk}
+
+\begin{figure}
+\input{tex/boxplot_RAE.tex}
+\end{figure}

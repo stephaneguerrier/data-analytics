@@ -1,0 +1,287 @@
+---
+title: "Modelling and Data Analytics for Pharmaceutical Sciences"
+subtitle: "Part I: Introduction to Statistical Inference"
+author: "Stéphane Guerrier"
+date: " "
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    seal: false
+---
+
+
+```{R, setup, include = F}
+# devtools::install_github("dill/emoGG")
+library(pacman)
+p_load(
+  broom, tidyverse,
+  latex2exp, ggplot2, ggthemes, ggforce, viridis, extrafont, gridExtra,
+  kableExtra, snakecase, janitor,
+  data.table, dplyr, estimatr,
+  lubridate, knitr, parallel,
+  lfe,
+  here, magrittr
+)
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+orange <- "#FFA500"
+red <- "#fb6107"
+blue <- "#2b59c3"
+green <- "#8bb174"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+grey = "#b4b4b4"
+purple <- "#6A5ACD"
+slate <- "#314f4f"
+# Dark slate grey: #314f4f
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+options(crayon.enabled = F)
+options(knitr.table.format = "html")
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -0.5, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 18, family = "STIXGeneral"),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_math <- theme_void() + theme(
+  text = element_text(family = "MathJax_Math"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_serif <- theme_void() + theme(
+  text = element_text(family = "MathJax_Main"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes <- theme_void() + theme(
+  text = element_text(family = "Fira Sans Book"),
+  axis.title = element_text(size = 18),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = grey_light,
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_set(theme_gray(base_size = 20))
+# Column names for regression results
+reg_columns <- c("Term", "Est.", "S.E.", "t stat.", "p-Value")
+# Function for formatting p values
+format_pvi <- function(pv) {
+  return(ifelse(
+    pv < 0.0001,
+    "<0.0001",
+    round(pv, 4) %>% format(scientific = F)
+  ))
+}
+format_pv <- function(pvs) lapply(X = pvs, FUN = format_pvi) %>% unlist()
+# Tidy regression results table
+tidy_table <- function(x, terms, highlight_row = 1, highlight_color = "black", highlight_bold = T, digits = c(NA, 3, 3, 2, 5), title = NULL) {
+  x %>%
+    tidy() %>%
+    select(1:5) %>%
+    mutate(
+      term = terms,
+      p.value = p.value %>% format_pv()
+    ) %>%
+    kable(
+      col.names = reg_columns,
+      escape = F,
+      digits = digits,
+      caption = title
+    ) %>%
+    kable_styling(font_size = 20) %>%
+    row_spec(1:nrow(tidy(x)), background = "white") %>%
+    row_spec(highlight_row, bold = highlight_bold, color = highlight_color)
+}
+```
+
+```{css, echo = F, eval = F}
+@media print {
+  .has-continuation {
+    display: block !important;
+  }
+}
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_extra_styles()
+```
+
+
+class: title-slide  
+<div class="my-logo-right"></div>
+<br>
+<br>
+<br>
+<br>
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part III: Linear Regression
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva, 🇨🇭]
+
+<br>
+```{R, out.width = "25%", echo = F}
+include_graphics("pics/liscence.png")
+```
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu]
+
+---
+
+# .smallest[Motivating Example: Reading Ability]
+
+.panelset[
+.panel[.panel-name[Problem]
+An educator believes that new directed reading activities in the classroom can help elementary school students (6-12 years old) improve their reading ability. She arranged a pilot study where some students (chosen at random) of age 6 start to take part in these activities .hi-purple2[(treatment group)], meanwhile other students continue with the classical curriculum .hi-pink[(control group)]. After three years, the educator wishes to evaluate the effectiveness of these activities so all students are given a Degree of Reading Power (DRP) test, which assesses their reading ability.
+
+.pink[Can we conclude that these new directed reading activities can help elementary school students improve their reading ability?]
+]
+.panel[.panel-name[Data]
+
+```{r}
+dat = read.csv("data/reading.csv")
+control = dat$score[dat$group == "Control"]
+head(control)
+treatment = dat$score[dat$group == "Treatment"]
+head(treatment)
+```
+
+]
+.panel[.panel-name[Graph]
+
+```{R, readingboxplot, out.width = "80%", echo = F}
+include_graphics("pics/boxplot_reading.png")
+```
+
+]
+.panel[.panel-name[Test]
+1. .purple[Define hypotheses:] $H_0: \mu_T = \mu_C$ and $H_a: \mu_T > \mu_C$.
+2. .purple[Define] $\color{#6A5ACD}{\alpha}$: We consider $\alpha = 5\%$.
+3. .purple[Compute p-value]: p-value = $97.12\%$ (see R code tab for details).
+4. .purple[Conclusion:] We have p-value > $\alpha$ so we cannot reject the null hypothesis at the significance level of 5%. 
+
+.hi-pink[Remark:] Notice that the p-value for the test with opposite hypotheses is actually $100-97.12\%=2.88\% < \alpha$ (Why? 🤔). So we conclude, at the significance level of 5%, that the classical curriculum without these new directed reading activities actually improve students' reading ability more compared to the curriculum with these activities. 😬
+]
+.panel[.panel-name[`R` Code ]
+```{r}
+t.test(treatment, control, alternative = "greater")
+```
+]
+]
+
+---
+
+# .smaller[Is our analysis comprehensive?]
+
+The educator points out that she has considered these new directed reading activities for only three years. So only students of 6-8 years old have participated in these activities. In other words, in the sample she collected, the students in the treatment group are only of age 6 to 8, whereas the students in the control group vary from 6 to 12 years old. .pink[Is age a potential explanation to the difference we observe among the students' reading ability?]
+
+To make sure that the analysis is reliable, she includes the age information of the students, which can be accessed as follows:
+
+```{r}
+treatment_age = dat$age[dat$group == "Treatment"]
+control_age   = dat$age[dat$group == "Control"]
+```
+
+---
+
+# .smaller[Should age be taken into account?]
+
+```{R, readingpoint, out.width = "90%", echo = F}
+include_graphics("pics/reading_points.png")
+```
+
+---
+
+# .smaller[Regression analysis]
+
+- Regression analysis corresponds a set of statistical processes for estimating the relationships between a dependent variable (often called the 'outcome variable') and one or more independent variables (often called 'predictors', 'covariates', or 'features').
+- .pink[Regression methods] allow to study the effects of some explanatory variables (also called covariates or regressors) $ X_1, \ldots, X_p$ on a response variable $Y$ of primary interest. They are used to reveal and investigate the relationships between input and output variables.]
+- The relationship between the response variable $\small Y$ and the covariates is not .purple2[deterministic]. Instead, it shows some random errors. In other words, the response $\small Y$ is random and its .purple2[(conditional) expected value] (i.e. $\mathbb{E}[Y | X_1, \ldots, X_p]$) is modeled as a function of the covariates.
+
+---
+
+# r
+- .smallest[In .hi-pink[linear regression models], the mean value of] $\small Y$ .smallest[is a linear combination of the covariates:] 
+$$Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p + \epsilon, \quad \epsilon \sim \mathcal{N}(0, \sigma^2).$$
+- .smallest[.purple[The random errors are assumed to be independently and identically normally distributed with mean 0 and variance]] $\small \color{#6A5ACD}{\sigma^2}$ .smallest[.purple[.]]
+- .smallest[The parameters of interest are] $\small \beta_0, \beta_1, \ldots, \beta_p$<sup>.smallest[👋]</sup>.smallest[. They are estimated using the least squares approach.]
+
+.footnote[.smallest[👋 Here we consider a simple situation where the variance is known. In practice, however, the variance is typically unknown so it needs to be estimated as well.]]
+
+---
+
+# Example: Reading ability assessment
+
+In the reading ability example, we can formulate a linear regression model as follows:
+$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2).$$
+- $\color{#e64173}{\text{Score}_i}$: score of the DRP test of the $i$-th student.
+- $\color{#6A5ACD}{\text{Group}_i}$: indicator of participation of the new directed reading activities for the $i$-th student (i.e. $\color{#6A5ACD}{\text{Group}_i} = 1$ if participate and $\color{#6A5ACD}{\text{Group}_i} = 0$ if not participate).
+- $\color{#20B2AA}{\text{Age}_i}$: age of the $i$-th student. 
+
+With this model the two groups can be compared as the age effect is taken into account. The goal of the educator is now to assess if $\beta_1$ is .pink[significantly larger than 0] (why??? 🤔).
+
+---

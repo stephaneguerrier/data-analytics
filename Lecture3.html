@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Guerrier" />
+    <link href="Lecture3_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Lecture3_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="Lecture3_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="Lecture3_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture3_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture3_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture3_files/panelset-0.2.4/panelset.js"></script>
+    <script src="Lecture3_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="Lecture3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="Lecture3_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+class: title-slide  
+&lt;div class="my-logo-right"&gt;&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part III: Linear Regression
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva, 🇨🇭]
+
+&lt;br&gt;
+&lt;img src="pics/liscence.png" width="25%" style="display: block; margin: auto;" /&gt;
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu]
+
+---
+
+# .smallest[Motivating Example: Reading Ability]
+
+.panelset[
+.panel[.panel-name[Problem]
+An educator believes that new directed reading activities in the classroom can help elementary school students (6-12 years old) improve their reading ability. She arranged a pilot study where some students (chosen at random) of age 6 start to take part in these activities .hi-purple2[(treatment group)], meanwhile other students continue with the classical curriculum .hi-pink[(control group)]. After three years, the educator wishes to evaluate the effectiveness of these activities so all students are given a Degree of Reading Power (DRP) test, which assesses their reading ability.
+
+.pink[Can we conclude that these new directed reading activities can help elementary school students improve their reading ability?]
+]
+.panel[.panel-name[Data]
+
+
+```r
+dat = read.csv("data/reading.csv")
+control = dat$score[dat$group == "Control"]
+head(control)
+```
+
+```
+#&gt; [1] 59.98881 60.39487 70.02395 41.47707 29.15497 58.84009
+```
+
+```r
+treatment = dat$score[dat$group == "Treatment"]
+head(treatment)
+```
+
+```
+#&gt; [1] 36.80558 36.70201 59.89362 31.72289 41.04241 51.82160
+```
+
+]
+.panel[.panel-name[Graph]
+
+&lt;img src="pics/boxplot_reading.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+.panel[.panel-name[Test]
+1. .purple[Define hypotheses:] `\(H_0: \mu_T = \mu_C\)` and `\(H_a: \mu_T &gt; \mu_C\)`.
+2. .purple[Define] `\(\color{#6A5ACD}{\alpha}\)`: We consider `\(\alpha = 5\%\)`.
+3. .purple[Compute p-value]: p-value = `\(97.12\%\)` (see R code tab for details).
+4. .purple[Conclusion:] We have p-value &gt; `\(\alpha\)` so we cannot reject the null hypothesis at the significance level of 5%. 
+
+.hi-pink[Remark:] Notice that the p-value for the test with opposite hypotheses is actually `\(100-97.12\%=2.88\% &lt; \alpha\)` (Why? 🤔). So we conclude, at the significance level of 5%, that the classical curriculum without these new directed reading activities actually improve students' reading ability more compared to the curriculum with these activities. 😬
+]
+.panel[.panel-name[`R` Code ]
+
+```r
+t.test(treatment, control, alternative = "greater")
+```
+
+```
+#&gt; 
+#&gt; 	Welch Two Sample t-test
+#&gt; 
+#&gt; data:  treatment and control
+#&gt; t = -1.9497, df = 43.527, p-value = 0.9712
+#&gt; alternative hypothesis: true difference in means is greater than 0
+#&gt; 95 percent confidence interval:
+#&gt;  -10.77571       Inf
+#&gt; sample estimates:
+#&gt; mean of x mean of y 
+#&gt;  44.77579  50.56302
+```
+]
+]
+
+---
+
+# .smaller[Is our analysis comprehensive?]
+
+The educator points out that she has considered these new directed reading activities for only three years. So only students of 6-8 years old have participated in these activities. In other words, in the sample she collected, the students in the treatment group are only of age 6 to 8, whereas the students in the control group vary from 6 to 12 years old. .pink[Is age a potential explanation to the difference we observe among the students' reading ability?]
+
+To make sure that the analysis is reliable, she includes the age information of the students, which can be accessed as follows:
+
+
+```r
+treatment_age = dat$age[dat$group == "Treatment"]
+control_age   = dat$age[dat$group == "Control"]
+```
+
+---
+
+# .smaller[Should age be taken into account?]
+
+&lt;img src="pics/reading_points.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# .smaller[Regression Methods]
+
+- .pink[Regression methods] allow to study the effects of some explanatory variables (also called covariates or regressors) $ X_1, \ldots, X_p$ on a response variable `\(Y\)` of primary interest. They are used to reveal and investigate the relationships between input and output variables.]
+- The relationship between the response variable `\(\small Y\)` and the covariates is not .purple2[deterministic]. Instead, it shows some random errors. In other words, the response `\(\small Y\)` is random and its .purple2[(conditional) expected value] (i.e. `\(\mathbb{E}[Y | X_1, \ldots, X_p]\)`) is modeled as a function of the covariates.
+
+---
+
+# r
+- .smallest[In .hi-pink[linear regression models], the mean value of] `\(\small Y\)` .smallest[is a linear combination of the covariates:] 
+`$$Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p + \epsilon, \quad \epsilon \sim \mathcal{N}(0, \sigma^2).$$`
+- .smallest[.purple[The random errors are assumed to be independently and identically normally distributed with mean 0 and variance]] `\(\small \color{#6A5ACD}{\sigma^2}\)` .smallest[.purple[.]]
+- .smallest[The parameters of interest are] `\(\small \beta_0, \beta_1, \ldots, \beta_p\)`&lt;sup&gt;.smallest[👋]&lt;/sup&gt;.smallest[. They are estimated using the least squares approach.]
+
+.footnote[.smallest[👋 Here we consider a simple situation where the variance is known. In practice, however, the variance is typically unknown so it needs to be estimated as well.]]
+
+---
+
+# Example: Reading ability assessment
+
+In the reading ability example, we can formulate a linear regression model as follows:
+`$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2).$$`
+- `\(\color{#e64173}{\text{Score}_i}\)`: score of the DRP test of the `\(i\)`-th student.
+- `\(\color{#6A5ACD}{\text{Group}_i}\)`: indicator of participation of the new directed reading activities for the `\(i\)`-th student (i.e. `\(\color{#6A5ACD}{\text{Group}_i} = 1\)` if participate and `\(\color{#6A5ACD}{\text{Group}_i} = 0\)` if not participate).
+- `\(\color{#20B2AA}{\text{Age}_i}\)`: age of the `\(i\)`-th student. 
+
+With this model the two groups can be compared as the age effect is taken into account. The goal of the educator is now to assess if `\(\beta_1\)` is .pink[significantly larger than 0] (why??? 🤔).
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
