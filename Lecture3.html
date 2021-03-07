@@ -143,14 +143,45 @@ control_age   = dat$age[dat$group == "Control"]
 
 # .smaller[Regression analysis]
 
-- Regression analysis corresponds a set of statistical processes for estimating the relationships between a dependent variable (often called the 'outcome variable') and one or more independent variables (often called 'predictors', 'covariates', or 'features').
-- .pink[Regression methods] allow to study the effects of some explanatory variables (also called covariates or regressors) $ X_1, \ldots, X_p$ on a response variable `\(Y\)` of primary interest. They are used to reveal and investigate the relationships between input and output variables.]
-- The relationship between the response variable `\(\small Y\)` and the covariates is not .purple2[deterministic]. Instead, it shows some random errors. In other words, the response `\(\small Y\)` is random and its .purple2[(conditional) expected value] (i.e. `\(\mathbb{E}[Y | X_1, \ldots, X_p]\)`) is modeled as a function of the covariates.
+- Regression analysis corresponds a set of statistical methods for estimating the .pink[relationships] between a response variable `\(Y\)` of primary interest (often called the *outcome variable*) and some explanatory variables `\(X_1, \ldots, X_p\)` (also called *covariates*, *regressors*, *features* or *predictors*).
+- The relationship between the response variable `\(Y\)` and the covariates is not .purple2[deterministic] and we model the .purple2[conditional expected value] (i.e. `\(\mathbb{E}[Y | X_1, \ldots, X_p]\)`).
+- Therefore, we consider the following (general) model:
+`$$Y_i = \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}] + \varepsilon_i,$$`where `\(\mathbb{E}[\varepsilon_i] = 0\)`.
+- Examples: `\(\mathbb{E}[\text{reading abilities}_i| \ \text{age}_i, \text{treatment}_i, \ldots]\)`.
 
 ---
 
-# r
-- .smallest[In .hi-pink[linear regression models], the mean value of] `\(\small Y\)` .smallest[is a linear combination of the covariates:] 
+# .smaller[Linear regression]
+
+- The most common form of regression analysis is .pink[linear regression], in which 
+the conditional expected value `\(\color{#373895}{\mathbb{E}[Y | X_1, \ldots, X_p]}\)` takes the form
+`$$\color{#373895}{\mathbb{E}[Y_i| X_{i1}, \ldots, X_{ip}]} = \color{#373895}{\beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p}.$$`
+and `\(\color{#eb078e}{\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2)}\)`.
+- Our general model can be expressed as
+`$$Y_i = \color{#373895}{\mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]} + \varepsilon_i = \color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_i X_{ij}} + \varepsilon_i,$$`
+and, therefore,
+`$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_i X_{ij}}, \color{#eb078e}{\sigma^2}\right).$$`
+
+---
+
+# .smaller[Linear regression]
+
+Therefore, this approach makes two (.pink[strong]) assumptions:
+
+1. The conditional expected value `\(\mathbb{E}[Y | X_1, \ldots, X_p]\)` is assumed to be a linear function of the covariates.
+2. The errors are assumed to be `\(iid\)` Gaussian, i.e. `\(\color{#eb078e}{\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2)}\)`.
+
+⚠️ .pink[In practice, it is important to assess if these assumptions are plausible.]
+
+The parameters of the model (i.e. `\(\beta_1, \ldots, \beta_p\)` and `\(\sigma^2\)`) can be estimated by several methods. The most commonly used is the .pink[least squares] approach where `\(\beta_1, \ldots, \beta_p\)` are chosen such that
+
+`$$\sum_{i = 1}^p \varepsilon_i^2 = \sum_{i = 1}^p \left(Y_i- \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]\right)^2 = \sum_{i = 1}^p \left(Y_i- \beta_0 + \sum_{j = 1}^p \beta_i X_{ij}\right)^2,$$`
+is .pink[minimized].
+
+---
+
+# rdsglkj
+In .hi-pink[linear regression models], the mean value of] `\(\small Y\)` .smallest[is a linear combination of the covariates:] 
 `$$Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p + \epsilon, \quad \epsilon \sim \mathcal{N}(0, \sigma^2).$$`
 - .smallest[.purple[The random errors are assumed to be independently and identically normally distributed with mean 0 and variance]] `\(\small \color{#6A5ACD}{\sigma^2}\)` .smallest[.purple[.]]
 - .smallest[The parameters of interest are] `\(\small \beta_0, \beta_1, \ldots, \beta_p\)`&lt;sup&gt;.smallest[👋]&lt;/sup&gt;.smallest[. They are estimated using the least squares approach.]
