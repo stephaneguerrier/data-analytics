@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.21)  6 MAR 2021 14:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.21)  7 MAR 2021 15:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -450,17 +450,17 @@ Non-PDF special ignored!
 <special> psfile=/dev/null
 ] (./boxplot_RAE.aux) ) 
 Here is how much of TeX's memory you used:
- 12029 strings out of 480608
- 246982 string characters out of 5903630
- 480025 words of memory out of 5000000
- 27707 multiletter control sequences out of 15000+600000
+ 12037 strings out of 480608
+ 247190 string characters out of 5903630
+ 495072 words of memory out of 5000000
+ 27715 multiletter control sequences out of 15000+600000
  532646 words of font info for 25 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,7n,60p,392b,666s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2020/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmbx10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmr10.pfb>
-Output written on boxplot_RAE.pdf (1 page, 31289 bytes).
+Output written on boxplot_RAE.pdf (1 page, 31008 bytes).
 PDF statistics:
  19 PDF objects out of 1000 (max. 8388607)
  13 compressed objects within 1 object stream
