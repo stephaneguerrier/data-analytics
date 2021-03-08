@@ -7,15 +7,15 @@
     <link href="Lecture3_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture3_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture3_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture3_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="Lecture3_files/tile-view-0.2.4/tile-view.js"></script>
-    <link href="Lecture3_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="Lecture3_files/panelset-0.2.4/panelset.js"></script>
+    <link href="Lecture3_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="Lecture3_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="Lecture3_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="Lecture3_files/panelset-0.2.6/panelset.js"></script>
     <script src="Lecture3_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture3_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture3_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture3_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture3_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -41,9 +41,9 @@ class: title-slide
 
 ## Part III: Linear Regression
 
-### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
-### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
-### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva, 🇨🇭]
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva 🇨🇭]
 
 &lt;br&gt;
 &lt;img src="pics/liscence.png" width="25%" style="display: block; margin: auto;" /&gt;
@@ -95,7 +95,7 @@ head(treatment)
 3. .purple[Compute p-value]: p-value = `\(97.12\%\)` (see R code tab for details).
 4. .purple[Conclusion:] We have p-value &gt; `\(\alpha\)` so we cannot reject the null hypothesis at the significance level of 5%. 
 
-.hi-pink[Remark:] Notice that the p-value for the test with opposite hypotheses is actually `\(100-97.12\%=2.88\% &lt; \alpha\)` (Why? 🤔). So we conclude, at the significance level of 5%, that the classical curriculum without these new directed reading activities actually improve students' reading ability more compared to the curriculum with these activities. 😬
+.hi-pink[Remark:] Notice that the p-value for the test with opposite hypotheses is actually `\(100\%-97.12\%=2.88\% &lt; \alpha\)` (Why? 🤔). So we conclude, at the significance level of 5%, that the classical curriculum without these new directed reading activities actually improve students' reading ability more compared to the curriculum with these activities. 😬
 ]
 .panel[.panel-name[`R` Code ]
 
@@ -143,10 +143,10 @@ control_age   = dat$age[dat$group == "Control"]
 
 # .smaller[Regression analysis]
 
-- Regression analysis corresponds a set of statistical methods for estimating the .pink[relationships] between a response variable `\(Y\)` of primary interest (often called the *outcome variable*) and some explanatory variables `\(X_1, \ldots, X_p\)` (also called *covariates*, *regressors*, *features* or *predictors*).
+- Regression analysis corresponds to a set of statistical methods for estimating the .pink[relationships] between a response variable `\(Y\)` of primary interest (also called the *outcome variable*) and some explanatory variables `\(X_1, \ldots, X_p\)` (also called *covariates*, *regressors*, *features* or *predictors*).
 - The relationship between the response variable `\(Y\)` and the covariates is not .purple2[deterministic] and we model the .purple2[conditional expected value] (i.e. `\(\mathbb{E}[Y | X_1, \ldots, X_p]\)`).
 - Therefore, we consider the following (general) model:
-`$$Y_i = \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}] + \varepsilon_i,$$`where `\(\mathbb{E}[\varepsilon_i] = 0\)`.
+`$$Y_i = \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}] + \varepsilon_i,$$`where `\(\mathbb{E}[\varepsilon_i] = 0\)` and `\(i=1,\ldots,n\)`.
 - Examples: `\(\mathbb{E}[\text{reading abilities}_i| \ \text{age}_i, \text{treatment}_i, \ldots]\)`.
 
 ---
@@ -158,9 +158,9 @@ the conditional expected value `\(\color{#373895}{\mathbb{E}[Y | X_1, \ldots, X_
 `$$\color{#373895}{\mathbb{E}[Y_i| X_{i1}, \ldots, X_{ip}]} = \color{#373895}{\beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p}.$$`
 and `\(\color{#eb078e}{\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2)}\)`.
 - Our general model can be expressed as
-`$$Y_i = \color{#373895}{\mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]} + \varepsilon_i = \color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_i X_{ij}} + \varepsilon_i,$$`
-and, therefore,
-`$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_i X_{ij}}, \color{#eb078e}{\sigma^2}\right).$$`
+`$$Y_i = \color{#373895}{\mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]} + \varepsilon_i = \color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}} + \varepsilon_i,$$`
+and therefore,
+`$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \color{#eb078e}{\sigma^2}\right).$$`
 
 ---
 
@@ -175,7 +175,7 @@ Therefore, this approach makes two (.pink[strong]) assumptions:
 
 The parameters of the model (i.e. `\(\beta_1, \ldots, \beta_p\)` and `\(\sigma^2\)`) can be estimated by several methods. The most commonly used is the .pink[least squares] approach where `\(\beta_1, \ldots, \beta_p\)` are chosen such that
 
-`$$\sum_{i = 1}^p \varepsilon_i^2 = \sum_{i = 1}^p \left(Y_i- \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]\right)^2 = \sum_{i = 1}^p \left(Y_i- \beta_0 + \sum_{j = 1}^p \beta_i X_{ij}\right)^2,$$`
+`$$\sum_{i = 1}^n \varepsilon_i^2 = \sum_{i = 1}^n \left(Y_i- \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]\right)^2 = \sum_{i = 1}^n \left(Y_i- \beta_0 - \sum_{j = 1}^p \beta_j X_{ij}\right)^2$$`
 is .pink[minimized].
 
 ---
@@ -183,7 +183,7 @@ is .pink[minimized].
 # .smaller[Example: Reading ability assessment]
 
 In the reading ability example, we can formulate a linear regression model as follows:
-`$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2).$$`
+`$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2).$$`
 - `\(\color{#e64173}{\text{Score}_i}\)`: score of the DRP test of the `\(i\)`-th student.
 - `\(\color{#6A5ACD}{\text{Group}_i}\)`: indicator of participation of the new directed reading activities for the `\(i\)`-th student (i.e. `\(\color{#6A5ACD}{\text{Group}_i} = 1\)` if participate and `\(\color{#6A5ACD}{\text{Group}_i} = 0\)` if not participate).
 - `\(\color{#20B2AA}{\text{Age}_i}\)`: age of the `\(i\)`-th student. 
@@ -244,7 +244,7 @@ summary(mod1)
 
 We can obtain the estimated coefficients. Specifically,
 - `\(\hat{\beta}_0 = -7.8639\)` represents the estimated baseline average score of the DRP test.
-- `\(\hat{\beta}_1 = 6.3771\)` means that .pink[for a student of the same age], participating the new directed reading activities is estimated to increase their average score of the DRP test by 6.3771.
+- `\(\hat{\beta}_1 = 6.3771\)` means that .pink[for a student of the same age], participating in the new directed reading activities is estimated to increase their average score of the DRP test by 6.3771.
 - `\(\hat{\beta}_2 = 6.6457\)` means that .pink[when a student receives the same treatment] (either participate or not in the activities), their average score increases by 6.6457 as they become 1 year older. 
 
 Regression coefficients represent the mean change in the response variable .purple[for one unit of change] in the predictor variable .purple[while holding other covariates in the model constant.]
@@ -253,8 +253,8 @@ Regression coefficients represent the mean change in the response variable .purp
 
 # .smaller[Interpretation of coefficient p-values]
 
-- We notice that for each coefficient `\(\beta_i\)`, there is a corresponding p-value.
-- This coefficient p-value is associated to the (t-)test of `\(H_0: \beta_i = 0\)` and `\(H_a: \beta_i \neq 0\)`. 
+- We notice that for each coefficient `\(\beta_j\)`, there is a corresponding p-value.
+- This coefficient p-value is associated to the (t-)test of `\(H_0: \beta_j = 0\)` and `\(H_a: \beta_j \neq 0\)`. 
 - .pink[A covariate with a small p-value (typically smaller than 5%) is considered to be a significant (meaningful) addition to the model], as changes in the values of such covariate can lead to changes in the response variable. 
 - On the other hand, a large p-value (typically larger than 5%) suggests that the corresponding covariate is not significantly associated with changes in the response. 
 - In this example, the coefficient p-value associated to the `group` covariate is `\(2.6 \times 10^{-3}\)`%. .purple[This suggests that taking into account the effect of `age`, the reading abilities of the students receiving the treatment is significantly .hi.purple[different] from the control group, at the significance level of 5%.] But this is not what we want! 
@@ -263,12 +263,12 @@ Regression coefficients represent the mean change in the response variable .purp
 
 # .smaller[Interpretation of coefficient p-values]
 
-In the linear regression output, the coefficient p-value (which we denote as `\(p\)`) corresponds to a two-sided test. We can use this result to compute the p-value of a one-sided test using the following relations:
+In the linear regression output, the coefficient p-value (which we denote as `\(p\)` below) corresponds to a two-sided test. We can use this result to compute the p-value of a one-sided test using the following relations:
 
-|               | `\(\small H_a: \beta_i&gt;0\)`   | `\(\small H_a: \beta_i&lt;0\)`  |
+|               | `\(\small H_a: \beta_j&gt;0\)`   | `\(\small H_a: \beta_j&lt;0\)`  |
 | ------------- |:-------------:| :-----:|
-| `\(\small \hat{\beta_i}&gt;0\)`     | `\(\small p/2\)` | `\(\small 1-p/2\)` |
-| `\(\small \hat{\beta_i}&lt;0\)`      | `\(\small 1-p/2\)`      |   `\(\small p/2\)` |
+| `\(\small \hat{\beta_j}&gt;0\)`     | `\(\small p/2\)` | `\(\small 1-p/2\)` |
+| `\(\small \hat{\beta_j}&lt;0\)`      | `\(\small 1-p/2\)`      |   `\(\small p/2\)` |
 
 In our example, `\(\beta_1 = 6.3771\)` and `\(p=2.6 \times 10^{-3}\%\)`. So the p-value of the test with hypotheses `\(H_0: \beta_1=0\)` and `\(H_a: \beta_1&gt;0\)` is `\(2.6 \times 10^{-3}\% /2 \approx 1.3 \times 10^{-3}\%  &lt; \alpha\)`. So we can conclude that these new directed reading activities can .pink[significantly improve] students' reading ability compared to classical curriculum. 
 
@@ -284,7 +284,7 @@ In our example, `\(\beta_1 = 6.3771\)` and `\(p=2.6 \times 10^{-3}\%\)`. So the 
 
 # .smaller[Could we use the] `\(R^2\)`.smaller[?]
 
-- The .pink[coefficient of determination], denoted as `\(R^2\)` and often referred to as R-squared, corresponds the proportion of the variance in the response variable that is predictable from the covariates.  
+- The .pink[coefficient of determination], denoted as `\(R^2\)` and often referred to as R-squared, corresponds to the proportion of the variance in the response variable that is predictable from the covariates.  
 - `\(\color{#6A5ACD}{R^2}\)` .purple[gives certain information about the goodness of fit of a model.] It measures how well the regression predictions approximate the real data points. An `\(R^2\)` of 1 indicates that the regression predictions perfectly fit the data.
 -  However, the value of `\(R^2\)` is not related to the adequacy of our model to the data.
 - ⚠️ Moreover, adding new covariates to the current model .purple[always] increases `\(R^2\)`, whether the additional covariates are significant or not. Therefore, `\(R^2\)` alone cannot be used as a meaningful comparison of models with different covariates.
@@ -318,9 +318,9 @@ In our example, `\(\beta_1 = 6.3771\)` and `\(p=2.6 \times 10^{-3}\%\)`. So the 
 
 # .smaller[Let's update our model]
 
-Our results suggest that the students of the group participating to new directed reading activities progress more rapidly (which is actually more reasonable than our initial model 🤔). Therefore, we modify our model as follows:
+Our results suggest that the students of the group participating in these new directed reading activities progress more rapidly (which is actually more reasonable than our initial model 🤔). Therefore, we modify our model as follows:
 
-`$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \beta_3 \color{#6A5ACD}{\text{Group}_i}\color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2).$$`
+`$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \beta_3 \color{#6A5ACD}{\text{Group}_i}\color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2).$$`
 - `\(\color{#e64173}{\text{Score}_i}\)`: score of the DRP test of the `\(i\)`-th student.
 - `\(\color{#6A5ACD}{\text{Group}_i}\)`: indicator of participation of the new directed reading activities for the `\(i\)`-th student (i.e. `\(\color{#6A5ACD}{\text{Group}_i} = 1\)` if participate and `\(\color{#6A5ACD}{\text{Group}_i} = 0\)` if not participate).
 - `\(\color{#20B2AA}{\text{Age}_i}\)`: age of the `\(i\)`-th student. 
@@ -380,9 +380,9 @@ summary(mod2)
 
 We can obtain the estimated coefficients. Specifically,
 - `\(\hat{\beta}_0 = -3.2489\)` represents the estimated baseline average score of the DRP test.
-- `\(\hat{\beta}_1 = -36.0307\)` means that .pink[for a student of the same age], participating the new directed reading activities is estimated to decrease their average score of the DRP test by -36.0307 (does this make sense? 🧐).
+- `\(\hat{\beta}_1 = -36.0307\)` means that .pink[for a student of the same age], participating in the new directed reading activities is estimated to decrease their average score of the DRP test by 36.0307 (does this make sense? 🧐).
 - `\(\hat{\beta}_2 = 6.1207\)` means that for students not participating to the new directed reading activities, their average score increases by 6.1207 as they become 1 year older.
-- `\(\hat{\beta}_3 = 5.9539\)` means the average score of students participating to the new directed reading activities increases by 5.9539 as they become 1 year older .pink[compared to the other students]. This means that the average score of students participating to the new program increases by 12.0746 (i.e. 6.1207 + 5.9539) as they become 1 year older.
+- `\(\hat{\beta}_3 = 5.9539\)` means that the average score of students participating in the new directed reading activities increases by 5.9539 as they become 1 year older .pink[compared to the other students]. This means that the average score of students participating to the new program increases by 12.0746 (i.e. 6.1207 + 5.9539) as they become 1 year older.
 
 ---
 
@@ -410,26 +410,26 @@ We can obtain the estimated coefficients. Specifically,
 
 ---
 
-# .smaller[Choosing the best model]
+# .smaller[Model selection]
 
 In general, we prefer a .pink[parsimonious approach to modeling] in the sense that we only choose a more complex model if the benefits are ".pink[substantial]"&lt;sup&gt;.smallest[👋]&lt;/sup&gt;. We want our model to be such that:
 
 1.  The model fits the data well.
 2.  Avoid (excessive) overfitting.
 
-Naturally these two objective are .pink[contradictory] and there are many ways to select a suitable (actually this is one of the most active area of research in modern statistics). In this class, we will only consider one (simple) approach based on the .pink[Akaike information criterion (AIC)]. This criterion corresponds to an .purple2[estimator of prediction] error and thereby .purple2[relative quality of statistical models for a given set of data].
+Naturally these two objective are .pink[contradictory] and there are many ways to select a suitable model (actually this is one of the most active areas of research in modern Statistics). In this class, we will only consider one (simple) approach based on the .pink[Akaike Information Criterion (AIC)]. This criterion corresponds to an .purple2[estimator of prediction error] and thereby .purple2[relative quality of statistical models for a given set of data].
 
 .footnote[.smallest[👋  This point of view is based on .pink[Occam's razor] (or law of parsimony), the problem-solving principle stipulating that ".purple2[the simplest explanation is usually the right one]".]]
 
 ---
 
-# .smaller[Choosing the best model]
+# .smaller[Model selection]
 
-In `R`, the AIC can be computed for a given model (i.e. the output of the function `lm(...)` as `AIC(model)`. For example, we can compare the AIC of the previously considered models as follows:
+In `R`, the AIC can be computed for a given model (i.e. use the output of the function `lm(...)` in `AIC(model)`. For example, we can compare the AIC of the previously considered models as follows:
 
 
 ```r
-AIC(mod1)     # First model
+AIC(mod1)     # First model (no interaction)
 ```
 
 ```
@@ -437,7 +437,7 @@ AIC(mod1)     # First model
 ```
 
 ```r
-AIC(mod2)     # Second model
+AIC(mod2)     # Second model (with interaction)
 ```
 
 ```
@@ -450,14 +450,14 @@ As expected, these results suggests that the second model is more appropriate. .
 
 # .smaller[Let's update our model (again)]
 
-It should be reasonable that the average reading score of the two groups at the same at the start of the program
+It should be reasonable that the average reading scores of the two groups are the same at the start of the program.
 
-`$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#20B2AA}{(\text{Age}_i - 6)}  + \beta_2 \color{#6A5ACD}{\text{Group}_i}\color{#20B2AA}{(\text{Age}_i - 6)} + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2).$$`
+`$$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#20B2AA}{(\text{Age}_i - 6)}  + \beta_2 \color{#6A5ACD}{\text{Group}_i}\color{#20B2AA}{(\text{Age}_i - 6)} + \epsilon_i, \quad \epsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2).$$`
 - `\(\color{#e64173}{\text{Score}_i}\)`: score of the DRP test of the `\(i\)`-th student.
 - `\(\color{#6A5ACD}{\text{Group}_i}\)`: indicator of participation of the new directed reading activities for the `\(i\)`-th student (i.e. `\(\color{#6A5ACD}{\text{Group}_i} = 1\)` if participate and `\(\color{#6A5ACD}{\text{Group}_i} = 0\)` if not participate).
 - `\(\color{#20B2AA}{\text{Age}_i}\)`: age of the `\(i\)`-th student. 
 
-With this model the two groups can be compared as the age effect is taken into account. The goal of the educator is now (only!) to assess if `\(\beta_1\)` is .pink[significantly larger than 0].
+With this model the two groups can be compared as the age effect is taken into account. The goal of the educator now is (only!) to assess if `\(\beta_1\)` is .pink[significantly larger than 0].
 
 ---
 
@@ -466,7 +466,7 @@ With this model the two groups can be compared as the age effect is taken into a
 .panelset[
 .panel[.panel-name[R Code]
 
-Here is the code to fit our second model:
+Here is the code to fit our third model:
 
 
 ```r
@@ -563,7 +563,7 @@ AIC(mod3)
 - The last model we consider appears to fit the data, avoids overfitting and allows to answer whether the new reading activities are of interest. Indeed, the programs significantly improve the reading performance of the students (e.g. 5.81 more per year compared to control, p-value &lt; 5%).
 - Our model .pink[assumes a linear relationship] between the response and the covariates. However, this may be incorrect.
 - Our model .pink[only considers independent data] (which may not be correct here).
-- Finally, linear regression .pink[should not be used to extrapolate], i.e. to estimate beyond the original observation range. For example, if we consider a 100 year-old person in this reading ability example, we would predict that the corresponding score of the DRP test would be 611.45 and 1157.59, respectively, with and without these activities. Does it really make sense? 😯
+- Finally, linear regression .pink[should not be used to extrapolate], i.e. to estimate beyond the original observation range. For example, if we consider a 100 year-old person in this reading ability example, we would predict (using the third model) that the corresponding score of the DRP test would be 1157.59 and 611.45, respectively, with and without these activities. Does it really make sense? 😯
 
 ---
 
