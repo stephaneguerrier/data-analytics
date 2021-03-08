@@ -480,6 +480,14 @@ We can obtain the estimated coefficients. Specifically,
 
 ---
 
+# .smaller[Model fit]
+
+```{R, pointswithmod2, out.width = "90%", echo = F}
+include_graphics("pics/points_with_mod2.png")
+```
+
+---
+
 # .smaller[Model diagnostic]
 
 ```{R, diag_mod2_v2, out.width = "90%", echo = F}
@@ -580,6 +588,14 @@ AIC(mod3)
 ```
 ]
 ]
+
+---
+
+# .smaller[Model fit]
+
+```{R, pointswithmod3, out.width = "90%", echo = F}
+include_graphics("pics/points_with_mod3.png")
+```
 
 ---
 
