@@ -196,7 +196,7 @@ include_graphics("pics/liscence.png")
 
 .panelset[
 .panel[.panel-name[Problem]
-An educator believes that .hi-purple2[new directed reading activities] in the classroom can help elementary school students (6-12 years old) improve their reading ability. She arranged a pilot study where some students (chosen at random) of age 6 start to take part in these activities .hi-purple2[(treatment group)], meanwhile other students continue with the .pink[classical curriculum] .hi-pink[(control group)]. The educator wishes to evaluate the effectiveness of these activities so all students are given a Degree of Reading Power (DRP) test, which assesses their reading ability. 
+An educator believes that .purple2[new directed reading activities] in the classroom can help elementary school students (6-12 years old) improve their reading ability. She arranged a pilot study where some students (chosen at random) of age 6 start to take part in these activities .hi-purple2[(treatment group)], meanwhile other students continue with the .pink[classical curriculum] .hi-pink[(control group)]. The educator wishes to evaluate the effectiveness of these activities so all students are given a Degree of Reading Power (DRP) test, which assesses their reading ability. 
 
 .pink[Can we conclude that these new directed reading activities can help elementary school students improve their reading ability?]
 ]
