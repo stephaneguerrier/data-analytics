@@ -640,3 +640,29 @@ include_graphics("pics/extrapolating.png")
 ```
 
 👋 .smallest[If you want to know more have a look [here](https://www.explainxkcd.com/wiki/index.php/605:_Extrapolating).]
+
+---
+
+# .smaller[Exercise: Urine Cortisol vs Chips]
+
+.panelset[
+.panel[.panel-name[Problem]
+A researcher in Nutrition Science is interested in studying the effects of consuming fried food on human's health. To study this issue, this researcher conducted an experiment on 61 pigs which are randomly assigned with .hi-pink[Chips] and .hi-purple2[Non-Chips] diets. Then the levels of different hormones such as urine cortisol, serum cortisol, ACTH and CRH are measured. The researcher wants to know if the Chips diet increases the level of urine cortisol in pigs.
+]
+.panel[.panel-name[Import]
+```{r}
+# Import data
+cortisol_data = read.csv("data/cortisol.csv", row.names=1)
+
+# Create data frame
+dat = data.frame(group = cortisol_data$group,
+                 gender = cortisol_data$gender,
+                 urine_cortisol = cortisol_data$Urine.Cortisol..pg.mg.,
+                 serum_cortisol = cortisol_data$Serum.Cortisol..ng.ml.,
+                 ACTH = cortisol_data$Serum.ACTH..pg.ml.,
+                 CRH = cortisol_data$Serum.CRH..pg.ml.,
+                 testosterone = cortisol_data$Testosterone..ng.ml.,
+                 LH = cortisol_data$LH..ng.ml.)
+```
+]
+]

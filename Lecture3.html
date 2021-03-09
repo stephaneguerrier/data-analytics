@@ -380,7 +380,7 @@ summary(mod2)
 # .smaller[Interpretation of coefficients]
 
 We can obtain the estimated coefficients. Specifically,
-- `\(\hat{\beta}_0 = -3.2489\)` represents the estimated baseline average score of the DRP test.
+- `\(\hat{\beta}_0 = -3.2489\)` represents the estimated baseline average score of the DRP test (at age 0).
 - `\(\hat{\beta}_1 = -36.0307\)` means that .pink[for a student of the same age], participating in the new directed reading activities is estimated to decrease their average score of the DRP test by 36.0307 (does this make sense? 🧐).
 - `\(\hat{\beta}_2 = 6.1207\)` means that for students not participating to the new directed reading activities, their average score increases by 6.1207 as they become 1 year older.
 - `\(\hat{\beta}_3 = 5.9539\)` means that the average score of students participating in the new directed reading activities increases by 5.9539 as they become 1 year older .pink[compared to the other students]. This means that the average score of students participating to the new program increases by 12.0746 (i.e. 6.1207 + 5.9539) as they become 1 year older.
@@ -573,6 +573,33 @@ AIC(mod3)
 &lt;img src="pics/extrapolating.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 👋 .smallest[If you want to know more have a look [here](https://www.explainxkcd.com/wiki/index.php/605:_Extrapolating).]
+
+---
+
+# .smaller[Exercise: Urine Cortisol vs Chips]
+
+.panelset[
+.panel[.panel-name[Problem]
+A researcher in Nutrition Science is interested in studying the effects of consuming fried food on human's health. To study this issue, this researcher conducted an experiment on 61 pigs which are randomly assigned with .hi-pink[Chips] and .hi-purple2[Non-Chips] diets. Then the levels of different hormones such as urine cortisol, serum cortisol, ACTH and CRH are measured. The researcher wants to know if the Chips diet increases the level of urine cortisol in pigs.
+]
+.panel[.panel-name[Import]
+
+```r
+# Import data
+cortisol_data = read.csv("data/cortisol.csv", row.names=1)
+
+# Create data frame
+dat = data.frame(group = cortisol_data$group,
+                 gender = cortisol_data$gender,
+                 urine_cortisol = cortisol_data$Urine.Cortisol..pg.mg.,
+                 serum_cortisol = cortisol_data$Serum.Cortisol..ng.ml.,
+                 ACTH = cortisol_data$Serum.ACTH..pg.ml.,
+                 CRH = cortisol_data$Serum.CRH..pg.ml.,
+                 testosterone = cortisol_data$Testosterone..ng.ml.,
+                 LH = cortisol_data$LH..ng.ml.)
+```
+]
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
