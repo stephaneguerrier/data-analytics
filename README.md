@@ -36,7 +36,14 @@ Variance](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture
 |
 [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.Rmd))
 
-**Part III: Linear Regression** (coming soon 🚧)
+**[Part III: Linear
+Regression](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture2.html#1)**
+(note formats:
+[.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture3.html)
+|
+[.pdf](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture3.pdf)
+|
+[.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture3.Rmd))
 
 **Part IV: Logistic Regression** (coming soon 🚧)
 
