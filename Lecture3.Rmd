@@ -288,10 +288,10 @@ Therefore, this approach makes two (.pink[strong]) assumptions:
 
 ⚠️ .pink[In practice, it is important to assess if these assumptions are plausible.]
 
-The parameters of the model (i.e. $\beta_1, \ldots, \beta_p$ and $\sigma^2$) can be estimated by several methods. The most commonly used is the .pink[least squares] approach where $\beta_1, \ldots, \beta_p$ are chosen such that
+The parameters of the model (i.e. $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$) can be estimated by several methods. The most commonly used is the .pink[least squares] approach where $\beta_0, \beta_1, \ldots, \beta_p$ are chosen such that
 
 $$\small \sum_{i = 1}^n \varepsilon_i^2 = \sum_{i = 1}^n \left(Y_i- \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]\right)^2 = \sum_{i = 1}^n \left(Y_i- \beta_0 - \sum_{j = 1}^p \beta_j X_{ij}\right)^2$$
-is .pink[minimized].
+is .pink[minimized], which then allows to estimate $\sigma^2$ further on.
 
 ---
 
@@ -301,7 +301,7 @@ In the reading ability example, we can formulate a linear regression model (with
 $$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2).$$
 - $\color{#e64173}{\text{Score}_i}$: score of the DRP test of the $i$-th student.
 - $\color{#6A5ACD}{\text{Group}_i}$: indicator of participation of the new directed reading activities for the $i$-th student (i.e. $\color{#6A5ACD}{\text{Group}_i} = 1$ if participate and $\color{#6A5ACD}{\text{Group}_i} = 0$ if not participate).
-- $\color{#20B2AA}{\text{Age}_i}$: age of the $i$-th student (related to *.pink[time since start of treatment]*). 
+- $\color{#20B2AA}{\text{Age}_i}$: age of the $i$-th student (related to *.turquoise[time since start of treatment]*). 
 
 With this model the two groups can be compared as the age effect is taken into account. The goal of the educator is now to assess if $\beta_1$ is .pink[significantly larger than 0].
 
@@ -353,7 +353,7 @@ Regression coefficients represent the mean change in the response variable .purp
 
 # .smaller[Interpretation of coefficient p-values]
 
-- We notice that for each coefficient $\beta_j$, there is a corresponding p-value is associated to the (Wald t-)test of $H_0: \beta_j = 0$ and $H_a: \beta_j \neq 0$. 
+- We notice that for each coefficient $\beta_j$, there is a corresponding p-value associated to the (Wald t-)test of $H_0: \beta_j = 0$ and $H_a: \beta_j \neq 0$. 
 - .pink[A covariate with a small p-value (typically smaller than 5%) is considered to be a significant (meaningful) addition to the model], as changes in the values of such covariate can lead to changes in the response variable. 
 - On the other hand, a large p-value (typically larger than 5%) suggests that the corresponding covariate is not (significantly) associated with changes in the response or that we don't have enough evidence (data) to show its effect.
 - In this example, the coefficient p-value associated to the `group` covariate is $2.6 \times 10^{-3}$%. .purple[This suggests that taking into account the effect of `age`, the reading abilities of the students receiving the treatment is significantly .hi.purple[different] from the control group, at the significance level of 5%.] But this is not what we want! 
@@ -442,7 +442,7 @@ Our results suggest that the students of the group participating in these new di
 $$\color{#e64173}{\text{Score}_i} = \beta_0 + \beta_1 \color{#6A5ACD}{\text{Group}_i} + \beta_2 \color{#20B2AA}{\text{Age}_i} + \beta_3 \color{#6A5ACD}{\text{Group}_i}\color{#20B2AA}{\text{Age}_i} + \epsilon_i, \quad \epsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2).$$
 - $\color{#e64173}{\text{Score}_i}$: score of the DRP test of the $i$-th student.
 - $\color{#6A5ACD}{\text{Group}_i}$: indicator of participation of the new directed reading activities for the $i$-th student (i.e. $\color{#6A5ACD}{\text{Group}_i} = 1$ if participate and $\color{#6A5ACD}{\text{Group}_i} = 0$ if not participate).
-- $\color{#20B2AA}{\text{Age}_i}$: age of the $i$-th student (related to *.pink[time since start of treatment]*),
+- $\color{#20B2AA}{\text{Age}_i}$: age of the $i$-th student (related to *.turquoise[time since start of treatment]*),
 
 The goal of the educator is now to assess if $\beta_1$ and/or $\beta_3$ are .pink[significantly larger than 0].
 
@@ -528,7 +528,7 @@ In general, we prefer a .pink[parsimonious approach to modeling] in the sense th
 1.  The model fits the data well.
 2.  Avoid (excessive) overfitting.
 
-Naturally these two objective are .pink[contradictory] and there are many ways to select a suitable model (actually this is one of the most active areas of research in modern Statistics). In this class, we will only consider one (simple) approach based on the .pink[Akaike Information Criterion (AIC)]. This criterion corresponds to an .purple2[estimator of prediction error] and thereby .purple2[relative quality of statistical models for a given set of data].
+Naturally these two objectives are .pink[contradictory] and there are many ways to select a suitable model (actually this is one of the most active areas of research in modern Statistics). In this class, we will only consider one (simple) approach based on the .pink[Akaike Information Criterion (AIC)]. This criterion corresponds to an .purple2[estimator of prediction error] and thereby .purple2[relative quality of statistical models for a given set of data].
 
 .footnote[.smallest[👋  This point of view is based on .pink[Occam's razor] (or law of parsimony), the problem-solving principle stipulating that ".purple2[the simplest explanation is usually the right one]".]]
 
@@ -536,14 +536,14 @@ Naturally these two objective are .pink[contradictory] and there are many ways t
 
 # .smaller[Model selection]
 
-In `R`, the AIC can be computed for a given model (i.e. use the output of the function `lm(...)` in `AIC(model)`. For example, we can compare the AIC of the previously considered models as follows:
+In `R`, the AIC can be computed for a given model (i.e. use the output of the function `lm(...)` in `AIC(model)`.) For example, we can compare the AIC of the previously considered models as follows:
 
 ```{r}
 AIC(mod1)     # First model (no interaction)
 AIC(mod2)     # Second model (with interaction)
 ```
 
-As expected, these results suggests that the second model is more appropriate. .pink[But should we further improve it?]
+As expected, these results suggest that the second model is more appropriate. .pink[But should we further improve it?]
 
 ---
 
@@ -655,7 +655,7 @@ include_graphics("pics/extrapolating.png")
 
 .panelset[
 .panel[.panel-name[Problem]
-A researcher in Nutrition Science is interested in studying the effects of consuming .pink[fried food on human's health]. To study this issue, this researcher conducted an experiment on 61 pigs which are randomly assigned with .pink[Chips] and .purple2[Non-Chips] diets. Then, the following variables were measured: `group` (C for Chips, NC for non-chips), `gender` and several hormones: `urine_cortisol`, `serum_cortisol`, `ACTH`, `CRH`, `testosterone` and `LH`. Based on this data, can we conclude that fried food group (i.e. Chips) has increased level of cortisol compared to the control?
+A researcher in Nutrition Science is interested in studying the effects of consuming .pink[fried food on human's health]. To study this issue, this researcher conducted an experiment on 61 pigs which are randomly assigned with .pink[Chips] and .purple2[Non-Chips] diets. Then, the following variables were measured: `group` (C for Chips, NC for Non-Chips), `gender` and several hormones (`urine_cortisol`, `serum_cortisol`, `ACTH`, `CRH`, `testosterone` and `LH`). Based on this data, can we conclude that fried food group (i.e. Chips) has increased level of urine cortisol compared to the control?
 ]
 .panel[.panel-name[Import]
 ```{r}
