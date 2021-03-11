@@ -295,6 +295,16 @@ is .pink[minimized], which then allows to estimate $\sigma^2$ further on.
 
 ---
 
+# .smaller[Anscombe's quartet]
+
+```{R, out.width = "80%", echo = F}
+include_graphics("pics/Anscombe.png")
+```
+
+👋 .smallest[Source: [Wikipedia](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).]
+
+---
+
 # .smaller[Example: Reading ability assessment]
 
 In the reading ability example, we can formulate a linear regression model (without interaction) as follows:

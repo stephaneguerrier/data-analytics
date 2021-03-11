@@ -7,15 +7,15 @@
     <link href="Lecture3_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture3_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture3_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture3_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
-    <script src="Lecture3_files/tile-view-0.2.6/tile-view.js"></script>
-    <link href="Lecture3_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="Lecture3_files/panelset-0.2.6/panelset.js"></script>
+    <link href="Lecture3_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture3_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture3_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture3_files/panelset-0.2.4/panelset.js"></script>
     <script src="Lecture3_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture3_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture3_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture3_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture3_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -177,6 +177,14 @@ The parameters of the model (i.e. `\(\beta_0, \beta_1, \ldots, \beta_p\)` and `\
 
 `$$\small \sum_{i = 1}^n \varepsilon_i^2 = \sum_{i = 1}^n \left(Y_i- \mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]\right)^2 = \sum_{i = 1}^n \left(Y_i- \beta_0 - \sum_{j = 1}^p \beta_j X_{ij}\right)^2$$`
 is .pink[minimized], which then allows to estimate `\(\sigma^2\)` further on.
+
+---
+
+# .smaller[Anscombe's quartet]
+
+&lt;img src="pics/Anscombe.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+👋 .smallest[Source: [Wikipedia](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).]
 
 ---
 
