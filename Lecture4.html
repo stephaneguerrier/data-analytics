@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Guerrier" />
+    <link href="Lecture4_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Lecture4_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="Lecture4_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="Lecture4_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="Lecture4_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="Lecture4_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="Lecture4_files/panelset-0.2.6/panelset.js"></script>
+    <script src="Lecture4_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="Lecture4_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture4_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="Lecture4_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+class: title-slide  
+&lt;div class="my-logo-right"&gt;&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part IV: Generalized Linear Models 
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva 🇨🇭]
+
+&lt;br&gt;
+&lt;img src="pics/liscence.png" width="25%" style="display: block; margin: auto;" /&gt;
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu]
+
+---
+
+# .smallest[Non-normal conditional distributions]
+
+.smaller[In practice, we often encounter data which is actually not suitable for a linear model. For example,
+1. A restaurant is interested in studying the time taken by customers to consume a glass of wine.
+2. A hospital wants to investigate the number of children diagnosed with an infectious disease per day.
+3. A lab wants to analyze the probability of myocardial infarction per treatment group.]
+
+.smaller[In these cases, linear models are not suitable for two reasons:
+1. .hi-pink[Non-linearity]: a linear model may give predicted values outside of the possible range (e.g. negative values for time or probability, decimal values for number of people).
+2. .hi-pink[Heteroscedasticity]: the (conditional) variance of response is not constant and depends on its (conditional) mean.]
+
+---
+
+# .smallest[Motivation example: Bronchitis]
+
+.panelset[
+.panel[.panel-name[Problem]
+A scientist was interested in studying the effects of smoking on being diagnosed with bronchitis. He collected 212 people for an experiment where he collected their daily number of smoked cigarettes. Then the scientist recorded the .pink[presence (encoded as 1)] or .purple2[absence (encoded as 0)] of bronchitis of each person as the outcome of the experiment. 
+
+Based on these samples, how can we model the presence/absence of bronchitis based on the number of cigarettes they consumed every day? 
+]
+.panel[.panel-name[Data]
+
+```r
+dat = read.csv("data/bronchitis.csv")
+bronchitis = dat$bron
+head(bronchitis)
+```
+
+```
+#&gt; [1] 0 1 0 0 0 0
+```
+
+```r
+cigarettes = dat$cigs
+head(cigarettes)
+```
+
+```
+#&gt; [1] 5.15 0.00 2.50 1.75 6.75 0.00
+```
+]
+.panel[.panel-name[Graph]
+&lt;img src="Lecture4_files/figure-html/unnamed-chunk-4-1.svg" width="90%" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+
+# .smallest[Solution: Generalized linear models]
+
+- Recall that in linear regression, we consider
+`$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$`
+- In Generalized Linear Models (GLM), we consider 
+`$$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$`
+where .pink[distribution] belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function `\(\color{#eb078e}{f(\cdot)}\)`&lt;sup&gt;.smallest[👋]&lt;/sup&gt; is monotonically increasing, and `\(\phi\)` is the dispersion parameter that is related to the variance of `\(Y_i\)`.
+
+👋 .smallest[The function] `\(\small f(\cdot)\)` .smallest[is actually the inverse of a function called the link function.]
+
+---
+
+# .smaller[Logistic regression]
+
+- .smallest[.hi-pink[Logistic regression] is a classical example of GLM, and is most commonly used to model a binary response, where] `\(\small Y_i = 0\)` .smallest[or] `\(\small 1\)`. 
+- .smallest[It assumes that the response] `\(\small Y_i\)` .smallest[follows a Bernoulli distribution with parameter] `\(\small \mu_i\)` .smallest[such that] 
+`\(\small P(Y_i = 1) = \mu_i \quad \text{and} \quad P(Y_i = 0) = 1-\mu_i.\)`
+- .smallest[The parameter] `\(\small \mu_i\)`.smallest[, i.e. the conditional mean of] `\(\small Y_i\)`.smallest[, is then modelled as a function of the covariates]
+`\(\small \mu_i = \color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg).\)` .smallest[In other words,] `$$\small Y_i \color{#eb078e}{\sim \text{Bernoulli}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right), \quad \text{where} \;\; \phi=1.$$`
+- .smallest[The function] `\(\small f(\cdot)\)` .smallest[allows to transform the whole real line to] `\(\small (0,1)\)`.smallest[, which makes unrestricted linear modeling possible. Some common choices of] `\(\small f(\cdot)\)` .smallest[include:] 
+1. .smallest[.hi-pink[Logit link]:] `\(\small f(z) = e^z / (1+e^z) \color{#b4b4b4}{= 1/(1+e^{-z})}\)`.
+2. .smallest[.hi-pink[Probit link]:] `\(\small f(z) = \Phi(z)\)`.smallest[, where] `\(\small \Phi(\cdot)\)` .smallest[is the cumulative distribution function of a] `\(\small \mathcal{N}(0,1)\)`.
+
+---
+
+# .smaller[Logistic regression]
+
+Compared to linear regression, logistic regression makes .pink[more relaxed assumptions]:
+1. The conditional mean `\(\mu_i\)` is assumed to be a general (not necessarily linear) function of the covariates.
+2. The errors are assumed to be independent. However, they do not need to be normally distributed and actually have different variance that depends on `\(\mu_i\)`. 
+
+The parameters of the model (i.e. `\(\beta_0, \beta_1, \ldots, \beta_p\)`) are estimated by .pink[maximum likelihood estimation], rather than the least squares approach used in linear models. In practice, the maximum likelihood estimator is computed using .pink[iterative methods] such as the Newton-Raphson algorithm and the iteratively reweighted least squares algorithm. The details of these computation are beyond the scope of this class.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

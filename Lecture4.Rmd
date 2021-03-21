@@ -1,0 +1,267 @@
+---
+title: "Modelling and Data Analytics for Pharmaceutical Sciences"
+subtitle: "Part I: Introduction to Statistical Inference"
+author: "Stéphane Guerrier"
+date: " "
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    seal: false
+---
+
+
+```{R, setup, include = F}
+# devtools::install_github("dill/emoGG")
+library(pacman)
+p_load(
+  broom, tidyverse,
+  latex2exp, ggplot2, ggthemes, ggforce, viridis, extrafont, gridExtra,
+  kableExtra, snakecase, janitor,
+  data.table, dplyr, estimatr,
+  lubridate, knitr, parallel,
+  lfe,
+  here, magrittr
+)
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+orange <- "#FFA500"
+red <- "#fb6107"
+blue <- "#2b59c3"
+green <- "#8bb174"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+grey = "#b4b4b4"
+purple <- "#6A5ACD"
+slate <- "#314f4f"
+# Dark slate grey: #314f4f
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+options(crayon.enabled = F)
+options(knitr.table.format = "html")
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -0.5, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 18, family = "STIXGeneral"),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_math <- theme_void() + theme(
+  text = element_text(family = "MathJax_Math"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_serif <- theme_void() + theme(
+  text = element_text(family = "MathJax_Main"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes <- theme_void() + theme(
+  text = element_text(family = "Fira Sans Book"),
+  axis.title = element_text(size = 18),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = grey_light,
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_set(theme_gray(base_size = 20))
+# Column names for regression results
+reg_columns <- c("Term", "Est.", "S.E.", "t stat.", "p-Value")
+# Function for formatting p values
+format_pvi <- function(pv) {
+  return(ifelse(
+    pv < 0.0001,
+    "<0.0001",
+    round(pv, 4) %>% format(scientific = F)
+  ))
+}
+format_pv <- function(pvs) lapply(X = pvs, FUN = format_pvi) %>% unlist()
+# Tidy regression results table
+tidy_table <- function(x, terms, highlight_row = 1, highlight_color = "black", highlight_bold = T, digits = c(NA, 3, 3, 2, 5), title = NULL) {
+  x %>%
+    tidy() %>%
+    select(1:5) %>%
+    mutate(
+      term = terms,
+      p.value = p.value %>% format_pv()
+    ) %>%
+    kable(
+      col.names = reg_columns,
+      escape = F,
+      digits = digits,
+      caption = title
+    ) %>%
+    kable_styling(font_size = 20) %>%
+    row_spec(1:nrow(tidy(x)), background = "white") %>%
+    row_spec(highlight_row, bold = highlight_bold, color = highlight_color)
+}
+```
+
+```{css, echo = F, eval = F}
+@media print {
+  .has-continuation {
+    display: block !important;
+  }
+}
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_extra_styles()
+```
+
+
+class: title-slide  
+<div class="my-logo-right"></div>
+<br>
+<br>
+<br>
+<br>
+ 
+# Data Analytics for Pharmaceutical Sciences
+
+## Part IV: Generalized Linear Models 
+
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva 🇨🇭]
+
+<br>
+```{R, out.width = "25%", echo = F}
+include_graphics("pics/liscence.png")
+```
+.center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
+
+### .tiny[This document was prepared with the help of Wenfei Chu]
+
+---
+
+# .smallest[Non-normal conditional distributions]
+
+.smaller[In practice, we often encounter data which is actually not suitable for a linear model. For example,
+1. A restaurant is interested in studying the time taken by customers to consume a glass of wine.
+2. A hospital wants to investigate the number of children diagnosed with an infectious disease per day.
+3. A lab wants to analyze the probability of myocardial infarction per treatment group.]
+
+.smaller[In these cases, linear models are not suitable for two reasons:
+1. .hi-pink[Non-linearity]: a linear model may give predicted values outside of the possible range (e.g. negative values for time or probability, decimal values for number of people).
+2. .hi-pink[Heteroscedasticity]: the (conditional) variance of response is not constant and depends on its (conditional) mean.]
+
+---
+
+# .smallest[Motivation example: Bronchitis]
+
+.panelset[
+.panel[.panel-name[Problem]
+A scientist was interested in studying the effects of smoking on being diagnosed with bronchitis. He collected 212 people for an experiment where he collected their daily number of smoked cigarettes. Then the scientist recorded the .pink[presence (encoded as 1)] or .purple2[absence (encoded as 0)] of bronchitis of each person as the outcome of the experiment. 
+
+Based on these samples, how can we model the presence/absence of bronchitis based on the number of cigarettes they consumed every day? 
+]
+.panel[.panel-name[Data]
+```{r}
+dat = read.csv("data/bronchitis.csv")
+bronchitis = dat$bron
+head(bronchitis)
+cigarettes = dat$cigs
+head(cigarettes)
+```
+]
+.panel[.panel-name[Graph]
+```{r, echo = FALSE, out.width = "90%"}
+plot(dat$cigs, dat$bron, 
+     xlab = "Daily number of smoked cigarettes",
+     ylab = "Absence/Presense of bronchitis")
+```
+]
+]
+
+---
+
+# .smallest[Solution: Generalized linear models]
+
+- Recall that in linear regression, we consider
+$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$
+- In Generalized Linear Models (GLM), we consider 
+$$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$
+where .pink[distribution] belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function $\color{#eb078e}{f(\cdot)}$<sup>.smallest[👋]</sup> is monotonically increasing, and $\phi$ is the dispersion parameter that is related to the variance of $Y_i$.
+
+👋 .smallest[The function] $\small f(\cdot)$ .smallest[is actually the inverse of a function called the link function.]
+
+---
+
+# .smaller[Logistic regression]
+
+- .smallest[.hi-pink[Logistic regression] is a classical example of GLM, and is most commonly used to model a binary response, where] $\small Y_i = 0$ .smallest[or] $\small 1$. 
+- .smallest[It assumes that the response] $\small Y_i$ .smallest[follows a Bernoulli distribution with parameter] $\small \mu_i$ .smallest[such that] 
+$\small P(Y_i = 1) = \mu_i \quad \text{and} \quad P(Y_i = 0) = 1-\mu_i.$
+- .smallest[The parameter] $\small \mu_i$.smallest[, i.e. the conditional mean of] $\small Y_i$.smallest[, is then modelled as a function of the covariates]
+$\small \mu_i = \color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg).$ .smallest[In other words,] $$\small Y_i \color{#eb078e}{\sim \text{Bernoulli}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right), \quad \text{where} \;\; \phi=1.$$
+- .smallest[The function] $\small f(\cdot)$ .smallest[allows to transform the whole real line to] $\small (0,1)$.smallest[, which makes unrestricted linear modeling possible. Some common choices of] $\small f(\cdot)$ .smallest[include:] 
+1. .smallest[.hi-pink[Logit link]:] $\small f(z) = e^z / (1+e^z) \color{#b4b4b4}{= 1/(1+e^{-z})}$.
+2. .smallest[.hi-pink[Probit link]:] $\small f(z) = \Phi(z)$.smallest[, where] $\small \Phi(\cdot)$ .smallest[is the cumulative distribution function of a] $\small \mathcal{N}(0,1)$.
+
+---
+
+# .smaller[Logistic regression]
+
+Compared to linear regression, logistic regression makes .pink[more relaxed assumptions]:
+1. The conditional mean $\mu_i$ is assumed to be a general (not necessarily linear) function of the covariates.
+2. The errors are assumed to be independent. However, they do not need to be normally distributed and actually have different variance that depends on $\mu_i$. 
+
+The parameters of the model (i.e. $\beta_0, \beta_1, \ldots, \beta_p$) are estimated by .pink[maximum likelihood estimation], rather than the least squares approach used in linear models. In practice, the maximum likelihood estimator is computed using .pink[iterative methods] such as the Newton-Raphson algorithm and the iteratively reweighted least squares algorithm. The details of these computation are beyond the scope of this class. 
