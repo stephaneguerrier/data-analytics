@@ -437,3 +437,26 @@ We now consider whether both $\beta_1$ and $\beta_2$ are significantly greater t
 - Since $\hat{\beta}_2 = 0.1318$ and the p-value of the two sided test is $0.7113\%$, we obtain the p-value for the one sided test $H_0: \beta_2 = 0$ and $H_a: \beta_2>0$ is $0.7113\% / 2 \approx 0.3557\% < \alpha$, and therefore, $\beta_2$ is also significantly greater than 0 at the significance level of $5\%$.
 
 Therefore, we conclude that both smoking cigarettes and environmental pollution significantly contribute to the development of bronchitis. 
+
+---
+
+# .smaller[Poisson regression]
+
+- .smaller[.hi-pink[Poisson regression] is another example of GLM that is used to model count data] $\small Y_i \in \mathbb{N}$.smaller[, such as a number of events occurring during a time interval or in a given area.]
+- .smaller[It assumes that, during a time interval or in a given area, .purple2[the events occur independently at the same rate given the covariates.]]
+- .smaller[The count response] $\small Y_i$ .smaller[can be modelled with a Poisson distribution with rate parameter] $\small \mu_i$ .smaller[such that] 
+$\small \mu_i = \color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)$.smaller[. Then]
+$$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right), \quad \text{where} \;\; \phi=1.$$
+- .smaller[In R, we can use the function `glm(..., family=poisson)`.]
+- .smaller[The Poisson regression has a restrictive assumption that the mean and variance of] $\small Y_i$ .smaller[are the same given the covariates. In practice, however, data are often overdispersed, exhibiting larger variance than the mean. This can be handled, for example, by the .hi-pink[negative binomial regression].]  
+
+---
+
+# Concluding remarks
+
+- GLM extend the normal linear regression model in two ways:
+1. It allows the response variable to .pink[come from an exponential family distribution]. Exponential family includes some of the most commonly used statistical models, including the normal, Bernoulli, and Poisson distributions. 
+2. It allows the conditional mean of the response variable to vary linearly with the covariates .pink[through a monotonic transformation]. 
+- In GLM, the parameters are estimated by the .pink[method of maximum likelihood]. In general, there are no closed-form solutions to the MLE so .pink[iterative methods] are used to compute the estimators.
+- Like in linear regression, GLM .pink[only consider independent data], which sometimes may not be the case in practice. To consider dependent data, we can, for example, consider .hi-pink[generalized linear mixed models].
+- All regression models .pink[should not be used to extrapolate.]
