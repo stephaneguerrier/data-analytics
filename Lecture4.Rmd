@@ -220,9 +220,9 @@ include_graphics("pics/bronchitis_cig-data.png")
 # .smallest[Non-normal conditional distributions]
 
 .smaller[In practice, we often encounter data which is actually not suitable for a linear model. For example,
-1. A restaurant is interested in studying the time taken by customers to consume a glass of wine.
-2. A hospital wants to investigate the number of children diagnosed with an infectious disease per day.
-3. A lab wants to analyze the probability of myocardial infarction per treatment group.]
+1. A restaurant is interested in studying the .blue[time] taken by customers to consume a glass of wine.
+2. A hospital wants to investigate the .blue[number] of children diagnosed with an infectious disease per day.
+3. A lab wants to analyze the .blue[probability] of myocardial infarction per treatment group.]
 
 .smaller[In these cases, linear models are not suitable for two reasons:
 1. .hi-pink[Non-linearity]: a linear model may give predicted values outside of the possible range (e.g. negative values for time or probability, decimal values for number of people).
@@ -236,7 +236,7 @@ include_graphics("pics/bronchitis_cig-data.png")
 $$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$
 - In .hi-pink[Generalized Linear Models (GLM)], we consider 
 $$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$
-where .pink[distribution] belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function $\color{#eb078e}{f(\cdot)}$<sup>.smallest[👋]</sup> is monotonically increasing, and $\phi$ is the dispersion parameter that is related to the variance of $Y_i$.
+where .pink[distribution] (classically) belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function $\color{#eb078e}{f(\cdot)}$<sup>.smallest[👋]</sup> is monotonically increasing, and $\phi$ is a nuisance parameter related to the variance of $Y_i$ (which is typically also a function of $\mu_i$).
 
 👋 .smallest[The function] $\small f(\cdot)$ .smallest[is actually the inverse of a function called the link function.]
 
@@ -272,8 +272,10 @@ $$P(\color{#e64173}{\text{Bronchitis}_i} = 1) = \frac{\exp(\beta_0 + \beta_1\col
 - $\color{#e64173}{\text{Bronchitis}_i}$: indicator of the presence of bronchitis for the $i$-th person (i.e. $\color{#e64173}{\text{Bronchitis}_i} = 1$ if presence and $\color{#e64173}{\text{Bronchitis}_i} = 0$ if absence).
 - $\color{#6A5ACD}{\text{Cigarettes}_i}$: the daily number of smoked cigarettes of the $i$-th person. 
 
-We also name $\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})$ as the .blue[odds], the linear combination of covariates $\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i}$ as the .blue[log odds], and the coefficients to be .blue[log-odds ratios].
+We also name $\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})$ as the .blue[odds]<sup>.smallest[👋]</sup>, the linear combination of covariates $\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i}$ as the .blue[log odds], and the coefficients to be .blue[log-odds ratios].
 
+
+👋 .smallest[The odd] related to a probability $\pi$ .smallest[equals $\pi/(1-\pi)$ (the probability of success over the one of failure).]
 ---
 
 # .smaller[Example: Bronchitis]
@@ -443,7 +445,7 @@ Therefore, we conclude that both smoking cigarettes and environmental pollution 
 - .smaller[It assumes that, during a time interval or in a given area, .purple2[the events occur independently at the same rate given the covariates.]]
 - .smaller[The count response] $\small Y_i$ .smaller[can be modelled with a Poisson distribution with rate parameter] $\small \mu_i$ .smaller[such that] 
 $\small \mu_i = \color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)$.smaller[. Then]
-$$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right), \quad \text{where} \;\; \phi=1.$$
+$$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)\right).$$
 - .smaller[In R, we can use the function `glm(..., family=poisson)`.]
 - .smaller[The Poisson regression has a restrictive assumption that the mean and variance of] $\small Y_i$ .smaller[are the same given the covariates. In practice, however, data are often overdispersed, exhibiting larger variance than the mean. This can be handled, for example, by the .hi-pink[negative binomial regression].]  
 
