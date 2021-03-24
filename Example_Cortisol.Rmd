@@ -1,0 +1,130 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r}
+# Import data
+cortisol_data = read.csv("data/cortisol.csv", row.names=1)
+
+# Create data frame
+dat = data.frame(group = cortisol_data$group,
+                 gender = cortisol_data$gender,
+                 urine_cortisol = cortisol_data$Urine.Cortisol..pg.mg.,
+                 serum_cortisol = cortisol_data$Serum.Cortisol..ng.ml.,
+                 ACTH = cortisol_data$Serum.ACTH..pg.ml.,
+                 CRH = cortisol_data$Serum.CRH..pg.ml.,
+                 testosterone = cortisol_data$Testosterone..ng.ml.,
+                 LH = cortisol_data$LH..ng.ml.)
+```
+
+# Simple analysis
+
+```{r}
+gg_color_hue <- function(n, alpha = 1) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100, alpha = alpha)[1:n]
+}
+
+cols = gg_color_hue(2)
+boxplot(urine_cortisol ~ group, data = dat, col = cols)
+```
+
+```{r}
+boxplot(log(urine_cortisol) ~ group, data = dat, col = cols)
+```
+
+```{r}
+t.test(log(urine_cortisol) ~ group, data = dat, col = cols, alternative = "greater")
+```
+
+# More complex analysis with GLM
+
+Consider the following model
+
+$$Y_i \sim \text{Gamma}(\mu_i, \nu),$$
+
+where 
+
+$$\mu_i = \exp(\mathbf{x}_i^T \beta).$$
+
+```{r, warning=FALSE, message=FALSE}
+library(gamlss)
+```
+
+```{r}
+fit_ga_urine_cortisol = gamlss(urine_cortisol ~ group, data = dat, sigma.formula =~ 1, family = GA)
+summary(fit_ga_urine_cortisol)
+```
+
+It is possible to compute standardized residuals as follows:
+
+$$r_i = \frac{Y_i - \widehat{\mu}_i}{\widehat{\sigma}_i},$$
+where $\widehat{\mu}_i$ and $\widehat{\sigma}_i$ correspond to the predicted (by the estimated model) mean and standard deviation for observation $i$. Therefore, we can perform the following model check:
+
+```{r, fig.align='center', fig.height=5, fig.width=6}
+plot(fit_ga_urine_cortisol)
+```
+
+We also obtain the following fitted densities
+
+```{r, fig.align='center', fig.height=5, fig.width=6}
+mu_chips = fit_ga_urine_cortisol$mu.coefficients["(Intercept)"] 
+mu_non_chips = fit_ga_urine_cortisol$mu.coefficients["(Intercept)"] + fit_ga_urine_cortisol$mu.coefficients["groupNC"] 
+
+xx = seq(from = 0.0001, to = 10^4, length.out = 10^4)
+yy_chips = dGA(xx, mu = exp(mu_chips), sigma = exp(fit_ga_urine_cortisol$sigma.coefficients))
+yy_non_chips = dGA(xx, mu = exp(mu_non_chips), sigma = exp(fit_ga_urine_cortisol$sigma.coefficients))
+
+cols_trans = rev(gg_color_hue(2, alpha = 0.15))
+cols = rev(cols)
+
+
+plot(NA, type = "l", xlim = c(0, 10^4), col = cols[1], ylim = c(0, max(na.omit(yy_non_chips))),
+     xlab = "Urine Cortisol", ylab = "PDF")
+
+polygon(c(xx, rev(xx)), c(rep(0, length(xx)), rev(yy_non_chips)), border = NA, col = cols_trans[1])
+lines(xx, yy_non_chips, col = cols[1], lwd = 1)
+
+polygon(c(xx, rev(xx)), c(rep(0, length(xx)), rev(yy_chips)), border = NA, col = cols_trans[2])
+lines(xx, yy_chips, col = cols[2], lwd = 1)
+
+legend("topright", c("Chips", "Non-chips"), col = cols[2:1], lwd = 1)
+```
+
+```{r, fig.align='center', fig.height=5, fig.width=6}
+plot(NA, type = "l", xlim = c(0, 10^4), col = cols[1], ylim = c(0, max(na.omit(yy_non_chips))),
+     xlab = "Urine Cortisol", ylab = "PDF")
+
+hist(dat$urine_cortisol[dat$group == "NC"], probability = TRUE, add = TRUE, col = "grey80", breaks = 3,
+     border = cols[1])
+polygon(c(xx, rev(xx)), c(rep(0, length(xx)), rev(yy_non_chips)), border = NA, col = cols_trans[1])
+lines(xx, yy_non_chips, col = cols[1], lwd = 2)
+
+polygon(c(xx, rev(xx)), c(rep(0, length(xx)), rev(yy_chips)), border = NA, col = cols_trans[2])
+lines(xx, yy_chips, col = cols[2], lwd = 2)
+```
+
+```{r, fig.align='center', fig.height=5, fig.width=6}
+plot(NA, type = "l", xlim = c(0, 10^4), col = cols[1], ylim = c(0, max(na.omit(yy_non_chips))),
+     xlab = "Urine Cortisol", ylab = "PDF")
+
+hist(dat$urine_cortisol[dat$group == "C"], probability = TRUE, add = TRUE, col = "grey80", breaks = 10,
+     border = cols[2])
+polygon(c(xx, rev(xx)), c(rep(0, length(xx)), rev(yy_non_chips)), border = NA, col = cols_trans[1])
+lines(xx, yy_non_chips, col = cols[1], lwd = 2)
+
+polygon(c(xx, rev(xx)), c(rep(0, length(xx)), rev(yy_chips)), border = NA, col = cols_trans[2])
+lines(xx, yy_chips, col = cols[2], lwd = 2)
+```
+
+# Supplementary analysis - gender
+
+```{r}
+fit_ga_urine_cortisol2 = gamlss(urine_cortisol ~ group*gender, data = dat, sigma.formula =~ 1, family = GA)
+summary(fit_ga_urine_cortisol2)
+```
+
+```{r, fig.align='center', fig.height=5, fig.width=6}
+plot(fit_ga_urine_cortisol)
+```
