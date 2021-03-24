@@ -3,6 +3,8 @@ title: "Cortisol Dataset Analysis"
 output: html_document
 ---
 
+In this problem, we consider a blind study where all the pigs are randomly assigned with a certain diet with or without chips, and we are interested in the effect of chips (so the covariate `group`) on urine cortisol. As the causal influence among hormones remains unknown, we only consider `urine cortisol` as the response variable in our analysis. We first import and clean the data as follows:
+
 ```{r}
 # Import data
 cortisol_data = read.csv("data/cortisol.csv", row.names=1)
@@ -16,12 +18,15 @@ dat = data.frame(group = cortisol_data$group,
                  CRH = cortisol_data$Serum.CRH..pg.ml.,
                  testosterone = cortisol_data$Testosterone..ng.ml.,
                  LH = cortisol_data$LH..ng.ml.)
-head(dat)
+
+head(dat[,1:3])
 ```
 
 # Simple analysis
 
-```{r}
+We start our analysis by visualizing the data to grasp an idea of how the data is like. 
+
+```{r, fig.height=5, fig.width=6}
 gg_color_hue = function(n, alpha = 1) {
   hues = seq(15, 375, length = n + 1)
   hcl(h = hues, l = 65, c = 100, alpha = alpha)[1:n]
@@ -33,27 +38,36 @@ cols_trans = gg_color_hue(2, alpha = 0.15)
 boxplot(urine_cortisol ~ group, data = dat, col = cols, ylab = "Urine Cortisol")
 ```
 
+As we can see, the groups of `Chips` and `Non-chips` show different mean, different variance with some outliers. Therefore, it is not suitable to be analyzed by any of the methods we have discussed so far. Let's try a log transformation on the response variable and see if we can get something better.
+
 ```{r}
 boxplot(log(urine_cortisol) ~ group, data = dat, col = cols, ylab = "log(Urine Cortisol)")
 ```
+
+As we can see, after the log transformation, the two groups show different mean but relatively similar variance with no more outliers. The transformed data can then be analyzed with a Welch's t-test with hypotheses $H_0: \mu_{C} = \mu_{NC}$ and $H_a: \mu_{C} > \mu_{NC}$. The R output is as follows:
 
 ```{r}
 t.test(log(urine_cortisol) ~ group, data = dat, col = cols, alternative = "greater")
 ```
 
+Since the p-value is smaller than 5%, we can conclude that the chips diet significantly increases the level of urine cortisol **on the log scale**, at the significance level of 5%. However, what can we say on the original scale of urine cortisol? This will need to involve a more complicated study with the Generalized Linear Models (GLM). 
+
 # More complex analysis with GLM
 
-Consider the following model
+Consider the following model where we assume that the level of urine cortisol ($Y_i$) follows a gamma distribution 
 
-$$Y_i \sim \text{Gamma}(\mu_i, \nu),$$
+$$Y_i \sim \text{Gamma}(\mu_i, \sigma),$$
 
-where 
+where $\mu_i$, the conditional mean of $Y_i$, is modelled by
 
-$$\mu_i = \exp(\mathbf{x}_i^T \boldsymbol{\beta}).$$
+$$\mu_i = \exp(\mathbf{x}_i^T \boldsymbol{\beta}),$$
+and $\sigma$ is related to the conditional variance of $Y_i$ as $\text{var}(Y_i) = \mu_i^2 \sigma^2$. You can check out more details about the reparametrization of gamma distribution we use by loading the `gamlss` R package and checking the documentation of the `GA` function. 
 
 ```{r, warning=FALSE, message=FALSE}
 library(gamlss)
 ```
+
+Now let's try to fit the considered model with the `gamlss` function. 
 
 ```{r}
 fit_ga_urine_cortisol = gamlss(urine_cortisol ~ group, data = dat, 
@@ -61,7 +75,7 @@ fit_ga_urine_cortisol = gamlss(urine_cortisol ~ group, data = dat,
 summary(fit_ga_urine_cortisol)
 ```
 
-It is possible to compute standardized residuals as follows:
+Before we draw any conlusion from the fitted model, we should first check if the model is suitable given the data. It is possible to compute standardized residuals as follows:
 
 $$r_i = \frac{Y_i - \widehat{\mu}_i}{\widehat{\sigma}_i},$$
 where $\widehat{\mu}_i$ and $\widehat{\sigma}_i$ correspond to the predicted (by the estimated model) mean and standard deviation for observation $i$. Therefore, we can perform the following model check:
@@ -70,7 +84,7 @@ where $\widehat{\mu}_i$ and $\widehat{\sigma}_i$ correspond to the predicted (by
 plot(fit_ga_urine_cortisol)
 ```
 
-We can also obtain the following fitted densities
+We can also obtain the following fitted densities as follows:
 
 ```{r, fig.align='center', fig.height=5, fig.width=6}
 mu_coef = fit_ga_urine_cortisol$mu.coefficients
@@ -122,7 +136,11 @@ lines(xx, yy_non_chips, col = cols[2], lwd = 2)
 legend("topright", c("Chips", "Non-chips"), col = cols, lwd = 1)
 ```
 
+The above graphs show that the model fits the data very well. Therefore, it is reliable to draw conclusion based on this fitted gamma GLM. Since the p-value related to the `groupNC` covariate is $5.43 \times 10^{-8}\%$, and that the estimated coefficient is $-1.3016$, the p-value that corresponds to the hypotheses $H_0: \mu_{C} = \mu_{NC}$ and $H_a: \mu_{C} > \mu_{NC}$ is therefore $5.43 \times 10^{-8}\%/2 \approx 2.72\times 10^{-8}\%$. So we can conclude that the chips diet significantly increases the level of urine cortisol at the significance level of 5%. 
+
 # Supplementary analysis: Gender
+
+As the experiment is a blind study, we expect not to see significant difference between different genders. To verify our expectation, let's fit the model again by adding the covariate `gender`. 
 
 ```{r}
 fit_ga_urine_cortisol2 = gamlss(urine_cortisol ~ group*gender, data = dat, sigma.formula =~ 1, family = GA)
@@ -132,3 +150,6 @@ summary(fit_ga_urine_cortisol2)
 ```{r, fig.align='center', fig.height=5, fig.width=6}
 plot(fit_ga_urine_cortisol)
 ```
+
+As we can see, the considered model fits well the data, and the covariates related to `gender` are both not significant, which verifies our expectation and concludes the analysis. 
+
