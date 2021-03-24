@@ -4,18 +4,19 @@
     <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Guerrier" />
+    <script src="Lecture4_files/header-attrs-2.7.1/header-attrs.js"></script>
     <link href="Lecture4_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture4_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture4_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture4_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="Lecture4_files/tile-view-0.2.4/tile-view.js"></script>
-    <link href="Lecture4_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="Lecture4_files/panelset-0.2.4/panelset.js"></script>
+    <link href="Lecture4_files/tile-view-0.2.5.9000/tile-view.css" rel="stylesheet" />
+    <script src="Lecture4_files/tile-view-0.2.5.9000/tile-view.js"></script>
+    <link href="Lecture4_files/panelset-0.2.5.9000/panelset.css" rel="stylesheet" />
+    <script src="Lecture4_files/panelset-0.2.5.9000/panelset.js"></script>
     <script src="Lecture4_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture4_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture4_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture4_files/xaringanExtra-clipboard-0.2.5.9000/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture4_files/xaringanExtra-clipboard-0.2.5.9000/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture4_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture4_files/xaringanExtra-extra-styles-0.2.5.9000/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -90,9 +91,9 @@ head(dat$cigs)
 # .smallest[Non-normal conditional distributions]
 
 .smaller[In practice, we often encounter data which is actually not suitable for a linear model. For example,
-1. A restaurant is interested in studying the time taken by customers to consume a glass of wine.
-2. A hospital wants to investigate the number of children diagnosed with an infectious disease per day.
-3. A lab wants to analyze the probability of myocardial infarction per treatment group.]
+1. A restaurant is interested in studying the .blue[time] taken by customers to consume a glass of wine.
+2. A hospital wants to investigate the .blue[number] of children diagnosed with an infectious disease per day.
+3. A lab wants to analyze the .blue[probability] of myocardial infarction per treatment group.]
 
 .smaller[In these cases, linear models are not suitable for two reasons:
 1. .hi-pink[Non-linearity]: a linear model may give predicted values outside of the possible range (e.g. negative values for time or probability, decimal values for number of people).
@@ -106,7 +107,7 @@ head(dat$cigs)
 `$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$`
 - In .hi-pink[Generalized Linear Models (GLM)], we consider 
 `$$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$`
-where .pink[distribution] belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function `\(\color{#eb078e}{f(\cdot)}\)`&lt;sup&gt;.smallest[👋]&lt;/sup&gt; is monotonically increasing, and `\(\phi\)` is the dispersion parameter that is related to the variance of `\(Y_i\)`.
+where .pink[distribution] (classically) belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function `\(\color{#eb078e}{f(\cdot)}\)`&lt;sup&gt;.smallest[👋]&lt;/sup&gt; is monotonically increasing, and `\(\phi\)` is a nuisance parameter related to the variance of `\(Y_i\)` (which is typically also a function of `\(\mu_i\)`).
 
 👋 .smallest[The function] `\(\small f(\cdot)\)` .smallest[is actually the inverse of a function called the link function.]
 
@@ -142,8 +143,10 @@ In the bronchitis example, using the logit link function, we can formulate a log
 - `\(\color{#e64173}{\text{Bronchitis}_i}\)`: indicator of the presence of bronchitis for the `\(i\)`-th person (i.e. `\(\color{#e64173}{\text{Bronchitis}_i} = 1\)` if presence and `\(\color{#e64173}{\text{Bronchitis}_i} = 0\)` if absence).
 - `\(\color{#6A5ACD}{\text{Cigarettes}_i}\)`: the daily number of smoked cigarettes of the `\(i\)`-th person. 
 
-We also name `\(\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})\)` as the .blue[odds], the linear combination of covariates `\(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i}\)` as the .blue[log odds], and the coefficients to be .blue[log-odds ratios].
+We also name `\(\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})\)` as the .blue[odds]&lt;sup&gt;.smallest[👋]&lt;/sup&gt;, the linear combination of covariates `\(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i}\)` as the .blue[log odds], and the coefficients to be .blue[log-odds ratios].
 
+
+👋 .smallest[The odd] related to a probability `\(\pi\)` .smallest[equals `\(\pi/(1-\pi)\)` (the probability of success over the one of failure).]
 ---
 
 # .smaller[Example: Bronchitis]
@@ -369,7 +372,7 @@ Therefore, we conclude that both smoking cigarettes and environmental pollution 
 - .smaller[It assumes that, during a time interval or in a given area, .purple2[the events occur independently at the same rate given the covariates.]]
 - .smaller[The count response] `\(\small Y_i\)` .smaller[can be modelled with a Poisson distribution with rate parameter] `\(\small \mu_i\)` .smaller[such that] 
 `\(\small \mu_i = \color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)\)`.smaller[. Then]
-`$$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right), \quad \text{where} \;\; \phi=1.$$`
+`$$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)\right).$$`
 - .smaller[In R, we can use the function `glm(..., family=poisson)`.]
 - .smaller[The Poisson regression has a restrictive assumption that the mean and variance of] `\(\small Y_i\)` .smaller[are the same given the covariates. In practice, however, data are often overdispersed, exhibiting larger variance than the mean. This can be handled, for example, by the .hi-pink[negative binomial regression].]  
 
