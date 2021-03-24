@@ -7,15 +7,15 @@
     <link href="Lecture4_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture4_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture4_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture4_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
-    <script src="Lecture4_files/tile-view-0.2.6/tile-view.js"></script>
-    <link href="Lecture4_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="Lecture4_files/panelset-0.2.6/panelset.js"></script>
+    <link href="Lecture4_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture4_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture4_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture4_files/panelset-0.2.4/panelset.js"></script>
     <script src="Lecture4_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture4_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture4_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture4_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture4_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture4_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture4_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -65,8 +65,7 @@ Based on these samples, the scientist wants to verify that smoking every day sig
 
 ```r
 dat = read.csv("data/bronchitis.csv")
-bronchitis = dat$bron
-head(bronchitis)
+head(dat$bron)
 ```
 
 ```
@@ -74,8 +73,7 @@ head(bronchitis)
 ```
 
 ```r
-cigarettes = dat$cigs
-head(cigarettes)
+head(dat$cigs)
 ```
 
 ```
@@ -83,7 +81,7 @@ head(cigarettes)
 ```
 ]
 .panel[.panel-name[Graph]
-&lt;img src="Lecture4_files/figure-html/unnamed-chunk-4-1.svg" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="pics/bronchitis_cig-data.png" width="55%" style="display: block; margin: auto;" /&gt;
 ]
 ]
 
@@ -106,7 +104,7 @@ head(cigarettes)
 
 - Recall that in linear regression, we consider
 `$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$`
-- In Generalized Linear Models (GLM), we consider 
+- In .hi-pink[Generalized Linear Models (GLM)], we consider 
 `$$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$`
 where .pink[distribution] belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function `\(\color{#eb078e}{f(\cdot)}\)`&lt;sup&gt;.smallest[👋]&lt;/sup&gt; is monotonically increasing, and `\(\phi\)` is the dispersion parameter that is related to the variance of `\(Y_i\)`.
 
@@ -207,7 +205,7 @@ summary(mod1)
 We can obtain the estimated coefficients. Specifically,
 - `\(\hat{\beta}_0 = -2.2840\)` represents the .blue[log odds] that a person is diagnosed with bronchitis when no cigarettes is consumed. Alternatively, `\(\exp(\hat{\beta}_0) = 0.1019\)` represents the .blue[odds] that a person is diagnosed with bronchitis when no cigarettes is consumed.
 - `\(\hat{\beta}_1 = 0.2094\)` means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2094 by consuming one more cigarette. Alternatively, `\(\exp(\hat{\beta}_1) = 1.2329\)` means that with one more cigarette consumed, the .blue[odds] of having bronchitis is estimated to .pink[multiply by] 1.2329. This is an estimated conditional odds ratio:
-`$$\frac{\exp(\beta_0 + \beta_1(\color{#6A5ACD}{\text{Cigarettes_i}}+1))}{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes_i}})} = \exp(\beta_1).$$`
+`$$\frac{\exp(\beta_0 + \beta_1(\color{#6A5ACD}{\text{Cigarettes}_i}+1))}{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})} = \exp(\beta_1).$$`
 
 ---
 
@@ -246,7 +244,7 @@ In general, the logistic model stipulates that the effect of a covariate on the 
 
 # .smaller[Model fit]
 
-add graph
+&lt;img src="pics/bronchitis_cig-fit.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -256,8 +254,7 @@ The scientist points out that the .purple[environmental pollution] also plays an
 
 
 ```r
-pollution = dat$poll
-head(pollution)
+head(dat$poll)
 ```
 
 ```

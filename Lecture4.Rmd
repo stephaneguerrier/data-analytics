@@ -204,17 +204,13 @@ Based on these samples, the scientist wants to verify that smoking every day sig
 .panel[.panel-name[Data]
 ```{r}
 dat = read.csv("data/bronchitis.csv")
-bronchitis = dat$bron
-head(bronchitis)
-cigarettes = dat$cigs
-head(cigarettes)
+head(dat$bron)
+head(dat$cigs)
 ```
 ]
 .panel[.panel-name[Graph]
-```{r, echo = FALSE, out.width = "90%"}
-plot(dat$cigs, dat$bron, 
-     xlab = "Daily number of smoked cigarettes",
-     ylab = "Absence/Presense of bronchitis")
+```{r, echo = FALSE, out.width = "55%"}
+include_graphics("pics/bronchitis_cig-data.png")
 ```
 ]
 ]
@@ -238,7 +234,7 @@ plot(dat$cigs, dat$bron,
 
 - Recall that in linear regression, we consider
 $$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$
-- In Generalized Linear Models (GLM), we consider 
+- In .hi-pink[Generalized Linear Models (GLM)], we consider 
 $$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$
 where .pink[distribution] belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function $\color{#eb078e}{f(\cdot)}$<sup>.smallest[👋]</sup> is monotonically increasing, and $\phi$ is the dispersion parameter that is related to the variance of $Y_i$.
 
@@ -320,7 +316,7 @@ summary(mod1)
 We can obtain the estimated coefficients. Specifically,
 - $\hat{\beta}_0 = -2.2840$ represents the .blue[log odds] that a person is diagnosed with bronchitis when no cigarettes is consumed. Alternatively, $\exp(\hat{\beta}_0) = 0.1019$ represents the .blue[odds] that a person is diagnosed with bronchitis when no cigarettes is consumed.
 - $\hat{\beta}_1 = 0.2094$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2094 by consuming one more cigarette. Alternatively, $\exp(\hat{\beta}_1) = 1.2329$ means that with one more cigarette consumed, the .blue[odds] of having bronchitis is estimated to .pink[multiply by] 1.2329. This is an estimated conditional odds ratio:
-$$\frac{\exp(\beta_0 + \beta_1(\color{#6A5ACD}{\text{Cigarettes_i}}+1))}{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes_i}})} = \exp(\beta_1).$$
+$$\frac{\exp(\beta_0 + \beta_1(\color{#6A5ACD}{\text{Cigarettes}_i}+1))}{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})} = \exp(\beta_1).$$
 
 ---
 
@@ -359,7 +355,9 @@ In general, the logistic model stipulates that the effect of a covariate on the 
 
 # .smaller[Model fit]
 
-add graph
+```{r, echo = FALSE, out.width = "65%"}
+include_graphics("pics/bronchitis_cig-fit.png")
+```
 
 ---
 
@@ -368,8 +366,7 @@ add graph
 The scientist points out that the .purple[environmental pollution] also plays an important role in the development of bronchitis. So he wants to consider the level of environmental pollution a person is exposed to as an additional covariate, which can be accessed as follows:
 
 ```{r}
-pollution = dat$poll
-head(pollution)
+head(dat$poll)
 ```
 
 The scientist wants to know whether .pink[both smoking and environmental pollution contribute to the development of bronchitis.] 
