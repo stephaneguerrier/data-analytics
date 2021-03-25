@@ -272,8 +272,7 @@ $$\Pr(\color{#e64173}{\text{Bronchitis}_i} = 1 | \color{#6A5ACD}{\text{Cigarette
 
 We also name $\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})$ as the .blue[odds]<sup>.smallest[👋]</sup>, the linear combination of covariates $\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i}$ as the .blue[log odds], and the coefficients to be .blue[log-odds ratios].
 
-
-👋 .smallest[The odd related to a probability] $\small \pi$ .smallest[equals] $\small \pi/(1-\pi)$ .smallest[(the probability of success over the one of failure).]
+.smallest[👋 The odd related to a probability] $\small \pi$ .smallest[equals] $\small \pi/(1-\pi)$ .smallest[(the probability of success over the one of failure).]
 ---
 
 # .smaller[Example: Bronchitis] 🚬
@@ -313,11 +312,11 @@ summary(mod1)
 
 # .smaller[Interpretation of estimated coefficients]
 
-- $\hat{\beta}_0 = -2.2840$ represents the .blue[log odds] that a person is diagnosed with bronchitis when no cigarettes are consumed. Alternatively, the probability that a non-smoker person is diagnosed with bronchitis is:
+- $\hat{\beta}_0 = -2.2840$ represents the .blue[log odds] that a person is diagnosed with bronchitis when no cigarettes are consumed. Alternatively, the probability that a non-smoking person diagnosed with bronchitis is:
 
 $$\frac{\exp(\hat{\beta}_0)}{1 + \exp(\hat{\beta}_0)} \approx \color{#eb078e}{9.25\%}.$$
 
-- $\hat{\beta}_1 = 0.2094$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2094 by consuming one more cigarette. Therefore, the probability that a person .pink[consuming 20 daily cigarettes] is diagnosed with bronchitis is 
+- $\hat{\beta}_1 = 0.2094$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2094 by consuming one more cigarette. Therefore, the probability that a person .pink[consuming 20 cigarettes a day] to be diagnosed with bronchitis is 
 
 $$\frac{\exp(\hat{\beta}_0 + \color{#eb078e}{20}\hat{\beta}_1)}{1 + \exp(\hat{\beta}_0 + \color{#eb078e}{20}\hat{\beta}_1)} \approx \color{#eb078e}{87.03\%}.$$
 
@@ -352,7 +351,7 @@ In general, the logistic model stipulates that the effect of a covariate on the 
 | $\small \hat{\beta_j}>0$     | $\small p/2$ | $\small 1-p/2$ |
 | $\small \hat{\beta_j}<0$      | $\small 1-p/2$      |   $\small p/2$ |
 
-.smallest[In this case,] $\small \hat{\beta}_1 = 0.2094$ .smallest[and] $\small p = 2.59 \times 10^{-6}$.smallest[%. So the p-value for the test] $\small H_0: \beta_1=0$ .smallest[and] $\small H_a = \beta_1 > 0$ .smallest[is] $\small 2.59 \times 10^{-3}\% /2 \approx 1.3 \times 10^{-3}\%  < \alpha$.smallest[. So we can conclude that smoking .pink[significantly contributes] to the presence of bronchitis.]
+.smallest[In this case,] $\small \hat{\beta}_1 = 0.2094$ .smallest[and] $\small p = 2.59 \times 10^{-6}$.smallest[%. So the p-value for the test] $\small H_0: \beta_1=0$ .smallest[and] $\small H_a = \beta_1 > 0$ .smallest[is] $\small 2.59 \times 10^{-6}\% /2 \approx 1.3 \times 10^{-6}\%  < \alpha$.smallest[. So we can conclude that smoking .pink[significantly contributes] to the presence of bronchitis.]
 
 ---
 
@@ -366,7 +365,7 @@ include_graphics("pics/bronchitis_cig-fit.png")
 
 # .smaller[Example: Bronchitis] ☁️ 🏭 🚙 
 
-The scientist points out that the .purple[environmental pollution] also plays an important role in the development of bronchitis. So he wants to consider the level of environmental pollution a person is exposed to as an additional covariate, which can be accessed as follows:
+The scientist points out that the .pink[environmental pollution] also plays an important role in the development of bronchitis. So he wants to consider the level of environmental pollution a person is exposed to as an additional covariate, which can be accessed as follows:
 
 ```{r}
 head(dat$poll)
@@ -436,7 +435,7 @@ AIC(mod2)     # Cigarettes consumption + air pollution
 - $\hat{\beta}_2 = 0.1318$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.1318 by being exposed to one more unit of pollution.
 - Therefore, we can compute the following probabilities:
 
-$$\frac{\exp(\hat{\beta}_0 + \color{#6A5ACD}{20}\hat{\beta}_1 + \color{#20B2AA}{65}\hat{\beta}_2)}{1 + \exp(\hat{\beta}_0 + \color{#6A5ACD}{20}\hat{\beta}_1 + \color{#20B2AA}{66}\hat{\beta}_2)} \approx {93.80\%},$$
+$$\frac{\exp(\hat{\beta}_0 + \color{#6A5ACD}{20}\hat{\beta}_1 + \color{#20B2AA}{65}\hat{\beta}_2)}{1 + \exp(\hat{\beta}_0 + \color{#6A5ACD}{20}\hat{\beta}_1 + \color{#20B2AA}{65}\hat{\beta}_2)} \approx {93.80\%},$$
 
 $$\frac{\exp(\hat{\beta}_0 + \color{#6A5ACD}{10}\hat{\beta}_1 + \color{#20B2AA}{50}\hat{\beta}_2)}{1 + \exp(\hat{\beta}_0 + \color{#6A5ACD}{10}\hat{\beta}_1 + \color{#20B2AA}{50}\hat{\beta}_2)} \approx {20.13\%}.$$
 
@@ -467,8 +466,8 @@ fig
 # .smaller[Interpretation of coefficient p-values]
 
 We now consider whether both $\beta_1$ and $\beta_2$ are significantly greater than 0. 
-- Since $\hat{\beta}_1 = 0.2117$ and the p-value of the two sided test is $2.83\times10^{-6}\%,$ we obtain the p-value for the one sided test $H_0: \beta_1 = 0$ and $H_a: \beta_1>0$ is $2.83\times10^{-6}\% / 2 \approx 1.42 \times10^{-6}\% < \alpha$, and therefore, $\beta_1$ is significantly greater than 0 at the significance level of $5\%$.
-- Since $\hat{\beta}_2 = 0.1318$ and the p-value of the two sided test is $0.7113\%$, we obtain the p-value for the one sided test $H_0: \beta_2 = 0$ and $H_a: \beta_2>0$ is $0.7113\% / 2 \approx 0.3557\% < \alpha$, and therefore, $\beta_2$ is also significantly greater than 0 at the significance level of $5\%$.
+- Since $\hat{\beta}_1 = 0.2117$ and the p-value of the two sided test is $2.83\times10^{-6}\%,$ we obtain the p-value for the one sided test $H_0: \beta_1 = 0$ and $H_a: \beta_1>0$ as $2.83\times10^{-6}\% / 2 \approx 1.42 \times10^{-6}\% < \alpha$, and therefore, $\beta_1$ is significantly greater than 0 at the significance level of $5\%$.
+- Since $\hat{\beta}_2 = 0.1318$ and the p-value of the two sided test is $0.7113\%$, we obtain the p-value for the one sided test $H_0: \beta_2 = 0$ and $H_a: \beta_2>0$ as $0.7113\% / 2 \approx 0.3557\% < \alpha$, and therefore, $\beta_2$ is also significantly greater than 0 at the significance level of $5\%$.
 
 Therefore, we conclude that .pink[both smoking cigarettes and environmental pollution significantly contribute to the development of bronchitis]. 
 
@@ -480,7 +479,7 @@ Therefore, we conclude that .pink[both smoking cigarettes and environmental poll
 - .smallest[It assumes that, during a time interval or in a given area, .purple2[the events occur independently at the same rate given the covariates.]]
 - .smallest[The count response] $\small Y_i$ .smallest[can be modeled with a Poisson distribution with rate parameter] $\small \mu_i$ .smallest[such that] 
 $\small \mu_i = \color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)$.smaller[. Then]
-$$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)\right).$$
+$$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right), \quad \text{where} \;\; \phi=1.$$
 - .smallest[In R, we can use the function `glm(..., family=poisson)`.]
 - .smallest[The Poisson regression has a restrictive assumption that the mean and variance of] $\small Y_i$ .smaller[are the same given the covariates. In practice, however, data are often overdispersed, exhibiting larger variance than the mean. This can be handled, for example, by the .hi-pink[negative binomial regression].]  
 
