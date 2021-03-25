@@ -441,7 +441,7 @@ $$\frac{\exp(\hat{\beta}_0 + \color{#6A5ACD}{10}\hat{\beta}_1 + \color{#20B2AA}{
 
 ---
 
-# .smaller[Interpretation of estimated coefficients]
+# .smaller[Predicted probabilities]
 
 ```{r, echo = FALSE}
 library(plotly)
