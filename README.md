@@ -45,7 +45,14 @@ Regression](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lectu
 |
 [.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture3.Rmd))
 
-**Part IV: Logistic Regression** (coming soon 🚧)
+**[Part IV: Generalized Linear
+Models](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture4.html)**
+(note formats:
+[.html](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture4.html)
+|
+[.pdf](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture4.pdf)
+|
+[.Rmd](https://raw.githack.com/stephaneguerrier/data_analytics/master/Lecture4.Rmd))
 
 **Part V: Generalized Additive Model** (coming soon 🚧)
 
