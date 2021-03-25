@@ -189,8 +189,6 @@ include_graphics("pics/liscence.png")
 ```
 .center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
 
-### .tiny[This document was prepared with the help of Wenfei Chu]
-
 ---
 
 # .smallest[Motivation example: Bronchitis]
@@ -220,12 +218,12 @@ include_graphics("pics/bronchitis_cig-data.png")
 # .smallest[Non-normal conditional distributions]
 
 .smaller[In practice, we often encounter data which is actually not suitable for a linear model. For example,
-1. A restaurant is interested in studying the .blue[time] taken by customers to consume a glass of wine.
+1. A research is interested in studying the .blue[proportion] of individuals with a specific genetics mutation in different groups.
 2. A hospital wants to investigate the .blue[number] of children diagnosed with an infectious disease per day.
 3. A lab wants to analyze the .blue[probability] of myocardial infarction per treatment group.]
 
 .smaller[In these cases, linear models are not suitable for two reasons:
-1. .hi-pink[Non-linearity]: a linear model may give predicted values outside of the possible range (e.g. negative values for time or probability, decimal values for number of people).
+1. .hi-pink[Non-linearity]: a linear model may give predicted values outside of the possible range (e.g. negative values for probability/proportion, decimal values for number of people).
 2. .hi-pink[Heteroscedasticity]: the (conditional) variance of response is not constant and depends on its (conditional) mean.]
 
 ---
@@ -246,12 +244,12 @@ where .pink[distribution] (classically) belongs to the .pink[exponential family]
 
 - .smallest[.hi-pink[Logistic regression] is a classical example of GLM, and is most commonly used to model a binary response, where] $\small Y_i = 0$ .smallest[or] $\small 1$. 
 - .smallest[It assumes that the response] $\small Y_i$ .smallest[follows a Bernoulli distribution with parameter] $\small \mu_i$ .smallest[such that] 
-$\small P(Y_i = 1) = \mu_i$ .smallest[and] $\small P(Y_i = 0) = 1-\mu_i.$
+$\small \Pr(Y_i = 1) = \mu_i$ .smallest[and] $\small \Pr(Y_i = 0) = 1-\mu_i.$
 - .smallest[The parameter] $\small \mu_i$.smallest[, i.e. the conditional mean of] $\small Y_i$.smallest[, is then modelled as a function of the covariates]
 $\small \mu_i = \color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg).$ .smallest[In other words,] $$\small Y_i \color{#eb078e}{\sim \text{Bernoulli}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right), \quad \text{where} \;\; \phi=1.$$
 - .smallest[The function] $\small f(\cdot)$ .smallest[allows to transform the whole real line to] $\small (0,1)$.smallest[, which makes unrestricted linear modeling possible. Some common choices of] $\small f(\cdot)$ .smallest[include:] 
 1. .smallest[.hi-pink[Logit link]:] $\small f(z) = e^z / (1+e^z) \color{#b4b4b4}{= 1/(1+e^{-z})}$. 
-2. .smallest[.hi-pink[Probit link]:] $\small f(z) = \Phi(z)$.smallest[, where] $\small \Phi(\cdot)$ .smallest[is the cumulative distribution function of a] $\small \mathcal{N}(0,1)$.
+2. .smallest[.hi-pink[Probit link]:] $\small f(z) = \Phi(z)$.smallest[, where] $\small \Phi(\cdot)$ .smallest[is the CDF of a] $\small \mathcal{N}(0,1)$.
 
 ---
 
@@ -261,24 +259,24 @@ Compared to linear regression, logistic regression makes .pink[more relaxed assu
 1. The conditional mean $\mu_i$ is assumed to be a general (not necessarily linear) function of the covariates.
 2. The errors are assumed to be independent. However, they do not need to be normally distributed and actually have different variance that depends on $\mu_i$. 
 
-The parameters of the model (i.e. $\beta_0, \beta_1, \ldots, \beta_p$) are estimated by .pink[maximum likelihood estimation], rather than the least squares approach used in linear models. In practice, the Maximum Likelihood Estimator (MLE) has no closed-form solution and needs to be computed using .pink[iterative methods] such as the Newton-Raphson algorithm and the Iteratively ReWeighted Least Squares (IRWLS) algorithm. The details of these computational methods are beyond the scope of this class. 
+The parameters of the model (i.e. $\beta_0, \beta_1, \ldots, \beta_p$) are estimated by .pink[maximum likelihood estimation]. In practice, the Maximum Likelihood Estimator (MLE) has no closed-form solution and needs to be computed using .pink[iterative methods] such as the Newton-Raphson algorithm and the Iteratively ReWeighted Least Squares (IRWLS) algorithm. The details of these computational methods are beyond the scope of this class. 
 
 ---
 
-# .smaller[Example: Bronchitis]
+# .smaller[Example: Bronchitis] 🚬
 
 In the bronchitis example, using the logit link function, we can formulate a logistic regression model as follows:
-$$P(\color{#e64173}{\text{Bronchitis}_i} = 1) = \frac{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})}{1+\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})}.$$
+$$\Pr(\color{#e64173}{\text{Bronchitis}_i} = 1 | \color{#6A5ACD}{\text{Cigarettes}_i}) = \frac{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})}{1+\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})}.$$
 - $\color{#e64173}{\text{Bronchitis}_i}$: indicator of the presence of bronchitis for the $i$-th person (i.e. $\color{#e64173}{\text{Bronchitis}_i} = 1$ if presence and $\color{#e64173}{\text{Bronchitis}_i} = 0$ if absence).
 - $\color{#6A5ACD}{\text{Cigarettes}_i}$: the daily number of smoked cigarettes of the $i$-th person. 
 
 We also name $\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})$ as the .blue[odds]<sup>.smallest[👋]</sup>, the linear combination of covariates $\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i}$ as the .blue[log odds], and the coefficients to be .blue[log-odds ratios].
 
 
-👋 .smallest[The odd] related to a probability $\pi$ .smallest[equals $\pi/(1-\pi)$ (the probability of success over the one of failure).]
+👋 .smallest[The odd related to a probability] $\small \pi$ .smallest[equals] $\small \pi/(1-\pi)$ .smallest[(the probability of success over the one of failure).]
 ---
 
-# .smaller[Example: Bronchitis]
+# .smaller[Example: Bronchitis] 🚬
 
 .panelset[
 .panel[.panel-name[R Code]
@@ -313,22 +311,25 @@ summary(mod1)
 
 ---
 
-# .smaller[Interpretation of coefficients]
+# .smaller[Interpretation of estimated coefficients]
 
-We can obtain the estimated coefficients. Specifically,
-- $\hat{\beta}_0 = -2.2840$ represents the .blue[log odds] that a person is diagnosed with bronchitis when no cigarettes is consumed. Alternatively, $\exp(\hat{\beta}_0) = 0.1019$ represents the .blue[odds] that a person is diagnosed with bronchitis when no cigarettes is consumed.
-- $\hat{\beta}_1 = 0.2094$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2094 by consuming one more cigarette. Alternatively, $\exp(\hat{\beta}_1) = 1.2329$ means that with one more cigarette consumed, the .blue[odds] of having bronchitis is estimated to .pink[multiply by] 1.2329. This is an estimated conditional odds ratio:
-$$\frac{\exp(\beta_0 + \beta_1(\color{#6A5ACD}{\text{Cigarettes}_i}+1))}{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i})} = \exp(\beta_1).$$
+- $\hat{\beta}_0 = -2.2840$ represents the .blue[log odds] that a person is diagnosed with bronchitis when no cigarettes are consumed. Alternatively, the probability that a non-smoker person is diagnosed with bronchitis is:
+
+$$\frac{\exp(\hat{\beta}_0)}{1 + \exp(\hat{\beta}_0)} \approx \color{#eb078e}{9.25\%}.$$
+
+- $\hat{\beta}_1 = 0.2094$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2094 by consuming one more cigarette. Therefore, the probability that a person .pink[consuming 20 daily cigarettes] is diagnosed with bronchitis is 
+
+$$\frac{\exp(\hat{\beta}_0 + \color{#eb078e}{20}\hat{\beta}_1)}{1 + \exp(\hat{\beta}_0 + \color{#eb078e}{20}\hat{\beta}_1)} \approx \color{#eb078e}{87.03\%}.$$
 
 ---
 
 # .smaller[Interpretation of coefficients]
 
 In general, the logistic model stipulates that the effect of a covariate on the chance of "success" is .pink[linear on the log odds scale, or multiplicative on the odds scale.]
-- If $\beta_j > 0$ then $\exp(\beta_j) > 1$, and therefore the odds increases. 
-- If $\beta_j < 0$ then $\exp(\beta_j) < 1$, and therefore the odds decreases.
+- If $\beta_j > 0$ then $\exp(\beta_j) > 1$, and therefore the odds (probability) increases. 
+- If $\beta_j < 0$ then $\exp(\beta_j) < 1$, and therefore the odds (probability) decreases.
 - If $\beta_j = 0$ then $\exp(\beta_j) = 1$, which implies that the log odds is a constant function, and the response $Y_i$ is independent of the covariate $X_{ij}$.
-- The magnitude of $\beta_j$ (i.e. $|\beta_j|$) determines how fast the log odds increases or decreases as a function of the covariate $X_{ij}$.
+- The .pink[magnitude] of $\beta_j$ (i.e. $|\beta_j|$) determines how fast the log odds increases or decreases as a function of the covariate $X_{ij}$.
 
 ---
 
@@ -337,7 +338,7 @@ In general, the logistic model stipulates that the effect of a covariate on the 
 - Like for linear models, for each coefficient $\beta_j$, there is a corresponding p-value associated to the Wald test of $H_0: \beta_j = 0$ and $H_a: \beta_j \neq 0$. 
 - .pink[A covariate with a small p-value (typically smaller than 5%) is considered to be a significant (meaningful) addition to the model], as changes in the values of such covariate can lead to changes in the response variable. 
 - On the other hand, a large p-value (typically larger than 5%) suggests that the corresponding covariate is not (significantly) associated with changes in the response or that we don't have enough evidence (data) to show its effect.
-- ⚠️ The Wald test for each coefficient $\beta_j$ of a GLM is analogous to a t-test for a coefficient in a linear regression. .pink[But there is a slight difference.] Indeed, in linear regression, the test statsitic under the null follows exactly Student's t-distribution. In GLM, we have no exact distribution theory but only the large-sample approximations based on the asymptotic normality of the MLE.
+- ⚠️ The Wald test for each coefficient $\beta_j$ of a GLM is analogous to a t-test for a coefficient in a linear regression. .pink[But there is a slight difference.] Unlike in a linear regression, there is generally no exact distribution theory for a GLM and we rely instead on large-sample approximations based on the asymptotic normality of the MLE. 🤓
 
 ---
 
@@ -363,7 +364,7 @@ include_graphics("pics/bronchitis_cig-fit.png")
 
 ---
 
-# .smaller[Example: Bronchitis]
+# .smaller[Example: Bronchitis] ☁️ 🏭 🚙 
 
 The scientist points out that the .purple[environmental pollution] also plays an important role in the development of bronchitis. So he wants to consider the level of environmental pollution a person is exposed to as an additional covariate, which can be accessed as follows:
 
@@ -378,7 +379,8 @@ The scientist wants to know whether .pink[both smoking and environmental polluti
 # .smaller[Let's update our model]
 
 Taking into account the new covariate `pollution`, we can update our model as follows:
-$$P(\color{#e64173}{\text{Bronchitis}_i} = 1) = \frac{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i} + \beta_2\color{#20B2AA}{\text{Pollution}_i})}{1+\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i} + \beta_2\color{#20B2AA}{\text{Pollution}_i})}.$$
+
+$$\small \Pr(\color{#e64173}{\text{Bronchitis}_i} = 1| \color{#6A5ACD}{\text{Cigarettes}_i}, \color{#20B2AA}{\text{Pollution}_i}) = \frac{\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i} + \beta_2\color{#20B2AA}{\text{Pollution}_i})}{1+\exp(\beta_0 + \beta_1\color{#6A5ACD}{\text{Cigarettes}_i} + \beta_2\color{#20B2AA}{\text{Pollution}_i})}.$$
 - $\color{#e64173}{\text{Bronchitis}_i}$: indicator of the presence of bronchitis for the $i$-th person (i.e. $\color{#e64173}{\text{Bronchitis}_i} = 1$ if presence and $\color{#e64173}{\text{Bronchitis}_i} = 0$ if absence).
 - $\color{#6A5ACD}{\text{Cigarettes}_i}$: the daily number of smoked cigarettes of the $i$-th person. 
 - $\color{#20B2AA}{\text{Pollution}_i}$: the level of pollution that the $i$-th person is exposed to. 
@@ -416,16 +418,49 @@ summary(mod2)
 ```
 
 ]
+.panel[.panel-name[AIC]
+
+```{r}
+AIC(mod1)     # Cigarettes consumption
+AIC(mod2)     # Cigarettes consumption + air pollution
+```
+]
 ]
 
 ---
 
-# .smaller[Interpretation of coefficients]
+# .smaller[Interpretation of estimated coefficients]
 
-We can obtain the estimated coefficients. Specifically,
-- $\hat{\beta}_0 = -10.0849$ represents the .blue[log odds] that a person is diagnosed with bronchitis when the person consumes no cigarettes and is not exposed to any pollution. Alternatively, $\exp(\hat{\beta}_0) \approx 0$ represents the .blue[odds] that a person is diagnosed with bronchitis when the person consumes no cigarettes and is not exposed to any pollution.
-- $\hat{\beta}_1 = 0.2117$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2117 by consuming one more cigarette. Alternatively, $\exp(\hat{\beta}_1) = 1.2358$ means that with one more cigarette consumed, the .blue[odds] of having bronchitis is estimated to .pink[multiply by] 1.2358. 
-- $\hat{\beta}_2 = 0.1318$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.1318 by being exposed to one more unit of pollution. Alternatively, $\exp(\hat{\beta}_1) = 1.1409$ means that with one more unit of pollution, the .blue[odds] of having bronchitis is estimated to .pink[multiply by] 1.1409. 
+- $\hat{\beta}_0 = -10.0849$ represents the .blue[log odds] that a person is diagnosed with bronchitis when the person consumes no cigarettes and is not exposed to any pollution.
+- $\hat{\beta}_1 = 0.2117$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.2117 by consuming one more cigarette.
+- $\hat{\beta}_2 = 0.1318$ means that the .blue[log odds] of having bronchitis is estimated to .pink[increase by] 0.1318 by being exposed to one more unit of pollution.
+- Therefore, we can compute the following probabilities:
+
+$$\frac{\exp(\hat{\beta}_0 + \color{#6A5ACD}{20}\hat{\beta}_1 + \color{#20B2AA}{65}\hat{\beta}_2)}{1 + \exp(\hat{\beta}_0 + \color{#6A5ACD}{20}\hat{\beta}_1 + \color{#20B2AA}{66}\hat{\beta}_2)} \approx {93.80\%},$$
+
+$$\frac{\exp(\hat{\beta}_0 + \color{#6A5ACD}{10}\hat{\beta}_1 + \color{#20B2AA}{50}\hat{\beta}_2)}{1 + \exp(\hat{\beta}_0 + \color{#6A5ACD}{10}\hat{\beta}_1 + \color{#20B2AA}{50}\hat{\beta}_2)} \approx {20.13\%}.$$
+
+---
+
+# .smaller[Interpretation of estimated coefficients]
+
+```{r, echo = FALSE}
+library(plotly)
+m = 40
+mycigs = seq(from = 0, to = 30, length.out = m)
+mypoll = seq(from = 40, to = 65, length.out = m)
+probs = matrix(NA, m, m)
+
+for (i in 1:m){
+  for (j in 1:m){
+    odds = exp(-10.08491 + 0.21169*mycigs[i] + 0.13176*mypoll[j])
+    probs[i,j] = odds/(1 + odds)
+  }
+}
+
+fig <- plot_ly(x = mycigs, y = mypoll, z = probs, type = "contour", contours = list(showlabels = TRUE)) %>% colorbar(title = "Estimated \n probability") %>% layout(xaxis = list(title = "Daily cigarettes consumption"), yaxis = list(title = "Pollution levels"))
+fig
+```
 
 ---
 
@@ -435,19 +470,19 @@ We now consider whether both $\beta_1$ and $\beta_2$ are significantly greater t
 - Since $\hat{\beta}_1 = 0.2117$ and the p-value of the two sided test is $2.83\times10^{-6}\%,$ we obtain the p-value for the one sided test $H_0: \beta_1 = 0$ and $H_a: \beta_1>0$ is $2.83\times10^{-6}\% / 2 \approx 1.42 \times10^{-6}\% < \alpha$, and therefore, $\beta_1$ is significantly greater than 0 at the significance level of $5\%$.
 - Since $\hat{\beta}_2 = 0.1318$ and the p-value of the two sided test is $0.7113\%$, we obtain the p-value for the one sided test $H_0: \beta_2 = 0$ and $H_a: \beta_2>0$ is $0.7113\% / 2 \approx 0.3557\% < \alpha$, and therefore, $\beta_2$ is also significantly greater than 0 at the significance level of $5\%$.
 
-Therefore, we conclude that both smoking cigarettes and environmental pollution significantly contribute to the development of bronchitis. 
+Therefore, we conclude that .pink[both smoking cigarettes and environmental pollution significantly contribute to the development of bronchitis]. 
 
 ---
 
 # .smaller[Poisson regression]
 
-- .smaller[.hi-pink[Poisson regression] is another example of GLM that is used to model count data] $\small Y_i \in \mathbb{N}$.smaller[, such as a number of events occurring during a time interval or in a given area.]
-- .smaller[It assumes that, during a time interval or in a given area, .purple2[the events occur independently at the same rate given the covariates.]]
-- .smaller[The count response] $\small Y_i$ .smaller[can be modelled with a Poisson distribution with rate parameter] $\small \mu_i$ .smaller[such that] 
+- .smallest[.hi-pink[Poisson regression] is another example of GLM that is used to model count data] $\small Y_i \in \mathbb{N}$.smallest[, such as a number of events occurring during a time interval or in a given area.]
+- .smallest[It assumes that, during a time interval or in a given area, .purple2[the events occur independently at the same rate given the covariates.]]
+- .smallest[The count response] $\small Y_i$ .smallest[can be modeled with a Poisson distribution with rate parameter] $\small \mu_i$ .smallest[such that] 
 $\small \mu_i = \color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)$.smaller[. Then]
 $$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg)\right).$$
-- .smaller[In R, we can use the function `glm(..., family=poisson)`.]
-- .smaller[The Poisson regression has a restrictive assumption that the mean and variance of] $\small Y_i$ .smaller[are the same given the covariates. In practice, however, data are often overdispersed, exhibiting larger variance than the mean. This can be handled, for example, by the .hi-pink[negative binomial regression].]  
+- .smallest[In R, we can use the function `glm(..., family=poisson)`.]
+- .smallest[The Poisson regression has a restrictive assumption that the mean and variance of] $\small Y_i$ .smaller[are the same given the covariates. In practice, however, data are often overdispersed, exhibiting larger variance than the mean. This can be handled, for example, by the .hi-pink[negative binomial regression].]  
 
 ---
 
