@@ -458,7 +458,16 @@ for (i in 1:m){
 }
 
 fig <- plot_ly(x = mycigs, y = mypoll, z = probs, type = "contour", contours = list(showlabels = TRUE)) %>% colorbar(title = "Estimated \n probability") %>% layout(xaxis = list(title = "Daily cigarettes consumption"), yaxis = list(title = "Pollution levels"))
-fig
+
+htmlwidgets::saveWidget(fig, "p.html")
+htmltools::tags$iframe(
+    src="p.html",
+    width="100%", 
+    height="100%",
+    scrolling="no", 
+    seamless="seamless", 
+    frameBorder="0"
+)
 ```
 
 ---
