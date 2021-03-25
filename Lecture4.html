@@ -51,7 +51,7 @@ class: title-slide
 
 ---
 
-# .smallest[Motivation example: Bronchitis]
+# .smallest[Motivation example: Bronchitis] 🚬
 
 .panelset[
 .panel[.panel-name[Problem]
@@ -88,7 +88,7 @@ head(dat$cigs)
 # .smallest[Non-normal conditional distributions]
 
 .smaller[In practice, we often encounter data which is actually not suitable for a linear model. For example,
-1. A research is interested in studying the .blue[proportion] of individuals with a specific genetics mutation in different groups.
+1. A researcher is interested in studying the .blue[proportion] of individuals with a specific genetics mutation in different groups.
 2. A hospital wants to investigate the .blue[number] of children diagnosed with an infectious disease per day.
 3. A lab wants to analyze the .blue[probability] of myocardial infarction per treatment group.]
 
@@ -106,7 +106,7 @@ head(dat$cigs)
 `$$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$`
 where .pink[distribution] (classically) belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function `\(\color{#eb078e}{f(\cdot)}\)`&lt;sup&gt;.smallest[👋]&lt;/sup&gt; is monotonically increasing, and `\(\phi\)` is a nuisance parameter related to the variance of `\(Y_i\)` (which is typically also a function of `\(\mu_i\)`).
 
-👋 .smallest[The function] `\(\small f(\cdot)\)` .smallest[is actually the inverse of a function called the link function.]
+.smallest[👋 The function] `\(\small f(\cdot)\)` .smallest[is actually the inverse of a function called the link function.]
 
 ---
 
