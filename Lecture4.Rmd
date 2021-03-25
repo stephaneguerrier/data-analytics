@@ -463,8 +463,8 @@ htmlwidgets::saveWidget(fig, "p.html")
 htmltools::tags$iframe(
     src="p.html",
     width="95%", 
-    height="95%",
-    scrolling="no", 
+    height="400",
+    scrolling="no",
     seamless="seamless", 
     frameBorder="0"
 )
