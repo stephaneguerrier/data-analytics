@@ -500,7 +500,7 @@ $$\small Y_i \color{#eb078e}{\sim \text{Poisson}}\left(\color{#eb078e}{\exp}\big
 
 .panelset[
 .panel[.panel-name[Problem]
-We are interested in studying the predictability of the need of an admission to an intensive care unit of COVID 19 patients. For this purpose data were collected on patients admitted to emergency care facility in Belgium and used to assess their relationship to an admission to an intensive care unit during the course of the illness. The dataset is quite large and we will consider here a small subset: `ic` admission to intensive care unit (`0` for no, `1` for yes), `sex` gender of the patient (`0` for female, `1` for male), `age` age of the patient, `ldh` lactic acid dehydrogenase of the patient and `spo2`  oxygen saturation of the patient. Can you conclude that these variables are predictive for an admission to an intensive care unit?
+We are interested in studying the predictability of the need to be admitted to an Intensive Care Unit (ICU) for COVID 19 patients. For this purpose, data were collected on patients admitted to an emergency care facility in Belgium and were used to assess their relationship to an ICU admission during the course of their illness. The dataset is quite large and we will consider here a small subset with the following variables: `ic` admission to ICU (`0` for no, `1` for yes), `sex` gender of the patient (`0` for female, `1` for male), `age` age of the patient, `ldh` lactic acid dehydrogenase of the patient and `spo2` oxygen saturation of the patient. Can you conclude that these variables are significant to predict admissions to an ICU?
 ]
 .panel[.panel-name[Import]
 ```{r}
