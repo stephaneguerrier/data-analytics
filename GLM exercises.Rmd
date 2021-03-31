@@ -1,0 +1,131 @@
+---
+title: "Exercises on Generalized Linear Models"
+output: html_document
+---
+
+# Problem 1: Students with an infectious disease
+
+Suppose we are interested in the number of high school students diagnosed with an infectious disease as a function of the number of days from the initial outbreak. The data can be loaded as follows:
+
+```{r}
+students = read.csv("data/students.csv")
+head(students)
+```
+
+Can you fit a suitable model for this problem?
+
+### Solution
+
+We can first visualize the data as follows:
+
+```{r}
+plot(students$day, students$cases, xlim = c(0,120), ylim = c(0,12),
+     xlab = "Days since initial outbreak",
+     ylab = "Number of diagnosed students",
+     pch = 16, col = "#F8766D99")
+grid()
+```
+
+As we are modelling count data, we can use the Poisson regression. There are two functions in R that can fit a Poisson regression. The first one is the classical `glm()` function by specifying `family=poisson`.
+
+```{r}
+fit.glm = glm(cases ~ day, data = students, family = poisson)
+summary(fit.glm)
+```
+
+In this case, we can perform the model check as follows:
+
+```{r, fig.align='center', fig.height=5, fig.width=6}
+par(mfrow = c(2,2))
+plot(fit.glm)
+```
+
+Alternatively, you can use the `gamlss()` function in the `gamlss` R package by specifying `family = PO`.
+
+```{r, warning=FALSE, message=FALSE}
+library(gamlss)
+```
+
+```{r}
+fit.gamlss = gamlss(cases ~ day, data = students, family = PO)
+summary(fit.gamlss)
+```
+
+The `gamlss` approach provides a nicer summary of the model check:
+
+```{r, fig.align='center', fig.height=5, fig.width=6}
+par(mfrow = c(1,1))
+plot(fit.gamlss)
+```
+
+# Problem 2: Pima Indians Diabetes
+
+Consider a dataset on 768 women of at least 21 years old of the Pima Indian heritage. This dataset includes the following variables:
+
+- `pregnant`: Number of times pregnant
+- `glucose`: Plasma glucose concentration in an oral glucose tolerance test
+- `pressure`: Diastolic blood pressure (mm Hg)
+- `triceps`: Triceps skin fold thickness (mm)
+- `insulin`: 2-Hour serum insulin (mu U/ml)
+- `mass`: Body mass index (weight in kg/(height in m)^2)
+- `pedigree`: Diabetes pedigree function
+- `age`: Age of the patients (years)
+- `diabetes`: Class variable (test for diabetes)
+
+The dataset is stored in the `mlbench` R package and you can load it as follows:
+
+```{r}
+# install.packages("mlbench")
+library(mlbench)
+data(PimaIndiansDiabetes)
+head(PimaIndiansDiabetes)
+```
+
+Can you find a model to predict the possibility of a woman being diagnosed with diabetes based on these variables (or a subset of them)?
+
+### Solution
+
+As we are interested in fitting binary data (positive or negative of diabetes), we consider to fit a logistic regression. We start by fitting an initial model with all covariates included:
+
+```{r}
+fit.glm = glm(diabetes ~ ., data = PimaIndiansDiabetes, family = binomial(link="logit"))
+summary(fit.glm)
+```
+
+We can see that among these 8 variables, some appear not significant, implying that we may be able to find a smaller model with less variables. As an example, we can use the `step()` function to perform stepwise model selection using the AIC by removing variables iteratively from our initial model. This approach is known as "stepwise backward AIC".
+
+```{r}
+fit.glm.aic = step(fit.glm, trace = FALSE)
+summary(fit.glm.aic)
+```
+
+We now find a model with 7 variables (i.e. remove `triceps`) with slightly smaller AIC.
+
+```{r}
+AIC(fit.glm)
+AIC(fit.glm.aic)
+```
+
+```{r}
+# How reliable is our model?
+# In-sample classification error
+mean(abs(fit.glm.aic$fitted.values - as.numeric(PimaIndiansDiabetes$diabetes == "pos")))
+
+class_predict = fit.glm.aic$fitted.values > 0.5
+mean((PimaIndiansDiabetes$diabetes == "pos") == class_predict)
+# Is that high? Well it depends...
+mean((PimaIndiansDiabetes$diabetes == "neg"))
+mean((PimaIndiansDiabetes$diabetes == "pos"))
+table(PimaIndiansDiabetes$diabetes)/768
+
+# So yes... a little
+# Out-of-sample classification error
+# install.packages("boot")
+library(boot)
+cost = function(resp, pred){
+  mean(resp == (pred > 0.5))
+}
+cv.glm(PimaIndiansDiabetes, fit.glm.aic, cost, K = 10)$delta[2]
+
+```
+
