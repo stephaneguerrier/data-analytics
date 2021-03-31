@@ -106,26 +106,34 @@ AIC(fit.glm)
 AIC(fit.glm.aic)
 ```
 
+Now let's check how reliable our model is. If the predicted probability is larger than 0.5, then we predict that the considered individual will have diabetes (so positive). Otherwise we predict that the individual is negative. Then we can compute the in-sample classification accuracy by comparing the predicted values to the actual observed values for the whole sample. 
+
 ```{r}
-# How reliable is our model?
-# In-sample classification error
-mean(abs(fit.glm.aic$fitted.values - as.numeric(PimaIndiansDiabetes$diabetes == "pos")))
-
 class_predict = fit.glm.aic$fitted.values > 0.5
-mean((PimaIndiansDiabetes$diabetes == "pos") == class_predict)
-# Is that high? Well it depends...
-mean((PimaIndiansDiabetes$diabetes == "neg"))
-mean((PimaIndiansDiabetes$diabetes == "pos"))
-table(PimaIndiansDiabetes$diabetes)/768
+in_accuracy = mean((PimaIndiansDiabetes$diabetes == "pos") == class_predict)
+in_accuracy
+```
 
-# So yes... a little
-# Out-of-sample classification error
-# install.packages("boot")
+In this case, we have `r round(in_accuracy*100,2)`% in-sample classification accuracy. Is that high? 
+
+```{r}
+table(PimaIndiansDiabetes$diabetes)/768
+```
+
+So the in-sample classification accuracy is actually higher than if we blindly predict individuals to be positive or negative. Therefore, our model is working properly. 
+
+Now let's consider the out-of-sample classification accuracy. 
+
+```{r, warning=FALSE, message=FALSE}
 library(boot)
+```
+
+```{r}
 cost = function(resp, pred){
   mean(resp == (pred > 0.5))
 }
-cv.glm(PimaIndiansDiabetes, fit.glm.aic, cost, K = 10)$delta[2]
-
+out_accuracy = cv.glm(PimaIndiansDiabetes, fit.glm.aic, cost, K = 10)$delta[2]
+out_accuracy
 ```
+In this case, we have `r round(out_accuracy*100,2)`% out-of-sample classification accuracy, which is very similar to the in-sample classification accuracy. This is because we have a large number of observations ($n=768$) compared to the number of parameters to estimate ($p=8$). So we again verify that our model is working properly.
 
