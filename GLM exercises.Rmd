@@ -162,5 +162,21 @@ cost = function(resp, pred){
 out_accuracy = cv.glm(PimaIndiansDiabetes, fit.glm.aic, cost, K = 10)$delta[2]
 out_accuracy
 ```
+
 In this case, we have `r round(out_accuracy*100,2)`% out-of-sample classification accuracy, which is very similar to the in-sample classification accuracy. This is because we have a large number of observations ($n=768$) compared to the number of parameters to estimate ($p=8$). So we again verify that our model is working properly.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Problem 3: 
