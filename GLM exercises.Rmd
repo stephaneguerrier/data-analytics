@@ -26,7 +26,7 @@ plot(students$day, students$cases, xlim = c(0,120), ylim = c(0,12),
 grid()
 ```
 
-As we are modelling count data, we can use the Poisson regression. There are two functions in R that can fit a Poisson regression. The first one is the classical `glm()` function by specifying `family=poisson`.
+As we are modeling count data, we can use a Poisson regression. There are two functions in R that can fit a Poisson regression. The first one is the classical `glm()` function by specifying `family=poisson`.
 
 ```{r}
 fit.glm = glm(cases ~ day, data = students, family = poisson)
@@ -51,7 +51,7 @@ fit.gamlss = gamlss(cases ~ day, data = students, family = PO)
 summary(fit.gamlss)
 ```
 
-The `gamlss` approach provides a nicer summary of the model check:
+The `gamlss` approach provides a nicer summary to assess how well your model fit the data at hands:
 
 ```{r, fig.align='center', fig.height=5, fig.width=6}
 par(mfrow = c(1,1))
@@ -85,14 +85,14 @@ Can you find a model to predict the possibility of a woman being diagnosed with 
 
 ### Solution
 
-As we are interested in fitting binary data (positive or negative of diabetes), we consider to fit a logistic regression. We start by fitting an initial model with all covariates included:
+As we are interested in fitting binary data (positive or negative of diabetes), we consider to fit a logistic regression approach. We start by fitting an initial model with all covariates included (without interactions):
 
 ```{r}
 fit.glm = glm(diabetes ~ ., data = PimaIndiansDiabetes, family = binomial(link="logit"))
 summary(fit.glm)
 ```
 
-We can see that among these 8 variables, some appear not significant, implying that we may be able to find a smaller model with less variables. As an example, we can use the `step()` function to perform stepwise model selection using the AIC by removing variables iteratively from our initial model. This approach is known as "stepwise backward AIC".
+We can see that among these 8 variables, some appear not significant, implying that we may be able to find a smaller model with less variables. As an example, we can use the `step()` function to perform stepwise model selection using the AIC by removing variables iteratively from our initial model. This approach is known as "stepwise backward AIC" and it is an heuristic method which avoids to explore ALL models. Indeed, we have in this case $2^8 = 256$ models without interactions and $2^{36} = 68,719,476,736$ with first order interactions. If fitting one models takes 1 second, we would need over 2000 years to fit all models. Nevertheless, various modern methods allow to improve on this stepwise approach but they are beyond the scope of this class.
 
 ```{r}
 fit.glm.aic = step(fit.glm, trace = FALSE)
@@ -104,6 +104,33 @@ We now find a model with 7 variables (i.e. remove `triceps`) with slightly small
 ```{r}
 AIC(fit.glm)
 AIC(fit.glm.aic)
+```
+
+It is also possible to consider a forward approach starting from a simple model. This can be done as follows:
+
+```{r}
+# Initial model
+fit.glm.inital = glm(diabetes ~ 1, data = PimaIndiansDiabetes, 
+                     family = binomial(link="logit"))
+
+fit.glm.aic.forward = step(fit.glm.inital, 
+                           scope=list(lower = formula(fit.glm.inital),
+                              upper=formula(fit.glm)), 
+                   direction="forward", trace = FALSE)
+```
+
+In this case, the two methods (i.e. forward and backward) are equivalent: 
+
+```{r}
+summary(fit.glm.aic.forward)
+```
+
+We now find a model with 7 variables (i.e. remove `triceps`) with slightly smaller AIC.
+
+```{r}
+AIC(fit.glm)
+AIC(fit.glm.aic)
+AIC(fit.glm.aic.forward)
 ```
 
 ```{r}
