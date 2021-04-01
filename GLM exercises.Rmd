@@ -179,4 +179,33 @@ In this case, we have `r round(out_accuracy*100,2)`% out-of-sample classificatio
 
 
 
-# Problem 3: 
+# Problem 3: Breast Cancer
+
+Let's consider a breast cancer dataset from the `mlbench` R package. In this example, the objective is to identify each of a number of benign or malignant classes. This dataset includes 699 observations on 11 variables. You can load the data as follows:
+
+```{r}
+data(BreastCancer)
+dim(BreastCancer)
+head(BreastCancer)
+table(BreastCancer$Class)
+```
+
+More information about this dataset can be found by typing `?BreastCancer` in R. Can you find a model to identify benign or malignant classes based on these variables (or a subset of them)?
+
+### Solution
+
+We notice that there are some missing values in the dataset. Therefore, we start by removing the observations with missing data.
+
+```{r}
+BreastCancer = na.omit(BreastCancer)
+dim(BreastCancer)
+```
+
+After removing the missing values, we remain to have 683 observations. We start our analysis by fitting an initial model with all covariates included:
+
+```{r}
+# Initial model
+fit.glm = glm(Class ~ Cl.thickness + Cell.size + Cell.shape + Marg.adhesion + Epith.c.size + Bare.nuclei + Bl.cromatin + Normal.nucleoli + Mitoses, data = BreastCancer, family=binomial)
+summary(fit.glm)
+```
+
