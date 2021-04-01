@@ -159,6 +159,13 @@ out_accuracy
 
 In this case, we have `r round(out_accuracy*100,2)`% out-of-sample classification accuracy, which is very similar to the in-sample classification accuracy. This is because we have a large number of observations ($n=768$) compared to the number of parameters to estimate ($p=8$). So we again verify that our model is working properly.
 
+Lastly, we can use the `gamlss()` function to perform the model check:
+
+```{r}
+fit.gamlss = gamlss(formula(fit.glm.aic), data=PimaIndiansDiabetes, family=BI)
+plot(fit.gamlss)
+```
+
 
 
 # Problem 3: Breast Cancer
@@ -191,4 +198,72 @@ fit.glm = glm(Class ~ Cl.thickness + Cell.size + Cell.shape + Marg.adhesion + Ep
 summary(fit.glm)
 ```
 
+As we can see from the output, it looks like there's a problem with this initial model. Why is that?
 
+To fit a logistic regression, a quantity called the Events Per Variable (EPV) can give us an idea of the largest model we can consider given the number of observations. The EPV is defined as the number of occurrences of the least frequent outcome over the number of covariates. An EPV of 10 is a widely advocated minimal criterion for sample size considerations in logistic regression analysis. However, there's a lack of evidence to support this EPV rule of thumb. In fact, some studies have pointed out the urgent need for new research to provide more valid guidance. More details can for example be found [here](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-016-0267-3).
+
+```{r}
+n = min(table(BreastCancer$Class))
+p = 24 # assumed number of paprameter
+EPV = n/p
+
+length(fit.glm$coefficients) # actual number of parameters in the initial model
+```
+
+In our case, in order to have an EPV of approximately 10, we should consider up to 24 parameters, but our initial model has 81 parameters! Therefore, this model is not valid. Let's find a more appropriate model using a forward approach based on the AIC starting from a simple model.
+
+```{r}
+# Initial model
+fit.glm.inital = glm(Class ~ 1, data = BreastCancer,family=binomial)
+forward.fit = step(fit.glm.inital, 
+                   scope=list(lower = formula(fit.glm.inital),
+                              upper=formula(fit.glm)), 
+                   direction="forward", trace = FALSE)
+
+summary(forward.fit)
+length(forward.fit$coefficients)
+```
+
+As we can see, using this forward approach based on the AIC, we find a model of 46 parameters, which is still larger than the expected 24 and therefore the model fails. Alternatively, we can use a forward approach based on the BIC to impose more penalties on the covariates:
+
+```{r}
+forward.fit.BIC = step(fit.glm.inital, 
+                   scope=list(lower = formula(fit.glm.inital),
+                              upper=formula(fit.glm)), 
+                   direction="forward", k = log(length(BreastCancer$Id)), 
+                   trace = FALSE)
+
+summary(forward.fit.BIC)
+length(forward.fit.BIC$coefficients) # Better!
+```
+
+With BIC we obtain a model with only 19 parameters, which is smaller than 24! Now let's check how reliable this model is. We can again compute the in-sample classification accuracy and the out-of-sample classifictaion accuracy.
+
+```{r}
+class_predict = forward.fit.BIC$fitted.values > 0.5
+in_accuracy = mean((BreastCancer$Class == "malignant") == class_predict)
+in_accuracy
+```
+
+```{r}
+table(BreastCancer$Class)/length(BreastCancer$Class)
+```
+
+So the in-sample classification accuracy is actually higher than if we blindly identifying the benign or malignant classes. Therefore, our model is working properly. 
+
+Now let's consider the out-of-sample classification accuracy. 
+
+```{r, warning=FALSE, message=FALSE}
+out_accuracy = cv.glm(BreastCancer, forward.fit.BIC, cost, K = 10)$delta[2]
+out_accuracy
+```
+
+The resulting out-of-sample classification accuracy is very similar to the in-sample classification accuracy, which again verify that our model is working properly. 
+
+Lastly, we can again use the `gamlss()` function to perform the model check:
+
+```{r}
+fit.gamlss = gamlss(formula(forward.fit.BIC), data = BreastCancer, family=BI)
+summary(fit.gamlss)
+plot(fit.gamlss)
+```
