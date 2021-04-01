@@ -122,15 +122,9 @@ fit.glm.aic.forward = step(fit.glm.inital,
 In this case, the two methods (i.e. forward and backward) are equivalent: 
 
 ```{r}
-summary(fit.glm.aic.forward)
-```
-
-We now find a model with 7 variables (i.e. remove `triceps`) with slightly smaller AIC.
-
-```{r}
-AIC(fit.glm)
 AIC(fit.glm.aic)
 AIC(fit.glm.aic.forward)
+summary(fit.glm.aic.forward)
 ```
 
 Now let's check how reliable our model is. If the predicted probability is larger than 0.5, then we predict that the considered individual will have diabetes (so positive). Otherwise we predict that the individual is negative. Then we can compute the in-sample classification accuracy by comparing the predicted values to the actual observed values for the whole sample. 
@@ -167,18 +161,6 @@ In this case, we have `r round(out_accuracy*100,2)`% out-of-sample classificatio
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 # Problem 3: Breast Cancer
 
 Let's consider a breast cancer dataset from the `mlbench` R package. In this example, the objective is to identify each of a number of benign or malignant classes. This dataset includes 699 observations on 11 variables. You can load the data as follows:
@@ -208,4 +190,5 @@ After removing the missing values, we remain to have 683 observations. We start 
 fit.glm = glm(Class ~ Cl.thickness + Cell.size + Cell.shape + Marg.adhesion + Epith.c.size + Bare.nuclei + Bl.cromatin + Normal.nucleoli + Mitoses, data = BreastCancer, family=binomial)
 summary(fit.glm)
 ```
+
 
