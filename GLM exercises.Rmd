@@ -12,7 +12,7 @@ students = read.csv("data/students.csv")
 head(students)
 ```
 
-Can you fit a suitable model for this problem?
+Can you find a suitable model for this dataset?
 
 ### Solution
 
@@ -81,7 +81,7 @@ data(PimaIndiansDiabetes)
 head(PimaIndiansDiabetes)
 ```
 
-Can you find a model to predict the possibility of a woman being diagnosed with diabetes based on these variables (or a subset of them)?
+Can you find a suitable model to predict the possibility of a woman (Pima Indian heritage) being diagnosed with diabetes based on these variables (or a subset of them)?
 
 ### Solution
 
@@ -170,7 +170,7 @@ plot(fit.gamlss)
 
 # Problem 3: Breast Cancer
 
-Let's consider a breast cancer dataset from the `mlbench` R package. In this example, the objective is to identify each of a number of benign or malignant classes. This dataset includes 699 observations on 11 variables. You can load the data as follows:
+Let's consider a breast cancer dataset from the `mlbench` R package. In this example, the objective is to predict whether a cancer is malignant or benign from biopsy details. This dataset includes 699 observations on 11 variables. You can load the data as follows:
 
 ```{r}
 data(BreastCancer)
@@ -179,7 +179,7 @@ head(BreastCancer)
 table(BreastCancer$Class)
 ```
 
-More information about this dataset can be found by typing `?BreastCancer` in R. Can you find a model to identify benign or malignant classes based on these variables (or a subset of them)?
+More information about this dataset can be found by typing `?BreastCancer` in R. Can you find a suitable model to identify benign or malignant classes based on these variables (or a subset of them)?
 
 ### Solution
 
