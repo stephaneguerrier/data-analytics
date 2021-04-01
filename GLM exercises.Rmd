@@ -210,7 +210,7 @@ EPV = n/p
 length(fit.glm$coefficients) # actual number of parameters in the initial model
 ```
 
-In our case, in order to have an EPV of approximately 10, we should consider up to 24 parameters, but our initial model has 81 parameters! Therefore, this model is not valid. Let's find a more appropriate model using a forward approach based on the AIC starting from a simple model.
+In our case, in order to have an EPV of approximately 10, we should consider up to 24 parameters, but our initial model has 81 parameters! Therefore, this model may not be considered as suitable Let's find a more appropriate model using a forward approach based on the AIC starting from a simple model.
 
 ```{r}
 # Initial model
@@ -224,7 +224,7 @@ summary(forward.fit)
 length(forward.fit$coefficients)
 ```
 
-As we can see, using this forward approach based on the AIC, we find a model of 46 parameters, which is still larger than the expected 24 and therefore the model fails. Alternatively, we can use a forward approach based on the BIC to impose more penalties on the covariates:
+As we can see, using this forward approach based on the AIC, we find a model of 46 parameters, which is still larger than the expected 24 and therefore the model fails. Alternatively, we can use a forward approach based on the Bayesian Information Criterion (BIC) to penalize more complex models:
 
 ```{r}
 forward.fit.BIC = step(fit.glm.inital, 
@@ -237,7 +237,7 @@ summary(forward.fit.BIC)
 length(forward.fit.BIC$coefficients) # Better!
 ```
 
-With BIC we obtain a model with only 19 parameters, which is smaller than 24! Now let's check how reliable this model is. We can again compute the in-sample classification accuracy and the out-of-sample classifictaion accuracy.
+With BIC we obtain a model with only 19 parameters. Now let's check how reliable this model is. We can again compute the in-sample classification accuracy and the out-of-sample classification accuracy.
 
 ```{r}
 class_predict = forward.fit.BIC$fitted.values > 0.5
