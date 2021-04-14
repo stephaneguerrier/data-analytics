@@ -1,0 +1,104 @@
+---
+title: "Covid-19 Dataset Analysis"
+output: html_document
+---
+
+In this problem, we are interested in studying the predictability of the need to be admitted to an Intensive Care Unit (ICU) for COVID-19 patients. The data can be loaded as follows:
+
+```{r}
+# Import data
+covid = read.csv("data/covid.csv")
+# First look
+head(covid)
+```
+
+As our response variable admission to ICU `ic` is binary (0 for no, 1 for yes), we consider the approach to fit a logistic regression. We start by fitting an initial model with all covariates included (without interactions):
+
+```{r}
+fit.glm = glm(ic ~ sex + age + ldh + spo2, data = covid, family = binomial(link="logit"))
+summary(fit.glm)
+```
+
+We can see that some variables appear not significant, implying that we may be able to find a smaller model with less variables. As an example, we can use the `step()` function to perform stepwise model selection using the AIC by removing variables iteratively from our initial model. This approach is known as "stepwise backward AIC" and it is an heuristic method which avoids to explore ALL models. It can be done as follows:
+
+```{r}
+# Stepwise backward AIC
+fit.glm.aic.backward = step(fit.glm, trace = FALSE)
+summary(fit.glm.aic.backward)
+```
+
+Using the stepwise backward AIC, we indeed find a smaller model with less variables. Let's check if we reduce the AIC:
+
+```{r}
+AIC(fit.glm)
+AIC(fit.glm.aic.backward)
+```
+
+It is also possible to consider a forward approach starting from a simple model. This can be done as follows:
+
+```{r}
+# Stepwise forward AIC
+
+# Initial model
+fit.glm.inital = glm(ic ~ 1, data = covid, family = binomial(link="logit"))
+
+# Find a model with a forward approach using the AIC
+fit.glm.aic.forward = step(fit.glm.inital, 
+                           scope = list(lower = formula(fit.glm.inital),
+                                        upper = formula(fit.glm)), 
+                           direction = "forward", trace = FALSE)
+```
+
+This will also give a smaller model with reduced AIC: 
+
+```{r}
+AIC(fit.glm)
+AIC(fit.glm.aic.backward)
+AIC(fit.glm.aic.forward)
+```
+
+In this case, actually the two methods (i.e. forward and backward) are equivalent:
+
+```{r}
+summary(fit.glm.aic.forward)
+```
+
+Therefore, the significant variables are `sex` and `ldh`. Now let’s check how reliable our model is. If the predicted probability is larger than 0.5, then we predict that the considered individual will be admitted to ICU (ic=1). Otherwise we predict that the individual will not be admitted to ICU (ic=0). Then we can compute the in-sample classification accuracy by comparing the predicted values to the actual observed values for the whole sample.
+
+```{r}
+# in-sample classification accuracy
+class_predict = fit.glm.aic.forward$fitted.values > 0.5
+in_accuracy = mean((covid$ic == 1) == class_predict)
+in_accuracy
+```
+
+In this case, we have `r round(in_accuracy*100,2)`% in-sample classification accuracy. Is that high?
+
+```{r}
+n = dim(covid)[1] # sample size
+table(covid$ic)/n
+```
+
+So the in-sample classification accuracy is actually higher than if we blindly predict individuals to be admitted to ICU. Therefore, our model is working properly.
+
+Now let’s consider the out-of-sample classification accuracy.
+
+```{r, warning=FALSE, message=FALSE}
+library(boot)
+
+cost = function(resp, pred){
+  mean(resp == (pred > 0.5))
+}
+out_accuracy = cv.glm(covid, fit.glm.aic.forward, cost, K = 10)$delta[2]
+out_accuracy
+```
+
+In this case, we have `r round(out_accuracy*100,2)`% out-of-sample classification accuracy, which is very similar to the in-sample classification accuracy. This is because we have a large number of observations (n=`r n`) compared to the number of parameters to estimate (p=`r length(fit.glm.aic.forward$coefficients)`). So we again verify that our model is working properly.
+
+Lastly, we can use the `gamlss()` function in the `gamlss` R package to perform the model check:
+
+```{r, message=FALSE, warning=FALSE}
+library(gamlss)
+fit.gamlss = gamlss(formula(fit.glm.aic.forward), data=covid, family=BI)
+plot(fit.gamlss)
+```
