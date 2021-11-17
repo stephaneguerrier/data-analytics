@@ -350,7 +350,7 @@ Let `\(Z \sim \mathcal{N}(0,1)\)`, then using the definition of the p-value&lt;s
 
 ```r
 # Import data
-diet = read.csv("data/diet.csv",row.names=1)
+library(idar) 
 
 # Compute weight loss
 diet$weight.loss = diet$initial.weight - diet$final.weight
