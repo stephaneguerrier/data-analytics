@@ -173,21 +173,21 @@ class: title-slide
 <br>
 <br>
  
-# Data Analytics for Pharmaceutical Sciences
+# Introduction to Data Analytics
 
 ## Part I: Introduction to Statistical Inference
 
-### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
-### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva 🇨🇭]
 
-<br>
 <br>
 ```{R, out.width = "25%", echo = F}
 include_graphics("pics/liscence.png")
 ```
 .center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
 
-### .tiny[This document was prepared with the help of Wenfei Chu & Yuming Zhang]
+### .tiny[This document was prepared with the help of Lionel Voirol, Wenfei Chu and Jun Wu.]
 ---
 
 # R and RStudio
@@ -270,7 +270,7 @@ include_graphics("pics/data-torture.png")
 - .smallest[This procedure involves the design of an experiment and then the collection of data to compute a metric, called .hi.purple[p-value], which evaluates the adequacy between the data and your original hypothesis.]
 - .smallest[There is generally .pink[a specific threshold] (typically 5%), and if the p-value falls below this threshold we can claim that we have statistically significant result(s) validating our hypothesis.]
 
-.footnote[.smallest[👋 From W. Edwards Deming]]
+.footnote[.smallest[👋 From W. Edwards Deming.]]
 
 ---
 
@@ -486,7 +486,7 @@ Let $Z \sim \mathcal{N}(0,1)$, then using the definition of the p-value<sup>.sma
 
 $$\text{p-value} = \Pr \left(T > \frac{\sqrt{n}\bar{x}_n}{s} \right) \color{#eb078e}{\overset{\tiny CLT}{\approx}} \Pr \left(Z > \frac{\sqrt{n}\bar{x}_n}{s} \right) = 1 - \Phi\left(\frac{\sqrt{n}\bar{x}_n}{s}\right).$$
 
-.footnote[.smallest[👋] Reminder: the .hi-purple[p-value] is defined as the probability of observing a test statistic that is at least as extreme as actually observed, assuming that null is true]
+.footnote[.smallest[👋] Reminder: the .hi-purple[p-value] is defined as the probability of observing a test statistic that is at least as extreme as actually observed, assuming that the null hypothesis is true.]
 
 ---
 
@@ -563,7 +563,7 @@ $$X_i \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(\mu, \sigma^2),$$
 which corresponds to the following model:
 
 $$X_i = \mu + \color{#373895}{\varepsilon_i},$$
-where $\color{#373895}{\varepsilon_i} = X_i - \mu \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(0,\sigma^2)$, we have
+with $\color{#373895}{\varepsilon_i} = X_i - \mu \color{#eb078e}{\overset{iid}{\sim}} \mathcal{N}(0,\sigma^2)$, we have
 
 $$T = \frac{\sqrt{n} \left(\bar{X}_n - \mu_{H_0}\right)}{\color{#373895}{S}} = \frac{\sqrt{n}\bar{X}_n}{\color{#373895}{S}} \color{#eb078e}{\underset{H_0}{\overset{}{\sim}}} \text{Student}(n-1) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1).$$
 Unlike our previous result, $T$ .pink[follows exactly] a $\text{Student}(n-1)$ distribution for all $n$. 📝 $\text{Student}(n) \color{#eb078e}{\overset{}{\to}} \mathcal{N}(0,1)$ as $n \color{#eb078e}{\overset{}{\to}} \infty$.
@@ -589,11 +589,12 @@ $$\text{p-values based on } \mathcal{N} (0, 1)\color{#eb078e}{<}\text{p-values b
 include_graphics("pics/pvalue2.png")
 ```
 
+
 ---
 
 # R syntax for the t-test
 
-In `R`, we can use the function `t.test(...)` to compute p-values for the one-sample Student's t-test. For more information, have a look at `?t.test`. Here are some examples with the different alternative hypotheses:
+In `R`, we can use the function `t.test(...)` to compute the p-value for the one-sample Student's t-test. For more information, have a look at `?t.test`. Here are some examples with different alternative hypotheses:
 
 $$H_0: \mu \color{#eb078e}{=} 5 \ \ \ \ \text{and} \ \ \ \ H_a: \mu \color{#eb078e}{>} 5$$
 ```{r, eval = FALSE}
@@ -644,7 +645,7 @@ The .pink[reliability] of the t-test strongly relies on:
 
 In the diet example, these assumptions appear plausible. When this is not the case, the .pink[Wilcoxon signed rank test] can be used as an alternative that is less sensitive to outliers and doesn't assume that the data are normally distributed. This test is, however, less powerful than the t-test (when its assumptions are satisfied).
 
-.footnote[✋ If you want to know more [here](https://www.annualreviews.org/doi/full/10.1146/annurev.publhealth.23.100901.140546) is an interesting reference. .smallest[👋 Check out [QQ plot](https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot)]]
+.footnote[✋ If you want to know more [here](https://www.annualreviews.org/doi/full/10.1146/annurev.publhealth.23.100901.140546) is an interesting reference. 👋 Check out [QQ plot](https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot).]
 
 ---
 
@@ -661,11 +662,11 @@ In the diet example, these assumptions appear plausible. When this is not the ca
 
 - Under the assumption of a symmetric distribution, the assumed model for this method is given by $X_i = \mu + \color{#373895}{\varepsilon_i}$, where $\color{#373895}{\varepsilon_i} = X_i - \mu \color{#eb078e}{\overset{iid}{\sim}} (0,\sigma^2)$.
 
-- The Wilcoxon signed rank test considers the same alternative hypothesis as the t-test and its use in `R` is based on the function `wilcox.test(...)`, which has a similar syntax as the function `t.test(...).` 
+- The Wilcoxon signed rank test considers the same alternative hypothesis as the t-test and its use in `R` is based on the function `wilcox.test(...)`, which has a similar syntax as the function `t.test(...)`. 
 
 - In general, assessing whether the data is normally distributed is .purple[very difficult]. (In fact, there is no satisfactory statistical method for it.)
 
-- .pink[A reasonable strategy is to always use the one-sample Wilcoxon signed rank test]. Compared to the t-test, we may lose a bit of power using the Wilcoxon signed rank test if all the conditions are indeed satisfied (the difference is generally very small), but if this is not case the results will be far more reliable. 
+- .pink[A reasonable strategy is to always use the one-sample Wilcoxon signed rank test]. Compared to the t-test, we may lose a bit of power using the Wilcoxon signed rank test if all the conditions are indeed satisfied (although the difference is generally very small), but if this is not the case the results will be far more reliable. 
 
 ---
 
