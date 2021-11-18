@@ -4,18 +4,19 @@
     <title>Modelling and Data Analytics for Pharmaceutical Sciences</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Guerrier" />
+    <script src="Lecture1_files/header-attrs-2.10/header-attrs.js"></script>
     <link href="Lecture1_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture1_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture1_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture1_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="Lecture1_files/tile-view-0.2.4/tile-view.js"></script>
-    <link href="Lecture1_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="Lecture1_files/panelset-0.2.4/panelset.js"></script>
+    <link href="Lecture1_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="Lecture1_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="Lecture1_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="Lecture1_files/panelset-0.2.6/panelset.js"></script>
     <script src="Lecture1_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture1_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture1_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture1_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture1_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture1_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture1_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -349,8 +350,12 @@ Let `\(Z \sim \mathcal{N}(0,1)\)`, then using the definition of the p-value&lt;s
 .panel[.panel-name[Import]
 
 ```r
+# install.packages("devtools")
+# devtools::install_github("https://github.com/SMAC-Group/idar")
+
 # Import data
 library(idar) 
+data(diet)
 
 # Compute weight loss
 diet$weight.loss = diet$initial.weight - diet$final.weight
