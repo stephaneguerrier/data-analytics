@@ -173,7 +173,7 @@ class: title-slide
 <br>
 <br>
 <br>
- 
+
 # Data Analytics for Pharmaceutical Sciences
 
 ## Part III: Linear Regression
@@ -188,7 +188,7 @@ include_graphics("pics/liscence.png")
 ```
 .center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
 
-### .tiny[This document was prepared with the help of Wenfei Chu]
+### .tiny[This document was prepared with the help of Lionel Voirol, Wenfei Chu and Jun Wu.]
 
 ---
 
@@ -202,7 +202,15 @@ An educator believes that .purple2[new directed reading activities] in the class
 ]
 .panel[.panel-name[Data]
 
-```{r}
+```{r, eval=FALSE}
+library(idar)
+control = dat$score[dat$group == "Control"]
+head(control)
+treatment = dat$score[dat$group == "Treatment"]
+head(treatment)
+```
+
+```{r, echo=FALSE}
 dat = read.csv("data/reading.csv")
 control = dat$score[dat$group == "Control"]
 head(control)

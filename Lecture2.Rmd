@@ -178,17 +178,17 @@ class: title-slide
 
 ## Part II: Analysis of Variance (ANOVA)
 
-### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
-### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva 🇨🇭]
 
-<br>
 <br>
 ```{R, out.width = "25%", echo = F}
 include_graphics("pics/liscence.png")
 ```
 .center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
 
-### .tiny[This document was prepared with the help of Wenfei Chu & Yuming Zhang]
+### .tiny[This document was prepared with the help of Lionel Voirol, Wenfei Chu and Jun Wu.]
 
 ---
 
@@ -309,7 +309,7 @@ include_graphics("pics/dietAB.png")
 .panel[.panel-name[Import]
 ```{r xaringan-extra-styles}
 # Import data
-diet = read.csv("data/diet.csv",row.names=1)
+library(idar)
 
 # Compute weight loss
 diet$weight.loss = diet$initial.weight - diet$final.weight
@@ -562,9 +562,9 @@ include_graphics("pics/dietABC.png")
 ```
 ]
 .panel[.panel-name[Import]
-```{r}
+```{r, eval=FALSE}
 # Import data and compute weight loss
-diet = read.csv("data/diet.csv",row.names=1)
+library(idar)
 diet$weight.loss = diet$initial.weight - diet$final.weight
 
 # Variable of interest

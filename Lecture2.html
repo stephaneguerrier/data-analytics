@@ -7,15 +7,15 @@
     <link href="Lecture2_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="Lecture2_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="Lecture2_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
-    <link href="Lecture2_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
-    <script src="Lecture2_files/tile-view-0.2.6/tile-view.js"></script>
-    <link href="Lecture2_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="Lecture2_files/panelset-0.2.6/panelset.js"></script>
+    <link href="Lecture2_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="Lecture2_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="Lecture2_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="Lecture2_files/panelset-0.2.4/panelset.js"></script>
     <script src="Lecture2_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <link href="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Lecture2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
-    <link href="Lecture2_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="Lecture2_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -41,15 +41,15 @@ class: title-slide
 
 ## Part II: Analysis of Variance (ANOVA)
 
-### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva, 🇨🇭]
-### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge, 🇬🇧]
+### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva 🇨🇭]
+### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge 🇬🇧]
+### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva 🇨🇭]
 
-&lt;br&gt;
 &lt;br&gt;
 &lt;img src="pics/liscence.png" width="25%" style="display: block; margin: auto;" /&gt;
 .center[.tiny[License: [CC BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)]]
 
-### .tiny[This document was prepared with the help of Wenfei Chu &amp; Yuming Zhang]
+### .tiny[This document was prepared with the help of Lionel Voirol, Wenfei Chu and Jun Wu.]
 
 ---
 
@@ -169,7 +169,7 @@ Test statistic's distribution under `\(H_0\)`:
 
 ```r
 # Import data
-diet = read.csv("data/diet.csv",row.names=1)
+library(idar)
 
 # Compute weight loss
 diet$weight.loss = diet$initial.weight - diet$final.weight
@@ -453,7 +453,7 @@ We will discuss three .pink[multiple-sample location tests]:
 
 ```r
 # Import data and compute weight loss
-diet = read.csv("data/diet.csv",row.names=1)
+library(idar)
 diet$weight.loss = diet$initial.weight - diet$final.weight
 
 # Variable of interest
