@@ -508,8 +508,12 @@ include_graphics("pics/dietB.png")
 ]
 .panel[.panel-name[Import]
 ```{r xaringan-extra-styles}
+# install.packages("devtools")
+# devtools::install_github("https://github.com/SMAC-Group/idar")
+
 # Import data
 library(idar) 
+data(diet)
 
 # Compute weight loss
 diet$weight.loss = diet$initial.weight - diet$final.weight
