@@ -311,6 +311,7 @@ include_graphics("pics/dietAB.png")
 ```{r xaringan-extra-styles}
 # Import data
 library(idar)
+data(diet)
 
 # Compute weight loss
 diet$weight.loss = diet$initial.weight - diet$final.weight
