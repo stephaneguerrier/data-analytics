@@ -219,7 +219,6 @@ include_graphics("pics/r_first_then.png")
 
 We have developed an `R` package for this class which is called `idar` (which stands for Introduction to Data Analytics with R) and that you can install by running the following code in your `R` console:
 
-
 ```R
 install.packages("devtools")
 devtools::install_github("https://github.com/SMAC-Group/idar", force = TRUE)
