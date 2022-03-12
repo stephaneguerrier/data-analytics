@@ -202,6 +202,8 @@ In this class, we will use the statistical software .hi-purple[R] together with 
 .hi-purple[Note:] You cannot use RStudio without having installed R on your computer.
 ]
 
+
+
 .pull-right[
 
 ```{R, out.width = "100%", echo = F}
@@ -212,7 +214,22 @@ include_graphics("pics/r_first_then.png")
 ]
 
 ---
+# R package `idar`
 
+We have developed an `R` package for this class which is called `idar` (Introduction to Data Analytics with R) and that you can install by running the following code in your `R` console:
+
+
+```R
+install.packages("devtools")
+devtools::install_github("https://github.com/SMAC-Group/idar", force = TRUE)
+```
+
+.hi-purple[Note:] Find the GitHub repository of the package [here](https://github.com/SMAC-Group/idar).
+
+
+
+
+---
 
 # What is statistics?
 
