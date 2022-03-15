@@ -426,7 +426,7 @@ include_graphics("pics/standardnormalpdf3.png")
 
 ---
 
-# .smaller[Normal distribution as an approximation?]
+# .smallest[Normal distribution as an approximation?]
 
 The .hi.purple[Central Limit Theorem(s) (CLT)] states (very informally): .purple[*the sampling distribution of the average of independent (or "not too strongly dependent") random variables (whose distributions are "not too different" nor "too extreme") tends to a normal distribution as the sample size gets larger.*]
 
@@ -437,7 +437,7 @@ This result can be extended (under some conditions) to .pink[dependent] (i.e. $X
 
 ---
 
-# .smaller[Normal distribution as an approximation?]
+# .smallest[Normal distribution as an approximation?]
 
 Loosely speaking, we can translate the results of CLTs as 
 
