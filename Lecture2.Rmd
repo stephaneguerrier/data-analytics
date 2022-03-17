@@ -567,6 +567,7 @@ include_graphics("pics/dietABC.png")
 ```{r, eval=FALSE}
 # Import data and compute weight loss
 library(idar)
+data(diet)
 diet$weight.loss = diet$initial.weight - diet$final.weight
 
 # Variable of interest
