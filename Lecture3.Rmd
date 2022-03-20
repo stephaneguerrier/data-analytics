@@ -205,17 +205,19 @@ An educator believes that .purple2[new directed reading activities] in the class
 
 ```{r, eval=FALSE}
 library(idar)
-control = dat$score[dat$group == "Control"]
+data(reading)
+control = reading$score[reading$group == "Control"]
 head(control)
-treatment = dat$score[dat$group == "Treatment"]
+treatment = reading$score[reading$group == "Treatment"]
 head(treatment)
 ```
 
 ```{r, echo=FALSE}
-dat = read.csv("data/reading.csv")
-control = dat$score[dat$group == "Control"]
+library(idar)
+data(reading)
+control = reading$score[reading$group == "Control"]
 head(control)
-treatment = dat$score[dat$group == "Treatment"]
+treatment = reading$score[reading$group == "Treatment"]
 head(treatment)
 ```
 
@@ -251,8 +253,8 @@ The educator points out that only students of 6-8 years old have participated in
 To make sure that the analysis is reliable, she includes the age information of the students, which can be accessed as follows:
 
 ```{r}
-treatment_age = dat$age[dat$group == "Treatment"]
-control_age   = dat$age[dat$group == "Control"]
+treatment_age = reading$age[reading$group == "Treatment"]
+control_age   = reading$age[reading$group == "Control"]
 ```
 
 ---
@@ -337,10 +339,11 @@ Here is the code for our example:
 
 ```{r, eval = F}
 # Import data (if you haven't already)
-dat = read.csv("data/reading.csv")
+library(idar)
+data(reading)
 
 # Fit linear regression model
-mod1 = lm(score ~ group + age, data = dat)
+mod1 = lm(score ~ group + age, data = reading)
 summary(mod1)
 ```
 
@@ -348,10 +351,11 @@ summary(mod1)
 .panel[.panel-name[Output]
 ```{r, echo = F}
 # Import data (if you haven't already)
-dat = read.csv("data/reading.csv")
+library(idar)
+data(reading)
 
 # fit a linear regression model
-mod1 = lm(score ~ group + age, data = dat)
+mod1 = lm(score ~ group + age, data = reading)
 summary(mod1)
 ```
 ]
@@ -476,10 +480,11 @@ Here is the code to fit our second model:
 
 ```{r, eval = F}
 # Import data (if you haven't already)
-dat = read.csv("data/reading.csv")
+library(idar)
+data(reading)
 
 # Fit linear regression model
-mod2 = lm(score ~ group*age, data = dat)
+mod2 = lm(score ~ group*age, data = reading)
 summary(mod2)
 ```
 
@@ -487,10 +492,11 @@ summary(mod2)
 .panel[.panel-name[Output]
 ```{r, echo = F}
 # Import data (if you haven't already)
-dat = read.csv("data/reading.csv")
+library(idar)
+data(reading)
 
 # fit a linear regression model
-mod2 = lm(score ~ group*age, data = dat)
+mod2 = lm(score ~ group*age, data = reading)
 summary(mod2)
 ```
 ]
@@ -588,11 +594,12 @@ Here is the code to fit our third model:
 
 ```{r, eval = F}
 # Import data (if you haven't already)
-dat = read.csv("data/reading.csv")
-dat$age_minus_6 = dat$age - 6
+library(idar)
+data(reading)
+reading$age_minus_6 = reading$age - 6
 
 # Fit linear regression model
-mod3 = lm(score ~ age_minus_6 + group:age_minus_6, data = dat)
+mod3 = lm(score ~ age_minus_6 + group:age_minus_6, data = reading)
 summary(mod3)
 ```
 
@@ -600,11 +607,12 @@ summary(mod3)
 .panel[.panel-name[Output]
 ```{r, echo = F}
 # Import data (if you haven't already)
-dat = read.csv("data/reading.csv")
-dat$age_minus_6 = dat$age - 6
+library(idar)
+data(reading)
+reading$age_minus_6 = reading$age - 6
 
 # Fit linear regression model
-mod3 = lm(score ~ age_minus_6 + group:age_minus_6, data = dat)
+mod3 = lm(score ~ age_minus_6 + group:age_minus_6, data = reading)
 summary(mod3)
 ```
 ]
@@ -667,29 +675,3 @@ include_graphics("pics/extrapolating.png")
 ```
 
 👋 .smallest[If you want to know more have a look [here](https://www.explainxkcd.com/wiki/index.php/605:_Extrapolating).]
-
----
-
-# .smaller[Exercise: Urine Cortisol vs Chips]
-
-.panelset[
-.panel[.panel-name[Problem]
-A researcher in Nutrition Science is interested in studying the effects of consuming .pink[fried food on human's health]. To study this issue, this researcher conducted an experiment on 61 pigs which are randomly assigned with .pink[Chips] and .purple2[Non-Chips] diets. Then, the following variables were measured: `group` (C for Chips, NC for Non-Chips), `gender` and several hormones (`urine_cortisol`, `serum_cortisol`, `ACTH`, `CRH`, `testosterone` and `LH`). Based on this data, can we conclude that fried food group (i.e. Chips) has increased level of urine cortisol compared to the control?
-]
-.panel[.panel-name[Import]
-```{r}
-# Import data
-cortisol_data = read.csv("data/cortisol.csv", row.names=1)
-
-# Create data frame
-dat = data.frame(group = cortisol_data$group,
-                 gender = cortisol_data$gender,
-                 urine_cortisol = cortisol_data$Urine.Cortisol..pg.mg.,
-                 serum_cortisol = cortisol_data$Serum.Cortisol..ng.ml.,
-                 ACTH = cortisol_data$Serum.ACTH..pg.ml.,
-                 CRH = cortisol_data$Serum.CRH..pg.ml.,
-                 testosterone = cortisol_data$Testosterone..ng.ml.,
-                 LH = cortisol_data$LH..ng.ml.)
-```
-]
-]
