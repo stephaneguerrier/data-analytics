@@ -286,7 +286,7 @@ and $\color{#eb078e}{\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2)}
 - Our general model can be expressed as
 $$Y_i = \color{#373895}{\mathbb{E}[Y_i | X_{i1}, \ldots, X_{ip}]} + \varepsilon_i = \color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}} + \varepsilon_i,$$
 and therefore,
-$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \color{#eb078e}{\sigma^2}\right).$$
+$$Y_i \color{#eb078e}{ \, \sim \, \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \color{#eb078e}{\sigma^2}\right).$$
 
 ---
 

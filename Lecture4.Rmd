@@ -234,7 +234,7 @@ include_graphics("pics/bronchitis_cig-data.png")
 # .smallest[Solution: Generalized linear models]
 
 - Recall that in linear regression, we consider
-$$Y_i \color{#eb078e}{ \overset{iid}{\sim} \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$
+$$Y_i \color{#eb078e}{ \, \sim \, \mathcal{N}}\left(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}, \sigma^2\right).$$
 - In .hi-pink[Generalized Linear Models (GLM)], we consider 
 $$Y_i \color{#eb078e}{ \sim \text{distribution}}\left(\color{#eb078e}{f}\bigg(\color{#373895}{\beta_0 + \sum_{j = 1}^p \beta_j X_{ij}}\bigg), \phi\right),$$
 where .pink[distribution] (classically) belongs to the .pink[exponential family], such as Bernoulli distribution or Poisson distribution. The function $\color{#eb078e}{f(\cdot)}$<sup>.smallest[👋]</sup> is monotonically increasing, and $\phi$ is a nuisance parameter related to the variance of $Y_i$ (which is typically also a function of $\mu_i$).
