@@ -204,7 +204,7 @@ Based on these samples, the scientist wants to verify that smoking every day sig
 ]
 .panel[.panel-name[Data]
 ```{r}
-library(idar)
+library(idarps)
 data("bronchitis")
 head(bronchitis)
 ```
@@ -289,7 +289,7 @@ Here is the code for our example:
 
 ```{r, eval = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data("bronchitis")
 
 # Fit a logistic regression
@@ -302,7 +302,7 @@ summary(mod1)
 
 ```{r, echo = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data("bronchitis")
 
 # Fit a logistic regression
