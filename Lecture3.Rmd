@@ -204,7 +204,7 @@ An educator believes that .purple2[new directed reading activities] in the class
 .panel[.panel-name[Data]
 
 ```{r, eval=FALSE}
-library(idar)
+library(idarps)
 data(reading)
 control = reading$score[reading$group == "Control"]
 head(control)
@@ -213,7 +213,7 @@ head(treatment)
 ```
 
 ```{r, echo=FALSE}
-library(idar)
+library(idarps)
 data(reading)
 control = reading$score[reading$group == "Control"]
 head(control)
@@ -339,7 +339,7 @@ Here is the code for our example:
 
 ```{r, eval = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data(reading)
 
 # Fit linear regression model
@@ -351,7 +351,7 @@ summary(mod1)
 .panel[.panel-name[Output]
 ```{r, echo = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data(reading)
 
 # fit a linear regression model
@@ -480,7 +480,7 @@ Here is the code to fit our second model:
 
 ```{r, eval = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data(reading)
 
 # Fit linear regression model
@@ -492,7 +492,7 @@ summary(mod2)
 .panel[.panel-name[Output]
 ```{r, echo = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data(reading)
 
 # fit a linear regression model
@@ -594,7 +594,7 @@ Here is the code to fit our third model:
 
 ```{r, eval = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data(reading)
 reading$age_minus_6 = reading$age - 6
 
@@ -607,7 +607,7 @@ summary(mod3)
 .panel[.panel-name[Output]
 ```{r, echo = F}
 # Import data (if you haven't already)
-library(idar)
+library(idarps)
 data(reading)
 reading$age_minus_6 = reading$age - 6
 
