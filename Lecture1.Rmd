@@ -215,16 +215,16 @@ include_graphics("pics/r_first_then.png")
 
 ---
 
-# R package idar
+# R package idarps
 
-We have developed an `R` package for this class which is called `idar` (which stands for Introduction to Data Analytics with R) and that you can install by running the following code in your `R` console:
+We have developed an `R` package for this class which is called `idarps` (which stands for Introduction to Data Analytics with R for Pharmaceutical Sciences) and that you can install by running the following code in your `R` console:
 
 ```R
 install.packages("devtools")
-devtools::install_github("https://github.com/SMAC-Group/idar", force = TRUE)
+devtools::install_github("https://github.com/SMAC-Group/idarps", force = TRUE)
 ```
 
-.hi-purple[Note:] Find the GitHub repository of the package [here](https://github.com/SMAC-Group/idar).
+.hi-purple[Note:] Find the GitHub repository of the package [here](https://github.com/SMAC-Group/idarps).
 
 ---
 
@@ -524,10 +524,10 @@ include_graphics("pics/dietB.png")
 .panel[.panel-name[Import]
 ```{r xaringan-extra-styles}
 # install.packages("devtools")
-# devtools::install_github("https://github.com/SMAC-Group/idar")
+# devtools::install_github("https://github.com/SMAC-Group/idarps")
 
 # Import data
-library(idar) 
+library(idarps) 
 data(diet)
 
 # Compute weight loss
