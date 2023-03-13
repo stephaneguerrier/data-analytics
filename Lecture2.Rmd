@@ -310,7 +310,7 @@ include_graphics("pics/dietAB.png")
 .panel[.panel-name[Import]
 ```{r xaringan-extra-styles}
 # Import data
-library(idar)
+library(idarps)
 data(diet)
 
 # Compute weight loss
@@ -566,7 +566,7 @@ include_graphics("pics/dietABC.png")
 .panel[.panel-name[Import]
 ```{r, eval=FALSE}
 # Import data and compute weight loss
-library(idar)
+library(idarps)
 data(diet)
 diet$weight.loss = diet$initial.weight - diet$final.weight
 
