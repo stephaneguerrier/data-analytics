@@ -220,8 +220,7 @@ include_graphics("pics/r_first_then.png")
 We have developed an `R` package for this class which is called `idarps` (which stands for Introduction to Data Analytics with R for Pharmaceutical Sciences) and that you can install by running the following code in your `R` console:
 
 ```R
-install.packages("devtools")
-devtools::install_github("https://github.com/SMAC-Group/idarps", force = TRUE)
+install.packages("idarps")
 ```
 
 .hi-purple[Note:] Find the GitHub repository of the package [here](https://github.com/SMAC-Group/idarps).
