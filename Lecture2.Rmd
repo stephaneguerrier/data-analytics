@@ -266,7 +266,7 @@ $$\color{#b4b4b4}{T = \frac{(\overline{X}_{A}-\overline{X}_{B})-\mu_0}{\sqrt{s^2
 
 - This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Mann-Whitney-Wilcoxon test (see later) is (probably) a better option.
 - For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
-- This test does not require the variances of the two groups to be equal. If the variances of the two groups are the same (which is rather unlikely in practice), the Welch's t-test losses a little bit of power compared to the Student's t-test.
+- This test does not require the variances of the two groups to be equal. If the variances of the two groups are the same (which is rather unlikely in practice), the Welch's t-test loses a little bit of power compared to the Student's t-test.
 - The computation of $df$ (i.e. the degrees of freedom of the distribution under the null) is beyond the scope of this class.
 
 ---
@@ -424,7 +424,7 @@ $$\begin{align}
 \end{align}$$
 
 - Therefore, $\alpha_k$ increases rapidly with $k$ (e.g. $\alpha_1 = 0.05$, $\alpha_2 \approx 0.098$, $\alpha_{10} \approx 0.4013$, $\alpha_{100} \approx 0.9941$).
-- Hence .pink[performing multiple tests, with the same or different data, is dangerous] ⚠️ (but very common! 😟) as it can leads to significant results, when actually there are none!
+- Hence .pink[performing multiple tests, with the same or different data, is dangerous] ⚠️ (but very common! 😟) as it can lead to significant results, when actually there are none!
 
 ---
 
@@ -523,7 +523,7 @@ $$\small \color{#b4b4b4}{F^* = \frac{s^{*^2}_{\overline{X}}}{1+\frac{2(G-2)}{3\D
 
 - This test strongly relies on the .pink[assumed absence of outliers]. If outliers appear to be present the Kruskal-Wallis test (see later) is (probably) a better option.
 - For moderate and small sample sizes, the sample distribution should be at least .pink[approximately normal] with no strong skewness to ensure the reliability of the test.
-- This test does not require the variances of the groups to be equal. If the variances of all the groups are the same (which is rather unlikely in practice), the Welch's one-way ANOVA losses a little bit of power compared to the Fisher's one-way ANOVA.
+- This test does not require the variances of the groups to be equal. If the variances of all the groups are the same (which is rather unlikely in practice), the Welch's one-way ANOVA loses a little bit of power compared to the Fisher's one-way ANOVA.
 
 ---
 
@@ -551,7 +551,7 @@ $$\small H_0: \color{#6A5ACD}{\theta_1} \color{#eb078e}{=} \color{#06bcf1}{\thet
 
 - This test is ".pink[robust]" in the sense that (unlike the one-way ANOVA) it is not overly affected by outliers.
 - For the Kruskal-Wallis test to be comparable to the one-way ANOVAs (i.e. testing for the mean) we need to assume: (1) The distributions are symmetric, (2) the variances are the same. Then, we have $\color{#eb078e}{\theta_i = \mu_i, i=1,\ldots,G}$.
-- Compared to the one-way ANOVA, the Kruskal-Wallis test is less powerful if their requirements (Gaussian and possibly same variances) are met.
+- Compared to the one-way ANOVAs, the Kruskal-Wallis test is less powerful if their requirements (Gaussian and possibly same variances) are met.
 
 ---
 
