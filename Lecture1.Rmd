@@ -384,11 +384,10 @@ include_graphics("pics/p_value.png")
 # P-values may be controversial
 
 .pink[P-values have been misused] many times because understanding what they mean is not intuitive!
-
 <div align="center">
-<iframe src="https://fivethirtyeight.abcnews.go.com/video/embed/56150342" width="675" height="380" scrolling="no" style="border:none;" allowfullscreen></iframe>
-</div> 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/OEUJzKtCt00?si=IQiYL185VbElccSI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
+</div>
 👋 .smallest[If you want to know more have a look [here](https://fivethirtyeight.com/features/statisticians-found-one-thing-they-can-agree-on-its-time-to-stop-misusing-p-values/).]
 
 ---
@@ -453,7 +452,7 @@ Informally, it means that when a measurement can be thought of as the average (o
 .smaller[People have used .pink[the Galton Board] as a practical device to demonstrate the CLT, in particular that with sufficient sample size the binomial distribution approximates a normal distribution.]
 
 <div align="center">
-<iframe width="684" height="381" src="https://www.youtube.com/embed/Vo9Esp1yaC8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="684" height="381" src="https://www.youtube.com/embed/EvHiee7gs9Y?si=XPvPkcRoRs9eGq5F" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 ---
