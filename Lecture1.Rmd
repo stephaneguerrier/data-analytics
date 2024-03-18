@@ -384,10 +384,11 @@ include_graphics("pics/p_value.png")
 # P-values may be controversial
 
 .pink[P-values have been misused] many times because understanding what they mean is not intuitive!
-<div align="center">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/OEUJzKtCt00?si=IQiYL185VbElccSI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
+<div align="center">
+<iframe width="600" height="400" src="https://www.youtube.com/embed/OEUJzKtCt00?si=IQiYL185VbElccSI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
+
 👋 .smallest[If you want to know more have a look [here](https://fivethirtyeight.com/features/statisticians-found-one-thing-they-can-agree-on-its-time-to-stop-misusing-p-values/).]
 
 ---
