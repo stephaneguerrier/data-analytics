@@ -180,7 +180,7 @@ class: title-slide
 
 ### .smaller[Stéphane Guerrier, Data Analytics Lab, University of Geneva 🇨🇭]
 ### .smaller[Dominique-L. Couturier, Cancer Research UK, University of Cambridge 🇬🇧]
-### .smaller[Yuming Zhang, Data Analytics Lab, University of Geneva 🇨🇭]
+### .smaller[Yuming Zhang, Department of Biostatistics, Harvard University 🇺🇸]
 
 <br>
 ```{R, out.width = "25%", echo = F}
